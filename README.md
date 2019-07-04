@@ -27,6 +27,7 @@ The meaningful parts of the machine code are turned into
 - Put the .dd32 file into the same folder as PNGer.exe
 - Start x32dbg
 - Open PNGer.exe
-- "Run" PNGer.exe until fully running
+- "Run" PNGer.exe until fully running (until you seen the PNGer.exe window)
 - Go to breakpoints tab
 - Activate the file_processor breakpoint
+- Drag & drop a file onto the PNGer.exe window
