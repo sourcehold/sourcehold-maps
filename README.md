@@ -1,5 +1,5 @@
 # sourcehold-maps
-Reversing the map file format of Stronghold
+Reverse engineering the map file format of Stronghold
 
 ### Project goal
 The goal is to understand the .map file format of Stronghold (& Stronghold Crusader).
