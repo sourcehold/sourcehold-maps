@@ -5,7 +5,7 @@ Reverse engineering the map file format of Stronghold
 The goal is to understand the .map file format of Stronghold (& Stronghold Crusader).
 
 Progress can be made my looking at the machine code of PNGer.exe with a debugger such as x64dbg.
-The meaningful parts of the machine code are turned into 
+The meaningful parts of the machine code are then turned into Python code.
 
 ### Project structure
 ```
