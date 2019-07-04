@@ -11,14 +11,19 @@ The meaningful parts of the machine code are then turned into Python code.
 ```
 # Quite literal Python re-implementation of PNGer in which machine code is converted to meaningful code
 ├── pnger.py 
+
 # Old versions that might be meaningful to someone again
-├── old/     
+├── old/    
+
 # Tiny CPU and Memory emulator that facilitates cross validation of machine code and Python code
 ├── cpu_emulator/__init__.py 
+
 # The map file I use to reverse engineer PNGer.exe
 ├── resources/MxM_unseen_1.map
+
 # A structure file that can be read into a hex editor such as Hex Editor Neo
 ├── map_structure.h
+
 # x64dbg database file that contains labels & comments for the machine code
 ├── Stronghold Map PNGer.exe.dd32
 ```
