@@ -1,5 +1,4 @@
 
-
 from types import ModuleType
 
 
@@ -9,47 +8,104 @@ import struct
 ENDIANNESS = 'little'
 
 
-class MemoryPointer(object):
 
-    def __init__(self, memory = None, pointer = None):
-        self.pointer = pointer if not pointer is None else 0
+class Register(object):
+
+    def __init__(self, value=None, memory=None, size = None, offset = 0):
+        self.value : int = value if not value is None else 0
         self.memory = memory if memory else Memory()
+        self.offset = 0 #get(0) -> get(0x2222)
+        self.size = 0  #0x2222 + 0x300, get(0x301) throws an error
+
+    def _check_valid(self, pointer):
+        if self.size != None and pointer >= self.size:
+            return False
+        if pointer < 0:
+            return False
+        return True
+
+    def _shift(self, pointer):
+        return pointer if self.offset == None else self.offset + pointer
 
     def __add__(self, other):
-        return MemoryPointer(self.memory, self.pointer + other)
+        return Register(self.value + other, self.memory)
 
     def __sub__(self, other):
-        return MemoryPointer(self.memory, self.pointer - other)
+        return Register(self.value - other, self.memory)
+
+    def __mul__(self, other):
+        return Register(self.value * other, self.memory)
+
+    def __floordiv__(self, other):
+        return Register(self.value // other, self.memory)
+
+    def __lshift__(self, other):
+        return Register(self.value << other, self.memory)
+
+    def __rshift__(self, other):
+        return Register(self.value >> other, self.memory)
+
+    @property
+    def l(self):
+        return Register(self.value & 0xFF, self.memory)
+
+    @l.setter
+    def l(self, value):
+        return Register((self.value & 0xFFFFFF00) | (value & 0xFF), self.memory)
+
+    @property
+    def h(self):
+        return Register((self.value >> 8) & 0xFF, self.memory)
+
+    @h.property
+    def h(self, value):
+        return Register((self.value & 0xFFFF00FF) | ((value & 0xFF) << 8), self.memory)
+
+    @property
+    def x(self):
+        return Register(self.value & 0xFFFF, self.memory)
+
+    @x.property
+    def x(self, value):
+        return Register((self.value & 0xFFFF0000) | (value & 0xFFFF), self.memory)
+
+    @property
+    def ex(self):
+        return Register(self.value & 0xFFFFFFFF, self.memory)
+
+    @ex.property
+    def ex(self, value):
+        return Register(value, self.memory)
 
     @property
     def dword(self):
-        return int.from_bytes(self.memory.get(self.pointer, nbytes = 4), byteorder=ENDIANNESS, signed=False)
+        return int.from_bytes(self.memory.get(self.value, nbytes = 4), byteorder=ENDIANNESS, signed=False)
 
     @dword.setter
     def dword(self, value):
-        self.memory.set(self.pointer, value.to_bytes(4, byteorder=ENDIANNESS))
+        self.memory.set(self.value, value.to_bytes(4, byteorder=ENDIANNESS))
 
     @property
     def word(self):
-        return int.from_bytes(self.memory.get(self.pointer, nbytes = 2), byteorder = ENDIANNESS, signed = False)
+        return int.from_bytes(self.memory.get(self.value, nbytes = 2), byteorder = ENDIANNESS, signed = False)
 
     @word.setter
     def word(self, value):
-        self.memory.set(self.pointer, value.to_bytes(2, byteorder = ENDIANNESS))
+        self.memory.set(self.value, value.to_bytes(2, byteorder = ENDIANNESS))
 
     @property
     def byte(self):
-        return self.memory.get(self.pointer, nbytes = 1)
+        return self.memory.get(self.value, nbytes = 1)
 
     @byte.setter
     def byte(self, value):
-        self.memory.set(self.pointer, value)
+        self.memory.set(self.value, value)
 
     def put(self, data):
-        self.memory.set(self.pointer, data)
+        self.memory.set(self.value, data)
 
     def get(self, nbytes):
-        return self.memory.get(self.pointer, nbytes=nbytes)
+        return self.memory.get(self.value, nbytes=nbytes)
 
 class Memory(object):
 
@@ -65,7 +121,7 @@ class Memory(object):
         result = b''
 
         key = self._transform_key(key)
-        
+
         for i in range(nbytes):
             k = key + i
             if not k in self.memory:
@@ -77,7 +133,7 @@ class Memory(object):
                 if not b:
                     raise Exception("struct returned None")
                 result += b
-                
+
         return result
 
     def set(self, key, value):
@@ -86,27 +142,45 @@ class Memory(object):
 
         if type(value).__name__ != "bytes":
             raise Exception("value is not of type bytes")
-        
+
         for i in range(len(value)):
             self.memory[key + i] = value[i]
 
 
 
 
-class CPU(ModuleType):
+class Emulator(ModuleType):
 
     def __init__(self):
         super().__init__("cpu_emulator")
-        self._eax = 0
-        self._ebx = 0
-        self._ecx = 0
-        self._edx = 0
-        self._ebp = 0
-        self._esp = 0
-        self._esi = 0
-        self._edi = 0
         self._mem = Memory()
+        self._eax = Register(0, _mem)
+        self._ebx = Register(0, _mem)
+        self._ecx = Register(0, _mem)
+        self._edx = Register(0, _mem)
+        self._ebp = Register(0, _mem)
+        self._esp = Register(0, _mem)
+        self._esi = Register(0, _mem)
+        self._edi = Register(0, _mem)
         self._stack = []
+        self._zf = 0
+        self._sf = 0
+
+    def test(self, a, b):
+        self._zf = 0 if (a & b) == 0 else 1 #TODO
+
+
+    def cmp(self, a, b):
+        self._sf = 1 if a < b else 0
+
+    def be(self):
+        return self._sf == 1 or self._zf == 1
+
+    def l(self):
+        return self._sf == 0 and self._zf == 0
+
+    def as_pointer(self, value):
+        return Register(value, self._mem)
 
     def get_dword(self, address):
         return struct.unpack("<I", self._mem.get(address, nbytes = 4))[0]
@@ -332,16 +406,66 @@ class CPU(ModuleType):
         self._eax &= 0xFFFF00FF
         self._eax |= (value & 0xFF) << 8
 
-#test = CPU()
-#
-# import sys
-# old_module = sys.modules["cpu_emulator"]
-# new_module = sys.modules["cpu_emulator"] = CPU()
 
-##test.eax = 16
-##test.eax = test.eax >> 1
-##assert test.eax == 8
-##
-##test.set_byte(0, 0x01)
-##assert 1 == test.get_byte(0)
 
+cpu = Emulator()
+mem = cpu._mem
+
+
+## Example ##
+
+cpu.eax = cpu.as_pointer(cpu.esp+4).dword# mov eax,dword ptr ss:[esp+4]
+cpu.push(cpu.ebx)# push ebx
+cpu.ebx = (cpu.eax - 1).pointer# lea ebx,dword ptr ds:[eax-1]
+cpu.test(cpu.bx, cpu.bx)# test bx,bx
+if not cpu.l(): # jl stronghold map pnger.407E4E
+    cpu.eax = cpu.as_pointer(cpu.esp + 0xC).dword# mov eax,dword ptr ss:[esp+C]
+    cpu.ebp = cpu.as_pointer(cpu.esp + 0x14).dword# mov ebp,dword ptr ss:[esp+14]
+    cpu.push(cpu.esi) # push esi
+    cpu.esi = cpu.bx# movsx esi,bx
+    cpu.push(cpu.edi)# push edi
+    cpu.edi = cpu.as_pointer(cpu.esp + 20).dword# mov edi,dword ptr ss:[esp+20]
+    cpu.esi += cpu.eax# add esi,eax
+    cpu.ebp -= cpu.eax# sub ebp,eax
+    while True:
+        cpu.cl = cpu.as_pointer(cpu.esi).byte# mov cl,byte ptr ds:[esi]
+        cpu.eax = 0# xor eax,eax
+        cpu.al = cpu.as_pointer(cpu.esi + cpu.ebp).byte# mov al,byte ptr ds:[esi+ebp]
+        cpu.edx = 1# mov edx,1
+        cpu.edx = cpu.edx << cpu.cl# shl edx,cl
+        while True:
+            cpu.ecx = cpu.eax# mov ecx,eax
+            cpu.eax += cpu.edx# add eax,edx
+            cpu.ecx &= 0xFFFF# and ecx,FFFF
+            cpu.cmp(cpu.ax, 0x100) # cmp ax,100
+            cpu.as_pointer(cpu.ecx + cpu.edi).byte = cpu.bl # mov byte ptr ds:[ecx+edi],bl
+            if cpu.b():# jb stronghold map pnger.407E31
+                continue
+            break
+        cpu.ebx -= 1# dec ebx
+        cpu.esi -= 1# dec esi
+        cpu.test(cpu.bx, cpu.bx) # test bx,bx
+        if cpu.ge(): # jge stronghold map pnger.407E23
+            continue
+        break
+    cpu.edi = cpu.pop() # pop edi
+    cpu.esi = cpu.pop() # pop esi
+    cpu.ebp = cpu.pop() # pop ebp
+cpu.ebx = cpu.pop() # pop ebx
+# ret
+
+
+def routine(a, b, c):
+
+
+    def routine_sub1():
+        pass
+
+    def routine_sub2():
+        pass
+
+    cpu.eax = 1
+
+    if cpu.ebx == 0:
+        routine_sub1()
+    routine_sub2()
