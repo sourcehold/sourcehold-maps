@@ -11,4 +11,8 @@ You can run map preview extractor Python file to extract the map preview image.
 python preview_image_extractor.py input_file output_file
 ```
 
+## Dependencies
+* Pillow
+* Python 3 (I have not tested 2.7)
+
 See the Wiki for further detailed information
