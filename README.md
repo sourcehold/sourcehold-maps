@@ -14,5 +14,6 @@ python preview_image_extractor.py input_file output_file
 ## Dependencies
 * Pillow
 * Python 3 (I have not tested 2.7)
+* Compile blast.c to blast .exe, which can be found here https://github.com/madler/zlib/blob/master/contrib/blast/blast.c
 
 See the Wiki for further detailed information
