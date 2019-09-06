@@ -4,35 +4,16 @@ Reverse engineering the map file format of Stronghold
 ### Project goal
 The goal is to understand the .map file format of Stronghold (& Stronghold Crusader).
 
-Progress can be made my looking at the machine code of PNGer.exe with a debugger such as x64dbg.
-The meaningful parts of the machine code are then turned into Python code.
+# Current progress
+You can run map preview extractor Python file to extract the map preview image.
 
-### Project structure
-```
-# Quite literal Python re-implementation of PNGer in which machine code is converted to meaningful code
-├── pnger.py 
-
-# Old versions that might be meaningful to someone again
-├── old/    
-
-# Tiny CPU and Memory emulator that facilitates cross validation of machine code and Python code
-├── cpu_emulator/__init__.py 
-
-# The map file I use to reverse engineer PNGer.exe
-├── resources/MxM_unseen_1.map
-
-# A structure file that can be read into a hex editor such as Hex Editor Neo
-├── map_structure.h
-
-# x64dbg database file that contains labels & comments for the machine code
-├── Stronghold Map PNGer.exe.dd32
+```r
+python preview_image_extractor.py input_file output_file
 ```
 
-### Instructions for using x64dbg
-- Put the .dd32 file into the same folder as PNGer.exe
-- Start x32dbg
-- Open PNGer.exe
-- "Run" PNGer.exe until fully running (until you seen the PNGer.exe window)
-- Go to breakpoints tab
-- Activate the file_processor breakpoint
-- Drag & drop a file onto the PNGer.exe window
+## Dependencies
+* Pillow
+* Python 3 (I have not tested 2.7)
+* Compile blast.c to blast .exe, which can be found here https://github.com/madler/zlib/blob/master/contrib/blast/blast.c
+
+See the Wiki for further detailed information
