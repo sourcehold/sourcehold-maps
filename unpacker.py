@@ -116,7 +116,6 @@ class DescriptionSection(CompressedSection):
         if self.buf.remaining() > 0:
             print("warning: {} has bytes remaining: {}".format(self.__class__.__name__, self.buf.remaining()))
 
-
 class CompressedDataSection(CompressedSection):
 
     def __init__(self, raw):
@@ -207,6 +206,10 @@ class MapStructure(object):
             image.save(f)
         with open(path + "/description.txt", 'wb') as f:
             f.write(self.description_section.decompressed)
+        with open(path + "/description_uknown_1.dat", 'wb') as f:
+            f.write(self.description_section.unknown_1)
+        with open(path + "/description_uknown_2.dat", 'wb') as f:
+            f.write(self.description_section.unknown_2)
         for i in range(self.meta_section.sections_count):
             index = self.meta_section.section_indices[i]
 
