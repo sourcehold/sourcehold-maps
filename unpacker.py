@@ -204,11 +204,21 @@ class MapStructure(object):
             image.putpalette(p)
             image.putdata(b.read())
             image.save(f)
+        with open(path + "/section_unknown_1.dat") as f:
+            f.write(self.section_unknown_1)
+        with open(path + "/section_unknown_2.dat") as f:
+            f.write(self.section_unknown_2)
+        with open(path + "/section_unknown_3.dat") as f:
+            f.write(self.section_unknown_3)
+        with open(path + "/section_unknown_4.dat") as f:
+            f.write(self.section_unknown_4)
+        with open(path + "/data_unknown_1.dat") as f:
+            f.write(self.data_unknown_1)
         with open(path + "/description.txt", 'wb') as f:
             f.write(self.description_section.decompressed)
-        with open(path + "/description_uknown_1.dat", 'wb') as f:
+        with open(path + "/description_unknown_1.dat", 'wb') as f:
             f.write(self.description_section.unknown_1)
-        with open(path + "/description_uknown_2.dat", 'wb') as f:
+        with open(path + "/description_unknown_2.dat", 'wb') as f:
             f.write(self.description_section.unknown_2)
         for i in range(self.meta_section.sections_count):
             index = self.meta_section.section_indices[i]

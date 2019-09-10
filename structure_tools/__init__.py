@@ -193,6 +193,11 @@ class Table(object):
             string += "\n"
         return string
 
+    def as_array(self, rowname="rowname"):
+        header = [rowname] + self.colnames
+        values = [[self.rownames[i]] + self.matrix[i] for i in range(len(self.matrix))]
+        return [header] + values
+
     def as_dict(self):
         d = {}
         for r in self.rownames:
