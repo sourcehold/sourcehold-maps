@@ -1,6 +1,6 @@
-|filename|description|
-|---|---|
-|160cb_unseen|a freshly generated unopened castle builder map of size 160x160|
-|160cr_unseen|a freshly generated unopened crusader map of size 160x160|
-|400cb_unseen|a freshly generated unopened castle builder map of size 400x400|
-|400cr_unseen|a freshly generated unopened crusader map of size 400x400|
+|filename|size|type|comment|
+|:---|---:|---:|---:|
+|160cb_unseen|160|castle builder|unopened|
+|160cr_unseen|160|crusader|unopened|
+|400cb_unseen|400|castle builder|unopened|
+|400cr_unseen|400|crusader|unopened|
