@@ -89,7 +89,7 @@ def get_dat_files(path):
     return [file for file in os.listdir(path) if file.endswith(".dat")]
 
 
-def compare_files_on_percentage_byte_overlap(files, keys=None):
+def compare_files_on_percentage_byte_overlap(title, files, keys=None):
     if keys == None:
         keys = [file.split(".")[0] for file in get_dat_files(files[0])]
 
@@ -112,19 +112,52 @@ def compare_files_on_percentage_byte_overlap(files, keys=None):
                 matrix.append([key, fnames[i], fnames[j], v])
 
     writer = MarkdownTableWriter()
-    writer.table_name = "Percentage of byte overlap for resaves"
+    writer.table_name = title
     writer.value_matrix = matrix
     writer.headers = header
 
     return writer
 
 
-if __name__ == "__main__":
-    w = compare_files_on_percentage_byte_overlap([
-        "file_inspection/maps/200cb_unseen_1_resave1",
-        "file_inspection/maps/200cb_unseen_1_resave2",
-        "file_inspection/maps/200cb_unseen_1_resave3",
-        "file_inspection/maps/200cb_unseen_1_resave4"
-    ])
+import unpacker
 
-    w.dump(open("file_inspection/findings/byte_overlap_in_resaves.md", "w"))
+IMPORT_HELPER = unpacker.ImportHelper()
+
+
+def compare_unit_movement():
+    fs = [
+        "file_inspection/maps/160cr_arab_archer_red",
+        "file_inspection/maps/160cr_arab_archer_r_m1",
+        "file_inspection/maps/160cr_arab_archer_r_m2",
+        "file_inspection/maps/160cr_arab_archer_r_m3",
+    ]
+
+    ufs = [f for f in fs if not os.path.exists(f)]
+    for uf in ufs:
+        mapname = uf.split("/")[-1]
+        IMPORT_HELPER.dump_to_library(mapname)
+
+    w = compare_files_on_percentage_byte_overlap("Percentage of byte overlap in unit movement", fs)
+
+    w.dump(open("file_inspection/findings/byte_overlap_in_unit_movement.md", "w"))
+
+
+def compare_view_nav():
+    fs = [
+        "160crnav_upleft",
+        "160crnav_upright",
+        "160crnav_lowleft",
+        "160crnav_lowright",
+    ]
+
+    ufs = [f for f in fs if not IMPORT_HELPER.exists_in_library(f)]
+    for uf in ufs:
+        IMPORT_HELPER.dump_to_library(uf)
+
+    paths = [IMPORT_HELPER.get_library_path_to(f) for f in fs]
+    w = compare_files_on_percentage_byte_overlap("Percentage of byte overlap in view navigation", paths)
+
+    w.dump(open("file_inspection/findings/byte_overlap_in_view_navigation.md", "w"))
+
+if __name__ == "__main__":
+    compare_view_nav()

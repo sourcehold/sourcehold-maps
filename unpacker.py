@@ -1,7 +1,42 @@
 import binascii
-import io
+import os
 import struct
 import subprocess
+
+
+class ImportHelper(object):
+    MAP_PATH = os.path.expanduser("~/Documents/Stronghold Crusader/Maps")
+
+    def __init__(self):
+        pass
+
+    def _fix_mapname(self, mapname):
+        if not mapname.endswith(".map"):
+            return mapname + ".map"
+        return mapname
+
+    def _get_name_for_mapname(self, mapname):
+        while mapname.endswith(".map"):
+            mapname = mapname[:-4]
+        return mapname
+
+    def get_path_to(self, mapname):
+        return os.path.join(ImportHelper.MAP_PATH, self._fix_mapname(mapname))
+
+    def get_file_handle(self, mapname):
+        return open(self.get_path_to(mapname), 'rb')
+
+    def load(self, mapname):
+        return MapStructure(0, self.get_file_handle(mapname).read())
+
+    def get_library_path_to(self, mapname):
+        return "file_inspection/maps/{}".format(self._get_name_for_mapname(mapname))
+
+    def dump_to_library(self, mapname):
+        return self.load(mapname).dump_to_folder(self.get_library_path_to(mapname))
+
+    def exists_in_library(self, mapname):
+        return os.path.exists(self.get_library_path_to(mapname))
 
 BLAST_PATH = "resources/blast.exe"
 
@@ -12,25 +47,29 @@ def decompress(data: bytes):
     return result.stdout
 
 
-class Buffer(io.BytesIO):
+from structure_tools import Buffer
 
-    def __init__(self, initial_bytes=b''):
-        super().__init__(initial_bytes)
-        self.bytes_length = len(initial_bytes)
 
-    def read(self, size=-1):
-        # if size == -1:
-        #     return super().read(size)
-        d = super().read(size)
-        if len(d) < size:
-            raise Exception("Data underflow. Expected {} bytes, but got {}".format(size, len(d)))
-        return d
-
-    def write(self, b):
-        raise NotImplementedError()
-
-    def remaining(self):
-        return self.bytes_length - self.tell()
+#
+# class Buffer(io.BytesIO):
+#
+#     def __init__(self, initial_bytes=b''):
+#         super().__init__(initial_bytes)
+#         self.bytes_length = len(initial_bytes)
+#
+#     def read(self, size=-1):
+#         # if size == -1:
+#         #     return super().read(size)
+#         d = super().read(size)
+#         if len(d) < size:
+#             raise Exception("Data underflow. Expected {} bytes, but got {}".format(size, len(d)))
+#         return d
+#
+#     def write(self, b):
+#         raise NotImplementedError()
+#
+#     def remaining(self):
+#         return self.bytes_length - self.tell()
 
 
 class CompressedSection(object):
@@ -204,15 +243,15 @@ class MapStructure(object):
             image.putpalette(p)
             image.putdata(b.read())
             image.save(f)
-        with open(path + "/section_unknown_1.dat") as f:
+        with open(path + "/section_unknown_1.dat", 'wb') as f:
             f.write(self.section_unknown_1)
-        with open(path + "/section_unknown_2.dat") as f:
+        with open(path + "/section_unknown_2.dat", 'wb') as f:
             f.write(self.section_unknown_2)
-        with open(path + "/section_unknown_3.dat") as f:
+        with open(path + "/section_unknown_3.dat", 'wb') as f:
             f.write(self.section_unknown_3)
-        with open(path + "/section_unknown_4.dat") as f:
+        with open(path + "/section_unknown_4.dat", 'wb') as f:
             f.write(self.section_unknown_4)
-        with open(path + "/data_unknown_1.dat") as f:
+        with open(path + "/data_unknown_1.dat", 'wb') as f:
             f.write(self.data_unknown_1)
         with open(path + "/description.txt", 'wb') as f:
             f.write(self.description_section.decompressed)
