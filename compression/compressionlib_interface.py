@@ -24,7 +24,7 @@ dll.explode.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.POINTER(ctypes.
 
 import struct
 
-TESTSIZE = 1000000
+TESTSIZE = 1000 * 1000 * 32  # reserve 32mb
 
 
 @ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_ubyte), ctypes.POINTER(ctypes.c_uint), ctypes.POINTER(TDataInfo))

@@ -201,8 +201,20 @@ class MapStructure(object):
             self.sections_dict[index] = self.sections[i]
 
     def verify(self):
-        return [self.magic_value == 0xFFFFFFFF, self.preview_section.verify(), self.description_section.verify()] + [
-            section.verify() for section in self.sections]
+        if not self.magic_value == 0xFFFFFFFF:
+            print("Invalid magic header", file=sys.stderr)
+            return False
+        if not self.preview_section.verify():
+            print("Invalid preview section", file=sys.stderr)
+            return False
+        if not self.description_section.verify():
+            print("Invalid description section", file=sys.stderr)
+            return False
+        for i in range(len(self.sections)):
+            if not self.sections[i].verify():
+                print("Invalid section crc32 {}".format(i), file=sys.stderr)
+                return False
+        return True
 
     def reordered(self):
         rindex = [self.meta_section.section_indices.index(v) for v in sorted(self.meta_section.section_indices)]
