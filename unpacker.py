@@ -3,6 +3,8 @@ import os
 import struct
 import subprocess
 
+import compression
+
 
 class ImportHelper(object):
     MAP_PATH = os.path.expanduser("~/Documents/Stronghold Crusader/Maps")
@@ -38,7 +40,9 @@ class ImportHelper(object):
     def exists_in_library(self, mapname):
         return os.path.exists(self.get_library_path_to(mapname))
 
-BLAST_PATH = "resources/blast.exe"
+
+BLAST_PATH = "bin/blast.exe"
+
 
 
 def decompress(data: bytes):
@@ -46,6 +50,24 @@ def decompress(data: bytes):
     result.check_returncode()
     return result.stdout
 
+
+def decompress2(data: bytes):
+    result = subprocess.run(["python", "explode.py", "decompress"], input=data, stdout=subprocess.PIPE)
+    # result.check_returncode()
+    return result.stdout
+
+
+def compress2(data: bytes):
+    result = subprocess.run(["python", "explode.py", "compress"], input=data, stdout=subprocess.PIPE)
+    # result.check_returncode()
+    return result.stdout
+
+
+def test_decompress_and_compress():
+    data = open('resources/MxM_unseen_1_descript.map', 'rb').read()[20:]
+    d = decompress2(data)
+    c = compress2(d)
+    assert data == c
 
 from structure_tools import Buffer
 
@@ -71,8 +93,16 @@ from structure_tools import Buffer
 #     def remaining(self):
 #         return self.bytes_length - self.tell()
 
+class Section(object):
 
-class CompressedSection(object):
+    def __init__(self):
+        pass
+
+    def as_bytes(self):
+        raise NotImplementedError()
+
+
+class CompressedSection(Section):
 
     def __init__(self):
         self.decompressed = None
@@ -80,7 +110,7 @@ class CompressedSection(object):
 
     def decompress(self):
         if self.decompressed == None:
-            self.decompressed = decompress(self.compressed_data)
+            self.decompressed = compression.COMPRESSION.decompress(self.compressed_data)
         return self.decompressed
 
     def verify(self, signature=None):
@@ -106,7 +136,7 @@ class PreviewSection(CompressedSection):
         assert self.buf.remaining() == 0
 
 
-class MetaSection(object):
+class MetaSection(Section):
     AMOUNT_OF_SECTIONS = 122
 
     def __init__(self, offset, raw):
@@ -170,7 +200,7 @@ class CompressedDataSection(CompressedSection):
             print("warning: {} has bytes remaining: {}".format(self.__class__.__name__, self.buf.remaining()))
 
 
-class UncompressedDataSection(object):
+class UncompressedDataSection(Section):
 
     def __init__(self, raw):
         self.raw = raw
