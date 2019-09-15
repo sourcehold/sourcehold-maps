@@ -1,7 +1,6 @@
 import binascii
 import os
 import struct
-import subprocess
 
 import compression
 
@@ -41,57 +40,8 @@ class ImportHelper(object):
         return os.path.exists(self.get_library_path_to(mapname))
 
 
-BLAST_PATH = "bin/blast.exe"
-
-
-
-def decompress(data: bytes):
-    result = subprocess.run(BLAST_PATH, input=data, stdout=subprocess.PIPE)
-    result.check_returncode()
-    return result.stdout
-
-
-def decompress2(data: bytes):
-    result = subprocess.run(["python", "explode.py", "decompress"], input=data, stdout=subprocess.PIPE)
-    # result.check_returncode()
-    return result.stdout
-
-
-def compress2(data: bytes):
-    result = subprocess.run(["python", "explode.py", "compress"], input=data, stdout=subprocess.PIPE)
-    # result.check_returncode()
-    return result.stdout
-
-
-def test_decompress_and_compress():
-    data = open('resources/MxM_unseen_1_descript.map', 'rb').read()[20:]
-    d = decompress2(data)
-    c = compress2(d)
-    assert data == c
-
 from structure_tools import Buffer
 
-
-#
-# class Buffer(io.BytesIO):
-#
-#     def __init__(self, initial_bytes=b''):
-#         super().__init__(initial_bytes)
-#         self.bytes_length = len(initial_bytes)
-#
-#     def read(self, size=-1):
-#         # if size == -1:
-#         #     return super().read(size)
-#         d = super().read(size)
-#         if len(d) < size:
-#             raise Exception("Data underflow. Expected {} bytes, but got {}".format(size, len(d)))
-#         return d
-#
-#     def write(self, b):
-#         raise NotImplementedError()
-#
-#     def remaining(self):
-#         return self.bytes_length - self.tell()
 
 class Section(object):
 
