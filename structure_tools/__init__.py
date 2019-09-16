@@ -1,6 +1,7 @@
 import io
 
 
+
 class Buffer(io.BytesIO):
 
     def __init__(self, initial_bytes=b''):
@@ -95,6 +96,43 @@ class Variable(object):
         self.fdel = fdel
         return self
 
+    def serialize_to_buffer(self, obj, buf: Buffer):
+        if self.type.__class__ == str:
+            if self.array_size == 0:
+                r = struct.pack(self.type, self.__get__(obj))
+                buf.write(r)
+            else:
+                if self.array_size == "*":
+                    for o in self.__get__(obj):
+                        buf.write(struct.pack(self.type, o))
+                elif self.array_size.__class__ == int:
+                    for o in self.__get__(obj):
+                        buf.write(struct.pack(self.type, o))
+                elif self.array_size.__class__ == Variable:
+                    self.array_size.__set__(obj, len(self.__get__(obj)))
+                    for o in self.__get__(obj):
+                        buf.write(struct.pack(self.type, o))
+                else:
+                    raise Exception("Invalid size specification {}".format(self.array_size))
+        elif self.type.__class__ == type:
+            if self.array_size == 0:
+                o = self.__get__(obj)
+                o.serialize_to_buffer(buf)
+            else:
+                if self.array_size == "*":
+                    for o in self.__get__(obj):
+                        o.serialize_to_buffer(buf)
+                elif self.array_size.__class__ == int:
+                    for o in self.__get__(obj):
+                        o.serialize_to_buffer(buf)
+                elif self.array_size.__class__ == Variable:
+                    for o in self.__get__(obj):
+                        o.serialize_to_buffer(buf)
+                else:
+                    raise Exception("Invalid size specification {}".format(self.array_size))
+        else:
+            raise Exception("Invalid type specification {}".format(self.type))
+
     def set_from_buffer(self, obj, buf: Buffer, array_index=-1):
         if self.type.__class__ == str:
             if self.array_size == 0:
@@ -121,8 +159,7 @@ class Variable(object):
                     raise Exception("Invalid size specification {}".format(self.array_size))
         elif self.type.__class__ == type:
             if self.array_size == 0:
-                s = struct.calcsize(self.type)
-                r = struct.unpack(self.type, buf.read(s))[0]
+                r = self.type(buf, array_index)
                 self.__set__(obj, r)
             else:
                 if self.array_size == "*":
@@ -145,15 +182,50 @@ class Variable(object):
             raise Exception("Invalid type specification {}".format(self.type))
 
 
+import logging
+
 class Structure(object):
 
     def __init__(self, buf: Buffer, array_index=-1):
-        self.buf = buf
-        props = [key for key in self.__class__.__dict__ if key.isalnum()]
+        self._buf = buf
+        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
         for prop in props:
             # print("setting {}. buf is at {}".format(prop, buf.tell()))
+            bef = buf.tell()
             self.__class__.__dict__[prop].set_from_buffer(self, buf, array_index=array_index)
+            aft = buf.tell()
+            l = aft - bef
+            logging.debug("deserialized {:14s}. length: {:10d} before: {:10d},  after: {:10d}".format(
+                prop,
+                l,
+                bef,
+                aft
+            ))
 
+    def pack(self):
+        pass
+
+    def unpack(self):
+        pass
+
+    def get_data(self):
+        return self.data
+
+    def serialize_to_buffer(self, buf: Buffer):
+        self.pack()
+        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
+        for prop in props:
+            # print("serializing {}. buf is at {}".format(prop, buf.tell()))
+            bef = buf.tell()
+            self.__class__.__dict__[prop].serialize_to_buffer(self, buf)
+            aft = buf.tell()
+            l = aft - bef
+            logging.debug("serialized {:16s}. length: {:10d} before: {:10d},  after: {:10d}".format(
+                prop,
+                l,
+                bef,
+                aft
+            ))
 
 class Table(object):
 
