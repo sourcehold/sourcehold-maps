@@ -48,7 +48,7 @@ class Section(object):
     def __init__(self):
         pass
 
-    def as_bytes(self):
+    def pack(self):
         raise NotImplementedError()
 
 
@@ -85,6 +85,13 @@ class PreviewSection(CompressedSection):
 
         assert self.buf.remaining() == 0
 
+    def pack(self):
+        l1 = len(self.uncompressed)
+        compressed = compression.COMPRESSION.compress(self.uncompressed)
+        l2 = len(compressed)
+        hash = binascii.crc32(self.uncompressed)
+        return struct.pack("<III", l1, l2, hash) + self.uncompressed
+
 
 class MetaSection(Section):
     AMOUNT_OF_SECTIONS = 122
@@ -117,6 +124,8 @@ class MetaSection(Section):
             print("warning: {} has bytes remaining: {}\n{}".format(self.__class__.__name__, self.buf.remaining(),
                                                                    self.buf.read()))
 
+    def pack(self):
+        pass
 
 class DescriptionSection(CompressedSection):
 
@@ -256,6 +265,12 @@ class MapStructure(object):
 
             with open(path + "/" + str(index) + ".dat", 'wb') as f:
                 f.write(self.sections[i].decompressed)
+
+    def repack(self):
+        buf = Buffer()
+        buf.write(struct.pack("<I", self.magic_value))
+        p = self.preview_section.as_bytes()
+        buf.write(struct.pack())
 
 
 def unpack_map(path, into):
