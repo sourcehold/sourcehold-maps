@@ -1,6 +1,7 @@
+import unittest
+
 import maps
 import structure_tools
-import unittest
 
 
 class TestEqual(unittest.TestCase):
@@ -9,7 +10,7 @@ class TestEqual(unittest.TestCase):
         with open("resources/MxM_unseen_1.map", 'rb') as f:
             buf = structure_tools.Buffer(f.read())
 
-        m = maps.Map(buf)
+        m = maps.Map().from_buffer(buf)
         m.unpack()
         m.directory.unpack()
 

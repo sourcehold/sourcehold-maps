@@ -1,7 +1,8 @@
 import os
 import unittest
 
-import unpacker
+import maps
+import structure_tools
 
 
 class TestMapStructure(unittest.TestCase):
@@ -13,15 +14,17 @@ class TestMapStructure(unittest.TestCase):
         # compression.COMPRESSION = compression.BlastDecompression()
 
         for file in files:
-            print("reading file: {}".format(file))
+            # print("reading file: {}".format(file))
             with open(file, 'rb') as f:
                 data = f.read()
 
-            print("parsing file")
-            m = unpacker.MapStructure(0, data)
+            # print("parsing file")
+            buf = structure_tools.Buffer(data)
+            m = maps.Map().from_buffer(buf)
 
-            print("verifying file")
-            self.assertEqual(m.verify(), True)
+            # print("verifying file")
+            m.unpack()
+            m.directory.unpack()
 
-            print("checking no data is left")
-            self.assertEqual(m.buf.remaining(), 0)
+            # print("checking no data is left")
+            self.assertEqual(buf.remaining(), 0)

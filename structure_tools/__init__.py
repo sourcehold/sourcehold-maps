@@ -49,6 +49,20 @@ class BreakFunctions(object):
         return False
 
 
+def bytes_to_int_array(data: bytes):
+    if len(data) % 4 != 0:
+        raise Exception()
+    buf = Buffer(data)
+    while buf.remaining() > 0:
+        yield struct.unpack("I", buf.read(4))[0]
+
+
+def ints_to_byte_array(ints: list):
+    buf = Buffer()
+    for i in ints:
+        buf.write(struct.pack("I", i))
+    return buf.getvalue()
+
 class Variable(object):
 
     def __init__(self, name, type, array_size=0, break_array=BreakFunctions.break_at_eof):
@@ -133,7 +147,7 @@ class Variable(object):
         else:
             raise Exception("Invalid type specification {}".format(self.type))
 
-    def set_from_buffer(self, obj, buf: Buffer, array_index=-1):
+    def set_from_buffer(self, obj, buf: Buffer, **kwargs):
         if self.type.__class__ == str:
             if self.array_size == 0:
                 s = struct.calcsize(self.type)
@@ -159,21 +173,21 @@ class Variable(object):
                     raise Exception("Invalid size specification {}".format(self.array_size))
         elif self.type.__class__ == type:
             if self.array_size == 0:
-                r = self.type(buf, array_index)
+                r = create_structure_from_buffer(self.type, buf, **kwargs)
                 self.__set__(obj, r)
             else:
                 if self.array_size == "*":
                     s = struct.calcsize(self.type)
                     r = []
                     while not self.break_array(buf):
-                        r.append(self.type(buf, array_index))
+                        r.append(create_structure_from_buffer(self.type, buf, **kwargs))
                     self.__set__(obj, r)
                 elif self.array_size.__class__ == int:
-                    r = [self.type(buf, array_index) for i in range(self.array_size)]
+                    r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
                     self.__set__(obj, r)
                 elif self.array_size.__class__ == Variable:
                     si = self.array_size.__get__(obj)
-                    r = [self.type(buf, array_index) for i in range(si)]
+                    r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(si)]
                     self.__set__(obj, r)
                 else:
                     raise Exception("Invalid size specification {}".format(self.array_size))
@@ -184,23 +198,18 @@ class Variable(object):
 
 import logging
 
+
+def create_structure_from_buffer(structure: type, buf: Buffer, **kwargs):
+    self = structure()
+
+    self.from_buffer(buf, **kwargs)
+
+    return self
+
 class Structure(object):
 
-    def __init__(self, buf: Buffer, array_index=-1):
-        self._buf = buf
-        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
-        for prop in props:
-            # print("setting {}. buf is at {}".format(prop, buf.tell()))
-            bef = buf.tell()
-            self.__class__.__dict__[prop].set_from_buffer(self, buf, array_index=array_index)
-            aft = buf.tell()
-            l = aft - bef
-            logging.debug("deserialized {:14s}. length: {:10d} before: {:10d},  after: {:10d}".format(
-                prop,
-                l,
-                bef,
-                aft
-            ))
+    def __init__(self):
+        pass
 
     def pack(self):
         pass
@@ -210,6 +219,24 @@ class Structure(object):
 
     def get_data(self):
         return self.data
+
+    def from_buffer(self, buf: Buffer, **kwargs):
+        self._buf = buf
+        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
+        for prop in props:
+            # print("setting {}. buf is at {}".format(prop, buf.tell()))
+            bef = buf.tell()
+            self.__class__.__dict__[prop].set_from_buffer(self, buf, **kwargs)
+            aft = buf.tell()
+            l = aft - bef
+            logging.debug("deserialized {:14s}. length: {:10d} before: {:10d},  after: {:10d}".format(
+                prop,
+                l,
+                bef,
+                aft
+            ))
+
+        return self
 
     def serialize_to_buffer(self, buf: Buffer):
         self.pack()

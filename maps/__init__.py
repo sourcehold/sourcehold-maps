@@ -93,10 +93,16 @@ class Description(Structure):
 
 class MapSection(Structure):
 
-    def __init__(self, buf, array_index, length):
-        super().__init__(buf, array_index)
-        self.length = length
-        self.data = buf.read(length)
+    def __init__(self):
+        super().__init__()
+
+    def from_buffer(self, buf, **kwargs):
+        super().from_buffer(buf, **kwargs)
+        if not 'length' in kwargs:
+            raise KeyError()
+        self.length = kwargs.get('length')
+        self.data = buf.read(self.length)
+        return self
 
     def pack(self):
         self.length = len(self.data)
@@ -142,34 +148,39 @@ class CompressedMapSection(Structure):
         return self.uncompressed
 
 
+import csv
+from structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
+
 class Directory(Structure):
     _AMOUNT_OF_SECTIONS = 122
     length = Variable("l", "I")
     sections_count = Variable("sc", "I")
-    u1 = Variable("u1", "I", 5)
+    directory_u1 = Variable("directory_u1", "I", 5)
     uncompressed_lengths = Variable("ul", "I", _AMOUNT_OF_SECTIONS)
-    u2 = Variable("u2", "I", 28)
+    directory_u2 = Variable("directory_u2", "I", 28)
     section_lengths = Variable("sl", "I", _AMOUNT_OF_SECTIONS)
-    u3 = Variable("u3", "I", 28)
+    directory_u3 = Variable("directory_u3", "I", 28)
     section_indices = Variable("si", "I", _AMOUNT_OF_SECTIONS)
-    u4 = Variable("u4", "I", 28)
+    directory_u4 = Variable("directory_u4", "I", 28)
     section_compressed = Variable("com", "I", _AMOUNT_OF_SECTIONS)
-    u5 = Variable("u5", "I", 28)
+    directory_u5 = Variable("directory_u5", "I", 28)
     section_offsets = Variable("so", "I", _AMOUNT_OF_SECTIONS)
-    u6 = Variable("u6", "I", 28)
-    u7 = Variable("u7", "I")
+    directory_u6 = Variable("directory_u6", "I", 28)
+    directory_u7 = Variable("directory_u7", "I")
 
-    def __init__(self, buf, array_size):
-        super().__init__(buf, array_size)
+    def from_buffer(self, buf: Buffer, **kwargs):
+        super().from_buffer(buf, **kwargs)
         self.sections = []
         for i in range(self.sections_count):
             logging.debug("processing section {}".format(i))
             compressed = self.section_compressed[i] == 1
             length = self.section_lengths[i]
             if not compressed:
-                self.sections.append(MapSection(self._buf, i, length))
+                self.sections.append(MapSection().from_buffer(self._buf, length=length))
             else:
-                self.sections.append(CompressedMapSection(self._buf, i))
+                self.sections.append(CompressedMapSection().from_buffer(self._buf))
+
+        return self
 
     def __getitem__(self, item):
         # access directory item by index
@@ -233,15 +244,89 @@ class Directory(Structure):
             logging.debug("serializing section {} with size {}".format(i, self.section_lengths[i]))
             section.serialize_to_buffer(buf)
 
+    def _dump_spec(self):
+        buf = csv.StringIO()
+
+        writer = csv.DictWriter(buf, fieldnames=["uncompressed_length", "section_length", "section_index", "compressed",
+                                                 "section_offset"])
+        writer.writeheader()
+        for i in range(len(self.sections)):
+            writer.writerow(
+                {"uncompressed_length": self.uncompressed_lengths[i], "section_length": self.section_lengths[i],
+                 "section_index": self.section_indices[i], "compressed": self.section_compressed[i],
+                 "section_offset": self.section_offsets[i]})
+
+        return buf.getvalue().encode('ascii')
+
+    def _load_spec(self, data: bytes):
+        buf = csv.StringIO(data.decode('ascii'))
+
+        reader = csv.DictReader(buf, fieldnames=["uncompressed_length", "section_length", "section_index", "compressed",
+                                                 "section_offset"])
+        i = 0
+        for line in reader:
+            self.uncompressed_lengths[i] = line['uncompressed_length']
+            self.section_lengths[i] = line['section_length']
+            self.section_indices[i] = line['section_index']
+            self.section_compressed[i] = line['compressed']
+            self.section_offsets[i] = line['section_offset']
+            i += 1
+
+        self.sections_count = i
+
+
     def dump_to_folder(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
+
+        write_to_file(os.path.join(path, "spec"), self._dump_spec())
+
         for i in range(len(self.sections)):
             write_to_file(os.path.join(path, str(self.section_indices[i])), self.sections[i].get_data())
+
+        write_to_file(os.path.join(path, "directory_u1"), ints_to_byte_array(self.directory_u1))
+        write_to_file(os.path.join(path, "directory_u2"), ints_to_byte_array(self.directory_u2))
+        write_to_file(os.path.join(path, "directory_u3"), ints_to_byte_array(self.directory_u3))
+        write_to_file(os.path.join(path, "directory_u4"), ints_to_byte_array(self.directory_u4))
+        write_to_file(os.path.join(path, "directory_u5"), ints_to_byte_array(self.directory_u5))
+        write_to_file(os.path.join(path, "directory_u6"), ints_to_byte_array(self.directory_u6))
+        write_to_file(os.path.join(path, "directory_u7"), struct.pack("I", self.directory_u7))
+
+    @staticmethod
+    def load_from_folder(path):
+
+        self = Directory()
+        self._load_spec(read_file(os.path.join(path, "spec")))
+
+        self.sections = []
+        for i in range(self.sections_count):
+            path = os.path.join(path, str(self.section_indices[i]))
+            if self.section_compressed == 1:
+                self.sections.append(create_structure_from_buffer(CompressedMapSection, Buffer(read_file(path))))
+            else:
+                buf = Buffer(read_file(path))
+                m = create_structure_from_buffer(MapSection, buf)
+                m.data = buf.read()
+                m.length = len(m.data)
+                self.sections.append(m)
+
+        assert len(self.sections) == self.sections_count
+
+        self.directory_u1 = bytes_to_int_array(read_file(os.path.join(path, "directory_u1")))
+        self.directory_u2 = bytes_to_int_array(read_file(os.path.join(path, "directory_u2")))
+        self.directory_u3 = bytes_to_int_array(read_file(os.path.join(path, "directory_u3")))
+        self.directory_u4 = bytes_to_int_array(read_file(os.path.join(path, "directory_u4")))
+        self.directory_u5 = bytes_to_int_array(read_file(os.path.join(path, "directory_u5")))
+        self.directory_u6 = bytes_to_int_array(read_file(os.path.join(path, "directory_u6")))
+        self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
 
 
 import os
 
+
+def read_file(path):
+    with open(path, 'rb') as f:
+        return f.read()
 
 def write_to_file(path, data):
     with open(path, 'wb') as f:
