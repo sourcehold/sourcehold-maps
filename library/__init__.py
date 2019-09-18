@@ -45,7 +45,10 @@ class Library(object):
         return name if not name.endswith(".map") else name[-4:]
 
     def get_from_saves(self, name):
-        path = os.path.join(self.saves, self._as_file(name))
+        return os.path.join(self.saves, self._as_file(name))
 
     def get_from_maps(self, name):
-        pass
+        return os.path.join(self.maps, self._as_file(name))
+
+
+LIBRARY = Library()

@@ -148,8 +148,23 @@ class CompressedMapSection(Structure):
         return self.uncompressed
 
 
+from maps.sections import Section1001, Section1003, Section1002
+
 import csv
 from structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
+
+
+def get_section_for_index(index, compressed):
+    if index == 1001:
+        return Section1001
+    if index == 1002:
+        return Section1002
+    elif index == 1003:
+        return Section1003
+    if compressed == True:
+        return CompressedMapSection
+    else:
+        return MapSection
 
 class Directory(Structure):
     _AMOUNT_OF_SECTIONS = 122
@@ -175,10 +190,9 @@ class Directory(Structure):
             logging.debug("processing section {}".format(i))
             compressed = self.section_compressed[i] == 1
             length = self.section_lengths[i]
-            if not compressed:
-                self.sections.append(MapSection().from_buffer(self._buf, length=length))
-            else:
-                self.sections.append(CompressedMapSection().from_buffer(self._buf))
+            index = self.section_indices[i]
+            type = get_section_for_index(index, compressed)
+            self.sections.append(type().from_buffer(self._buf, length=length))
 
         return self
 
@@ -354,17 +368,19 @@ class Map(Structure):
     def unpack(self):
         self.preview.unpack()
         self.description.unpack()
-        # self.directory.unpack()
+        self.directory.unpack()
 
     def pack(self):
         self.preview.pack()
+        # self.preview_size = self.preview.compressed_size + 4 + 4 + 4
         self.description.pack()
-        # self.directory.pack()
+        # self.description_size = self.preview.compressed_size + 4 + 4 + 4 + 8
+        self.directory.pack()
+        #self.directory_size = self.directory.length + 4
 
     def dump_to_folder(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
-        dirpath = os.path.join(path, "sections")
 
         write_to_file(os.path.join(path, "preview"), self.preview.get_data())
         write_to_file(os.path.join(path, "description"), self.description.get_data())
@@ -373,4 +389,19 @@ class Map(Structure):
         write_to_file(os.path.join(path, "u3"), _int_array_to_bytes(self.u3.get_data()))
         write_to_file(os.path.join(path, "u4"), _int_array_to_bytes(self.u4.get_data()))
         write_to_file(os.path.join(path, "ud"), _int_array_to_bytes(self.ud))
-        self.directory.dump_to_folder(dirpath)
+        self.directory.dump_to_folder(os.path.join(path, "sections"))
+
+    def load_from_folder(self, path):
+        self.preview = Preview()
+        self.preview.uncompressed = read_file(os.path.join(path, "preview"))
+
+        self.description = Description()
+        self.description.uncompressed = read_file(os.path.join(path, "description"))
+
+        self.u1 = bytes_to_int_array(read_file(os.path.join(path, "u1")))
+        self.u2 = bytes_to_int_array(read_file(os.path.join(path, "u2")))
+        self.u3 = bytes_to_int_array(read_file(os.path.join(path, "u3")))
+        self.u4 = bytes_to_int_array(read_file(os.path.join(path, "u4")))
+        self.ud = bytes_to_int_array(read_file(os.path.join(path, "ud")))
+
+        self.directory = Directory.load_from_folder(os.path.join(path, "sections"))
