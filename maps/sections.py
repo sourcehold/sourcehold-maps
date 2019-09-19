@@ -1,4 +1,5 @@
 import binascii
+
 import compression
 from maps import Structure, Variable
 from structure_tools import Buffer
@@ -57,7 +58,30 @@ class Section1001(Structure):
         return cut(self.uncompressed, "H", 198)
 
 
-def create_image(data1, data2):
+def create_image(data1, palette):
+    sq1 = data1
+
+    rows = len(sq1)
+
+    assert rows % 2 == 0
+
+    cutpoint = rows // 2
+
+    width = rows
+    height = rows
+
+    from PIL import Image, ImageColor
+    im = Image.new('RGB', (width + 1, height + 1), ImageColor.getcolor('black', 'RGB'))
+
+    for i in range(len(sq1)):
+        for j in range(len(sq1[i])):
+            ti, tj = iso_xy_to_image_xy((i, j), rows)
+            im.putpixel((width - ti, tj), palette(sq1[i][j]))
+
+    return im
+
+
+def create_comparison_image(data1, data2):
     sq1 = data1
     sq2 = data2
 
@@ -148,22 +172,6 @@ def iso_xy_to_image_xy(coord, rows):
 
     return (tx, ty)
 
-
-def create_image_of_differences(mapdata1, mapdata2):
-    from PIL import Image, ImageColor
-    im = Image.new('1', (len(mapdata1) * 2, len(mapdata1) * 2))
-    for i in range(len(mapdata1)):
-        for j in range(len(mapdata1[i])):
-            d1 = mapdata1[i][j]
-            d2 = mapdata2[i][j]
-
-            xy = iso_xy_to_image_xy((i, j))
-            if d1 == d2:
-                im.putpixel(xy, ImageColor.getcolor('black', '1'))
-            else:
-                im.putpixel(xy, ImageColor.getcolor('red', '1'))
-
-    return im
 
 
 import struct

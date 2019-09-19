@@ -1,3 +1,17 @@
+import colorsys
+
+
+def create_palette(n):
+    ma = 324 / 360
+    s = 1 / n
+    i = 0
+    pal = []
+    for i in range(n):
+        col = colorsys.hsv_to_rgb(i * s, 1, 255)
+        r, g, b = round(col[0]), round(col[1]), round(col[2])
+        pal.append((r, g, b))
+    return pal
+
 
 def rgb15bitto32bit(i):
     b = i & 0x1F
@@ -11,7 +25,9 @@ def rgb15bitto32bit(i):
 
     return (r, g, b)
 
+
 import struct
+
 
 def build_serial_palette(stream):
     palette = []
@@ -21,6 +37,7 @@ def build_serial_palette(stream):
 
     return palette
 
+
 def build_palette(stream):
     palette = []
     for i in range(0x100):
@@ -29,8 +46,8 @@ def build_palette(stream):
 
     return palette
 
-def build_image(palette, stream):
 
+def build_image(palette, stream):
     image = []
 
     d = stream.read(1)
@@ -38,7 +55,7 @@ def build_image(palette, stream):
     #     d = stream.read(1)
 
     while True:
-        #while d == b'\x00':
+        # while d == b'\x00':
         #    d = stream.read(1)
 
         if d == b'':
