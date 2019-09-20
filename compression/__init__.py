@@ -33,7 +33,7 @@ class DirectCompression(AbstractCompressor):
 
     def __init__(self):
         super().__init__()
-        import compression.compressionlib_interface as handle
+        import compression.compressionlib_interface_nocb as handle
         self.handle = handle
 
     def compress(self, data):
