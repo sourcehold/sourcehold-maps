@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import ctypes
 import sys
 
@@ -67,7 +65,7 @@ def compress(data):
     type = ctypes.c_uint(0)
 
     # print("imploding data", file=sys.stderr)
-    result = dll.implode_nocb(pbOutBuff, pbOutBuffEnd, pbInBuff, pbInBuffEnd, type, level)
+    result = dll.implode_nocb(pbOutBuff, ctypes.byref(pbOutBuffEnd), pbInBuff, pbInBuffEnd, type, level)
     # print("data imploded", file=sys.stderr)
 
     # print(hex(ctypes.cast(info.pbOutBuff, ctypes.c_void_p).value), file=sys.stderr)
