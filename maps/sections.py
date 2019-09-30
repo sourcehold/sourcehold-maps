@@ -1,12 +1,15 @@
 import binascii
 
 import compression
+from iotools import unpack
 from maps import Structure, Variable
 from structure_tools import Buffer
 
 
 def cut(data, type, rows):
     data = Buffer(data)
+    if type.__class__ == int:
+        type = type + "B"
     size = struct.calcsize(type)
     header = data.read(size * 2)
 
@@ -14,13 +17,13 @@ def cut(data, type, rows):
 
     for i in range(0, rows + 1, 1):
         header = data.read(size * 2)
-        chunk = [struct.unpack(type, data.read(size))[0] for v in range(i * 2)]
+        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 
     for i in range(rows, -1, -1):
         header = data.read(size * 2)
-        chunk = [struct.unpack(type, data.read(size))[0] for v in range(i * 2)]
+        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 
@@ -56,6 +59,33 @@ class Section1001(Structure):
 
     def interpret(self):
         return cut(self.uncompressed, "H", 198)
+
+
+def translate_diamond_to_checkerboard(data):
+    sq1 = data
+
+    rows = len(sq1)
+
+    assert rows % 2 == 0
+
+    cutpoint = rows // 2
+
+    width = rows
+    height = rows
+
+    out = []
+    for i in range(width + 1):
+        col = []
+        for j in range(height + 1):
+            col.append(None)
+        out.append(col)
+
+    for i in range(len(sq1)):
+        for j in range(len(sq1[i])):
+            ti, tj = iso_xy_to_image_xy((i, j), rows)
+            out[width - ti][tj] = sq1[i][j]
+
+    return out
 
 
 def create_image(data1, palette):
@@ -154,7 +184,10 @@ def interpret(data, type, opening, closing):
     return mapdata
 
 
+# Only applies when rows is even.
 def iso_xy_to_image_xy(coord, rows):
+    assert rows % 2 == 0
+
     cut = rows // 2
 
     x = coord[0]

@@ -3,7 +3,7 @@ import colorsys
 
 def create_palette(n):
     ma = 324 / 360
-    s = 1 / n
+    s = 0.9 / n
     i = 0
     pal = []
     for i in range(n):
