@@ -89,40 +89,69 @@ def get_dat_files(path):
     return [file for file in os.listdir(path) if file.endswith(".dat")]
 
 
-def compare_files_on_percentage_byte_overlap(title, files, keys=None):
-    if keys == None:
-        keys = [file.split(".")[0] for file in get_dat_files(files[0])]
-
-    fnames = [file.split("/")[-1] for file in files]
+def compare_files_on_percentage_byte_overlap(changed_keys, filesdict, skip_equal=True):
 
     header = ["section", "file1", "file2", "percentage overlap"]
     matrix = []
 
-    for key in keys:
-        datas = [open(file + "/{}.dat".format(key), 'rb').read() for file in files]
-
-        for i in range(len(datas)):
-            for j in range(len(datas)):
+    for key in filesdict.keys():
+        keys = [k for k in filesdict[key].keys()]
+        for i in range(len(keys)):
+            for j in range(len(keys)):
                 if i >= j:
                     continue
-                d1 = datas[i]
-                d2 = datas[j]
+                key1 = keys[i]
+                key2 = keys[j]
+                d1 = filesdict[key][key1]
+                d2 = filesdict[key][key2]
+
+                if skip_equal:
+                    if d1 == d2:
+                        continue
+
+                changed_keys.add(key)
+
                 v = average_overlap(d1, d2)
-                # v = round(v, 3)
-                matrix.append([key, fnames[i], fnames[j], v])
+                matrix.append([key, key1, key2, v])
 
     writer = MarkdownTableWriter()
-    writer.table_name = title
+    # writer.table_name = title
     writer.value_matrix = matrix
     writer.headers = header
 
     return writer
 
 
-import unpacker
+import library
+import maps
 
-IMPORT_HELPER = unpacker.ImportHelper()
 
+def create_byte_comparison(files, title, outputfile):
+    fs = files
+
+    ufs = [f for f in fs if not os.path.exists(f)]
+    for uf in ufs:
+        mapname = os.path.basename(uf)
+        with open(library.LIBRARY.get_from_maps(mapname) + ".map", 'rb') as f:
+            buf = maps.Buffer(f.read())
+        map = maps.Map().from_buffer(buf)
+        map.dump_to_folder("file_inspection/maps/" + mapname)
+
+    names = [os.path.basename(f) for f in fs]
+    files = ["/" + f for f in os.listdir("file_inspection/maps/" + names[0])] + ["/sections/" + f for f in os.listdir(
+        "file_inspection/maps/" + names[0] + "/sections")]
+    files.remove("/sections")
+
+    fsdict = {f: {os.path.basename(fname): open(fname + f, 'rb').read() for fname in fs} for f in files}
+
+    changed_keys = set()
+    w = compare_files_on_percentage_byte_overlap(changed_keys, fsdict)
+    changed_keys = sorted(list(changed_keys))
+
+    with open(outputfile, "w") as f:
+        f.write("#{}\r\n".format(title))
+        f.write("The following sections were unequal:\r\n\r\n" + "\r\n".join(changed_keys) + "\r\n")
+        w.dump(f)
 
 def compare_unit_movement():
     fs = [
@@ -134,12 +163,27 @@ def compare_unit_movement():
 
     ufs = [f for f in fs if not os.path.exists(f)]
     for uf in ufs:
-        mapname = uf.split("/")[-1]
-        IMPORT_HELPER.dump_to_library(mapname)
+        mapname = os.path.basename(uf)
+        with open(library.LIBRARY.get_from_maps(mapname) + ".map", 'rb') as f:
+            buf = maps.Buffer(f.read())
+        map = maps.Map().from_buffer(buf)
+        map.dump_to_folder("file_inspection/maps/" + mapname)
 
-    w = compare_files_on_percentage_byte_overlap("Percentage of byte overlap in unit movement", fs)
+    names = [os.path.basename(f) for f in fs]
+    files = ["/" + f for f in os.listdir("file_inspection/maps/" + names[0])] + ["/sections/" + f for f in os.listdir(
+        "file_inspection/maps/" + names[0] + "/sections")]
+    files.remove("/sections")
 
-    w.dump(open("file_inspection/findings/byte_overlap_in_unit_movement.md", "w"))
+    fsdict = {f: {os.path.basename(fname): open(fname + f, 'rb').read() for fname in fs} for f in files}
+
+    changed_keys = set()
+    w = compare_files_on_percentage_byte_overlap(changed_keys, fsdict)
+    changed_keys = sorted(list(changed_keys))
+
+    with open("file_inspection/findings/byte_overlap_in_unit_movement.md", "w") as f:
+        f.write("#Percentage of byte overlap in unit movement\r\n")
+        f.write("The following sections were unequal:\r\n\r\n" + "\r\n".join(changed_keys) + "\r\n")
+        w.dump(f)
 
 
 def compare_view_nav():
@@ -159,5 +203,34 @@ def compare_view_nav():
 
     w.dump(open("file_inspection/findings/byte_overlap_in_view_navigation.md", "w"))
 
+
+def a():
+    create_byte_comparison([
+        "file_inspection/maps/S_noveg",
+        "file_inspection/maps/S_onetree",
+        "file_inspection/maps/S_removetree",
+        "file_inspection/maps/S_anothertree_left",
+    ], "Byte comparison of vegetation (a tree)", "file_inspection/findings/byte_overlap_in_vegetation.md")
+
+
+def b():
+    create_byte_comparison([
+        "file_inspection/maps/S_onewall_tl",
+        "file_inspection/maps/S_onewall_tltr",
+        "file_inspection/maps/S_onewall_tltrdr",
+        "file_inspection/maps/S_onewall_tltrdrdl",
+    ], "Byte comparison of wall placements", "file_inspection/findings/byte_overlap_in_wall_placements.md")
+
+
+def c():
+    create_byte_comparison([
+        "file_inspection/maps/XL_1knight_100p",
+        "file_inspection/maps/XL_1knight_60p"
+    ], "Byte comparison of unit health", "file_inspection/findings/byte_overlap_in_unit_health.md")
+
+
 if __name__ == "__main__":
-    compare_view_nav()
+    create_byte_comparison([
+        "file_inspection/maps/Scr",
+        "file_inspection/maps/160cr_arab_archer_red"
+    ], "Byte comparison of unit creation", "file_inspection/findings/byte_overlap_in_unit_creation.md")
