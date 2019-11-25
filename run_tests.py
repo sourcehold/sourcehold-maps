@@ -1,5 +1,7 @@
-import subprocess
+import unittest
 
 # logging.basicConfig(level = logging.DEBUG)
 
-subprocess.run(["python", "-m", "unittest", "discover"]).check_returncode()
+if __name__ == '__main__':
+    test_suite = unittest.TestLoader().discover('.')
+    unittest.TextTestRunner(descriptions=True, verbosity=2).run(test_suite)

@@ -1,8 +1,12 @@
 import binascii
+import io
 import logging
 import struct
 
+from PIL import Image
+
 import compression
+import palette
 from structure_tools import Structure, Variable
 
 
@@ -63,6 +67,24 @@ class Preview(Structure):
         if not hasattr(self, "uncompressed"):
             self.unpack()
         return self.uncompressed
+
+    def create_image(self) -> Image:
+        palette_size = 512
+
+        buff = io.BytesIO(self.uncompressed)
+        size = len(self.uncompressed)
+        image_size = size - palette_size
+        width = height = int(image_size ** 0.5)
+
+        buff.seek(0)
+        p = palette.build_serial_palette(buff)
+        data = list(buff.read(image_size))
+
+        img = Image.new("P", (width, height))
+        img.putpalette(p)
+        img.putdata(data)
+
+        return img
 
 
 class Description(Structure):
