@@ -25,6 +25,9 @@ def rgb15bitto32bit(i):
 
     return (r, g, b)
 
+def conv32bittorgb15bit(r, g, b):
+    v = 0
+
 
 import struct
 
