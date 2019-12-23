@@ -1,6 +1,6 @@
 import unittest
 
-import compression
+from sourcehold import compression
 
 
 class TestCompression(unittest.TestCase):

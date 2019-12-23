@@ -1,14 +1,10 @@
-
-import maps
-from maps import Map, read_file, Buffer
-
-import unittest
+from sourcehold.maps import Map, read_file, Buffer
 
 map = Map().from_buffer(Buffer(read_file("resources/MxM_unseen_1.map")))
 
 from PIL import Image, ImageDraw
 
-from palette import build_serial_palette
+from sourcehold.palette import build_serial_palette
 
 im = Image.new('P', (400,400))
 

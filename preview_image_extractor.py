@@ -2,14 +2,11 @@ import argparse
 import logging
 import os
 import io
-import sys
 from pathlib import PurePath
 
 from PIL import Image
 
-import maps
-import palette
-import structure_tools
+from sourcehold import structure_tools, maps, palette
 
 palette_size = 512
 

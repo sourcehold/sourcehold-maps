@@ -3,8 +3,7 @@ import logging
 
 logging.basicConfig(level=logging.WARNING)
 
-import maps
-import structure_tools
+from sourcehold import structure_tools, maps
 import sys
 import tempfile
 

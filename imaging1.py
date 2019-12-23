@@ -1,8 +1,8 @@
 import os
 
-import palette
-from maps import read_file, write_to_file
-from maps.sections import cut, create_image
+from sourcehold import palette
+from sourcehold.maps import read_file, write_to_file
+from sourcehold.maps.sections import cut, create_image
 
 hexformat = "#{0:02x}{1:02x}{2:02x}"
 datumhexformat = "{:016x}"

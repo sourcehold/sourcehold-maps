@@ -1,9 +1,9 @@
 import binascii
 
-import compression
-from iotools import unpack
-from maps import Structure, Variable
-from structure_tools import Buffer
+from sourcehold import compression
+from sourcehold.iotools import unpack
+from sourcehold.maps import Structure, Variable
+from sourcehold.structure_tools import Buffer
 
 
 def cut(data, type, rows):

@@ -1,8 +1,7 @@
 import os
 import unittest
 
-import maps
-import structure_tools
+from sourcehold import structure_tools, maps
 
 
 class TestMapStructure(unittest.TestCase):

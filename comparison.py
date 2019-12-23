@@ -1,4 +1,4 @@
-from structure_tools import Table
+from sourcehold.structure_tools import Table
 
 files = [
     'file_inspection/maps/160cb_unseen',
@@ -122,8 +122,8 @@ def compare_files_on_percentage_byte_overlap(changed_keys, filesdict, skip_equal
     return writer
 
 
-import library
-import maps
+from sourcehold import maps
+from sourcehold.maps import library
 
 
 def create_byte_comparison(files, title, outputfile):

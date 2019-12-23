@@ -3,8 +3,7 @@ import unittest
 
 from PIL import Image
 
-import maps
-import structure_tools
+from sourcehold import structure_tools, maps
 
 
 class TestPreview(unittest.TestCase):

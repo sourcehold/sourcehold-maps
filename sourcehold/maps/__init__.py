@@ -5,9 +5,8 @@ import struct
 
 from PIL import Image
 
-import compression
-import palette
-from structure_tools import Structure, Variable
+from sourcehold import compression, palette
+from sourcehold.structure_tools import Structure, Variable
 
 
 class SimpleSection(Structure):
@@ -170,10 +169,10 @@ class CompressedMapSection(Structure):
         return self.uncompressed
 
 
-from maps.sections import Section1001, Section1003, Section1002
+from sourcehold.maps.sections import Section1001, Section1003, Section1002
 
 import csv
-from structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
+from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
 
 
 def get_section_for_index(index, compressed):
@@ -427,3 +426,13 @@ class Map(Structure):
         self.ud = bytes_to_int_array(read_file(os.path.join(path, "ud")))
 
         self.directory = Directory.load_from_folder(os.path.join(path, "sections"))
+
+    def from_file(self, fp: str):
+        with open(fp, 'rb') as f:
+            return self.from_buffer(Buffer(f.read()))
+
+    def to_file(self, fp: str):
+        b = Buffer()
+        self.serialize_to_buffer(b)
+        with open(fp, 'wb') as f:
+            f.write(b.getvalue())

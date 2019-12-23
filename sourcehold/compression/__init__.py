@@ -1,6 +1,7 @@
 import struct
 import subprocess
 import sys
+import importlib
 
 
 def _int_array_to_bytes(array):
@@ -33,7 +34,8 @@ class DirectCompression(AbstractCompressor):
 
     def __init__(self):
         super().__init__()
-        import compression.compressionlib_interface_nocb as handle
+
+        import sourcehold.compression.compressionlib_interface_nocb as handle
         self.handle = handle
 
     def compress(self, data):
@@ -49,14 +51,14 @@ class SubprocessCompression(AbstractCompressor):
         super().__init__()
 
     def decompress(self, data):
-        result = subprocess.run(["python", "compression/compressionlib_interface.py", "decompress"],
+        result = subprocess.run(["python", "sourcehold/compression/compressionlib_interface.py", "decompress"],
                                 input=self._sanitize(data),
                                 stdout=subprocess.PIPE)
         result.check_returncode()
         return result.stdout
 
     def compress(self, data):
-        result = subprocess.run(["python", "compression/compressionlib_interface.py", "compress"],
+        result = subprocess.run(["python", "sourcehold/compression/compressionlib_interface.py", "compress"],
                                 input=self._sanitize(data),
                                 stdout=subprocess.PIPE)
         result.check_returncode()
