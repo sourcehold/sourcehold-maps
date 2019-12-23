@@ -6,6 +6,7 @@ import struct
 from PIL import Image
 
 from sourcehold import compression, palette
+from sourcehold.iotools import read_file, write_to_file, _int_array_to_bytes
 from sourcehold.structure_tools import Structure, Variable
 
 
@@ -19,10 +20,13 @@ class SimpleSection(Structure):
     def unpack(self):
         assert len(self.data) == self.size
 
+    def size_of(self):
+        return self.size + 4
+
 
 class CompressedSection(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
+    uncompressed_size = Variable("uncompressed_size", "I")
+    compressed_size = Variable("compressed_size", "I")
     hash = Variable("hash", "I")
     data = Variable("data", "B", compressed_size)
 
@@ -43,29 +47,11 @@ class CompressedSection(Structure):
             self.unpack()
         return self.uncompressed
 
+    def size_of(self):
+        return self.compressed_size + 4 + 4 + 4
 
-class Preview(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
 
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
+class Preview(CompressedSection):
 
     def create_image(self) -> Image:
         palette_size = 512
@@ -86,30 +72,8 @@ class Preview(Structure):
         return img
 
 
-class Description(Structure):
-    unknown1 = Variable("u1", "B", 4)
-    unknown2 = Variable("u2", "B", 4)
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
+class Description(CompressedSection):
+    pass
 
 
 class MapSection(Structure):
@@ -117,9 +81,12 @@ class MapSection(Structure):
     def __init__(self):
         super().__init__()
 
+    def size_of(self):
+        return self.length
+
     def from_buffer(self, buf, **kwargs):
         super().from_buffer(buf, **kwargs)
-        if not 'length' in kwargs:
+        if 'length' not in kwargs:
             raise KeyError()
         self.length = kwargs.get('length')
         self.data = buf.read(self.length)
@@ -145,28 +112,8 @@ class MapSection(Structure):
         ))
 
 
-class CompressedMapSection(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
+class CompressedMapSection(CompressedSection):
+    pass
 
 
 from sourcehold.maps.sections import Section1001, Section1003, Section1002
@@ -189,6 +136,7 @@ def get_section_for_index(index, compressed):
 
 class Directory(Structure):
     _AMOUNT_OF_SECTIONS = 122
+    directory_size = Variable("directory_size", "I")
     length = Variable("length", "I")
     sections_count = Variable("sections_count", "I")
     directory_u1 = Variable("directory_u1", "I", 5)
@@ -242,7 +190,7 @@ class Directory(Structure):
         for section in self.sections:
             section.pack()
 
-        # Lets keep things simple for now and not change compressed and indices
+        # Lets keep things simple for now and not assume change in compressed and indices
         zeroes = Directory._AMOUNT_OF_SECTIONS - len(self.sections)
 
         accum = 0
@@ -251,12 +199,12 @@ class Directory(Structure):
         for i in range(self.sections_count):
             s = self.sections[i]
             if s.__class__ == MapSection:
-                self.uncompressed_lengths[i] = s.length
-                self.section_lengths[i] = s.length
+                self.uncompressed_lengths[i] = s.size_of()
+                self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 0
             if s.__class__ == CompressedMapSection:
                 self.uncompressed_lengths[i] = s.uncompressed_size
-                self.section_lengths[i] = s.compressed_size + 12  # important!
+                self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 1
 
             self.section_offsets[i] = accum
@@ -358,31 +306,20 @@ class Directory(Structure):
 import os
 
 
-def read_file(path):
-    with open(path, 'rb') as f:
-        return f.read()
-
-def write_to_file(path, data):
-    with open(path, 'wb') as f:
-        f.write(data)
-
-
-def _int_array_to_bytes(array):
-    return b''.join(struct.pack("B", v) for v in array)
-
-
 class Map(Structure):
     magic = Variable("magic", "I")
     preview_size = Variable("preview_size", "I")
     preview = Variable("preview", Preview)
-    description_size = Variable("description_size", "I")
+    unknown1 = Variable("unknown1", "I", 1)
+    unknown2 = Variable("unknown2", "I", 1)
+    description_size = Variable("description_size", "I") #This variable seems a little redundant
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
     u2 = Variable("u2", SimpleSection)
     u3 = Variable("u3", SimpleSection)
     u4 = Variable("u4", SimpleSection)
     ud = Variable("ud", "B", 4)
-    directory_size = Variable("ds", "I")
+
     directory = Variable("directory", Directory)
 
     def unpack(self):
@@ -403,6 +340,8 @@ class Map(Structure):
             os.makedirs(path)
 
         write_to_file(os.path.join(path, "preview"), self.preview.get_data())
+        write_to_file(os.path.join(path, "unknown1"), _int_array_to_bytes(self.unknown1))
+        write_to_file(os.path.join(path, "unknown2"), _int_array_to_bytes(self.unknown2))
         write_to_file(os.path.join(path, "description"), self.description.get_data())
         write_to_file(os.path.join(path, "u1"), _int_array_to_bytes(self.u1.get_data()))
         write_to_file(os.path.join(path, "u2"), _int_array_to_bytes(self.u2.get_data()))
@@ -414,6 +353,9 @@ class Map(Structure):
     def load_from_folder(self, path):
         self.preview = Preview()
         self.preview.uncompressed = read_file(os.path.join(path, "preview"))
+
+        self.unknown1 = bytes_to_int_array(read_file(os.path.join(path, "unknown1")))
+        self.unknown2 = bytes_to_int_array(read_file(os.path.join(path, "unknown2")))
 
         self.description = Description()
         self.description.uncompressed = read_file(os.path.join(path, "description"))

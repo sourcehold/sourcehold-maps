@@ -132,7 +132,7 @@ def export_images(unpacked_map_folder, destination):
 
 
 from sourcehold import palette
-from sourcehold.maps import read_file, write_to_file
+from sourcehold.iotools import read_file, write_to_file
 from sourcehold.maps.sections import cut
 
 hexformat = "#{0:02x}{1:02x}{2:02x}"

@@ -1,6 +1,6 @@
 from PIL import Image
 
-from sourcehold.maps import read_file
+from sourcehold.iotools import read_file
 from sourcehold.maps.sections import cut, translate_diamond_to_checkerboard
 
 SAND_RAISED_LAND = (1, 512)

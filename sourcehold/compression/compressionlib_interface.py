@@ -10,7 +10,7 @@ class TDataInfo(ctypes.Structure):
                 ('pbOutBuffEnd', ctypes.POINTER(ctypes.c_ubyte))]
 
 dll_name = "compressionlib-vs.dll"
-dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + "..\\bin" + os.path.sep + dll_name
+dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + "..\\..\\bin" + os.path.sep + dll_name
 
 dll = ctypes.CDLL(dllabspath)
 

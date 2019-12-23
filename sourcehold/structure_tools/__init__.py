@@ -229,6 +229,21 @@ class Structure(object):
 
         return fields
 
+    @classmethod
+    def get_fields_2(cls):
+        fields = {}
+        tree = []
+        while cls is not None:
+            tree.insert(0, cls)
+            # Note: system does not support multiple inheritance
+            cls = cls.__base__
+
+        for cls in tree:
+            if not hasattr(cls, "__dict__"):
+                continue
+            fields.update(cls.__dict__["fields"])
+
+        return fields
 
     def pack(self):
         pass
@@ -241,15 +256,15 @@ class Structure(object):
 
     def from_buffer(self, buf: Buffer, **kwargs):
         self._buf = buf
-        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
-        for prop in props:
+        props = self.__class__.get_fields()
+        for name, prop in props.items():
             # print("setting {}. buf is at {}".format(prop, buf.tell()))
             bef = buf.tell()
-            self.__class__.__dict__[prop].set_from_buffer(self, buf, **kwargs)
+            prop.set_from_buffer(self, buf, **kwargs)
             aft = buf.tell()
             l = aft - bef
             logging.debug("deserialized {:14s}. length: {:10d} before: {:10d},  after: {:10d}".format(
-                prop,
+                name,
                 l,
                 bef,
                 aft
@@ -259,15 +274,15 @@ class Structure(object):
 
     def serialize_to_buffer(self, buf: Buffer):
         self.pack()
-        props = [key for key in self.__class__.__dict__ if self.__class__.__dict__[key].__class__ == Variable]
-        for prop in props:
+        props = self.__class__.get_fields()
+        for name, prop in props.items():
             # print("serializing {}. buf is at {}".format(prop, buf.tell()))
             bef = buf.tell()
-            self.__class__.__dict__[prop].serialize_to_buffer(self, buf)
+            prop.serialize_to_buffer(self, buf)
             aft = buf.tell()
             l = aft - bef
             logging.debug("serialized {:16s}. length: {:10d} before: {:10d},  after: {:10d}".format(
-                prop,
+                name,
                 l,
                 bef,
                 aft

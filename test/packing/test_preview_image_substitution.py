@@ -1,4 +1,5 @@
-from sourcehold.maps import Map, read_file, Buffer
+from sourcehold.maps import Map, Buffer
+from sourcehold.iotools import read_file
 
 map = Map().from_buffer(Buffer(read_file("resources/MxM_unseen_1.map")))
 
