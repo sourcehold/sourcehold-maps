@@ -206,10 +206,29 @@ def create_structure_from_buffer(structure: type, buf: Buffer, **kwargs):
 
     return self
 
+
 class Structure(object):
 
     def __init__(self):
         pass
+
+    @classmethod
+    def get_fields(cls):
+        fields = {}
+        tree = []
+        while cls is not None:
+            tree.insert(0, cls)
+            # Note: system does not support multiple inheritance
+            cls = cls.__base__
+
+        for cls in tree:
+            if not hasattr(cls, "__dict__"):
+                continue
+            props = {key: value for key, value in cls.__dict__.items() if cls.__dict__[key].__class__ == Variable}
+            fields.update(props)
+
+        return fields
+
 
     def pack(self):
         pass

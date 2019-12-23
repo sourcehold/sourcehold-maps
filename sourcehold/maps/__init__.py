@@ -189,18 +189,18 @@ def get_section_for_index(index, compressed):
 
 class Directory(Structure):
     _AMOUNT_OF_SECTIONS = 122
-    length = Variable("l", "I")
-    sections_count = Variable("sc", "I")
+    length = Variable("length", "I")
+    sections_count = Variable("sections_count", "I")
     directory_u1 = Variable("directory_u1", "I", 5)
-    uncompressed_lengths = Variable("ul", "I", _AMOUNT_OF_SECTIONS)
+    uncompressed_lengths = Variable("uncompressed_lengths", "I", _AMOUNT_OF_SECTIONS)
     directory_u2 = Variable("directory_u2", "I", 28)
-    section_lengths = Variable("sl", "I", _AMOUNT_OF_SECTIONS)
+    section_lengths = Variable("section_lengths", "I", _AMOUNT_OF_SECTIONS)
     directory_u3 = Variable("directory_u3", "I", 28)
-    section_indices = Variable("si", "I", _AMOUNT_OF_SECTIONS)
+    section_indices = Variable("section_indices", "I", _AMOUNT_OF_SECTIONS)
     directory_u4 = Variable("directory_u4", "I", 28)
-    section_compressed = Variable("com", "I", _AMOUNT_OF_SECTIONS)
+    section_compressed = Variable("section_compressed", "I", _AMOUNT_OF_SECTIONS)
     directory_u5 = Variable("directory_u5", "I", 28)
-    section_offsets = Variable("so", "I", _AMOUNT_OF_SECTIONS)
+    section_offsets = Variable("section_offsets", "I", _AMOUNT_OF_SECTIONS)
     directory_u6 = Variable("directory_u6", "I", 28)
     directory_u7 = Variable("directory_u7", "I")
 
@@ -308,7 +308,6 @@ class Directory(Structure):
             i += 1
 
         self.sections_count = i
-
 
     def dump_to_folder(self, path):
         if not os.path.exists(path):
