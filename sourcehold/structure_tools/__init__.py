@@ -63,6 +63,7 @@ def ints_to_byte_array(ints: list):
         buf.write(struct.pack("I", i))
     return buf.getvalue()
 
+
 class Variable(object):
 
     def __init__(self, name, type, array_size=0, break_array=BreakFunctions.break_at_eof):
@@ -212,6 +213,11 @@ class Structure(object):
     def __init__(self):
         pass
 
+    def __getattr__(self, item):
+        if not item in self.fields:
+            return None
+        return self.fields[item]
+
     @classmethod
     def get_fields(cls):
         fields = {}
@@ -231,6 +237,7 @@ class Structure(object):
 
     @classmethod
     def get_fields_2(cls):
+        # TODO: I need a substitute for properties, because they do not work in a dict... I guess?
         fields = {}
         tree = []
         while cls is not None:
