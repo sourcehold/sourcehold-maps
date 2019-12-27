@@ -72,8 +72,47 @@ class Preview(CompressedSection):
         return img
 
 
-class Description(CompressedSection):
-    pass
+class Description(Structure):
+    description_size = Variable("description_size", "I")  # This variable seems a little redundant
+    uncompressed_size = Variable("uncompressed_size", "I")
+    compressed_size = Variable("compressed_size", "I")
+    hash = Variable("hash", "I")
+    data = Variable("data", "B", compressed_size)
+
+    def pack(self):
+        self.description_size = len(self.uncompressed.replace(b'\x00', b'')) #quick and dirty. TODO: proper sanity checks
+        self.description_size = 0 #perhaps not the size of the description after all...
+        diff = 1000 - len(self.uncompressed)
+        if diff < 0:
+            raise Exception("description text too long")
+        elif diff == 0:
+            pass
+        else:
+            self.uncompressed += b'\x00' * diff
+
+        self.data = compression.COMPRESSION.compress(self.uncompressed)
+        self.hash = binascii.crc32(self.uncompressed)
+        self.uncompressed_size = len(self.uncompressed)
+        self.compressed_size = len(self.data)
+
+    def unpack(self):
+        self.uncompressed = compression.COMPRESSION.decompress(self.data)
+        assert len(self.data) == self.compressed_size
+        assert len(self.uncompressed) == self.uncompressed_size
+        assert binascii.crc32(self.uncompressed) == self.hash
+        self.uncompressed = self.uncompressed.replace(b'\x00', b'')
+        # if not self.description_size == len(self.uncompressed):
+        #     print(self.description_size)
+        #     print(self.uncompressed)
+        #     assert True is False
+
+    def get_data(self):
+        if not hasattr(self, "uncompressed"):
+            self.unpack()
+        return self.uncompressed
+
+    def size_of(self):
+        return self.compressed_size + 4 + 4 + 4 + 4
 
 
 class MapSection(Structure):
@@ -312,7 +351,6 @@ class Map(Structure):
     preview = Variable("preview", Preview)
     unknown1 = Variable("unknown1", "I", 1)
     unknown2 = Variable("unknown2", "I", 1)
-    description_size = Variable("description_size", "I") #This variable seems a little redundant
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
     u2 = Variable("u2", SimpleSection)

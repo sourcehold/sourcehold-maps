@@ -72,8 +72,8 @@ class Variable(object):
         self.type = type
         self.array_size = array_size
         self.break_array = break_array
-        self.fget = None
-        self.fset = None
+        self.fget = self.__get__
+        self.fset = self.__set__
         self.fdel = None
 
     def __call__(self, fget):
@@ -83,15 +83,15 @@ class Variable(object):
     def __get__(self, obj, objtype=None):
         if obj is None:
             return self
-        if not self.fget is None:
-            return self.fget(obj, self.name)
+        #if not self.fget is None:
+        #    return self.fget(obj, self.name)
         if "_" + self.name not in obj.__dict__:
             raise AttributeError("object has no attribute {}".format(self.name))
         return obj.__dict__["_" + self.name]
 
     def __set__(self, obj, value):
-        if not self.fset is None:
-            return self.fset(obj, self.name, value)
+        #if not self.fset is None:
+        #    return self.fset(obj, self.name, value)
         obj.__dict__["_" + self.name] = value
 
     def __delete__(self, obj):
@@ -208,15 +208,23 @@ def create_structure_from_buffer(structure: type, buf: Buffer, **kwargs):
     return self
 
 
+def dict_join(d1, d2):
+    d = d1.copy()
+    d.update(d2)
+    return d
+
 class Structure(object):
 
     def __init__(self):
         pass
 
-    def __getattr__(self, item):
-        if not item in self.fields:
-            return None
-        return self.fields[item]
+    # def __getattr__(self, item):
+    #     if item not in self.fields:
+    #         return None
+    #     return self.fields[item].fget(self)
+    #
+    # def __setattr__(self, key, value):
+    #     self.fields[key].fset(self, value)
 
     @classmethod
     def get_fields(cls):
@@ -247,6 +255,8 @@ class Structure(object):
 
         for cls in tree:
             if not hasattr(cls, "__dict__"):
+                continue
+            if not 'fields' in cls.__dict__:
                 continue
             fields.update(cls.__dict__["fields"])
 
