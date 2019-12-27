@@ -31,7 +31,7 @@ class CompressedSection(Structure):
     data = Variable("data", "B", compressed_size)
 
     def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
+        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
@@ -90,7 +90,7 @@ class Description(Structure):
         else:
             self.uncompressed += b'\x00' * diff
 
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
+        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)

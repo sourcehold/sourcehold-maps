@@ -3,31 +3,36 @@ import unittest
 from sourcehold import structure_tools, maps
 
 
-with open("resources/MxM_unseen_1.map", 'rb') as f:
-    raw1 = f.read()
-    buf = structure_tools.Buffer(raw1)
-
-m = maps.Map().from_buffer(buf)
-m.unpack()
-m.directory.unpack()
-
-buf2 = structure_tools.Buffer()
-m.serialize_to_buffer(buf2)
-
 class TestEqual(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        with open("resources/MxM_unseen_1.map", 'rb') as f:
+            cls.raw1 = f.read()
+            buf = structure_tools.Buffer(cls.raw1)
+
+        m = maps.Map().from_buffer(buf)
+        m.unpack()
+        m.directory.unpack()
+
+        buf2 = structure_tools.Buffer()
+        m.serialize_to_buffer(buf2)
+        cls.m = m
+        cls.buf2 = buf2
+
     def test_equal(self):
-        self.assertEqual(raw1, buf2.getvalue())
+        self.assertEqual(TestEqual.raw1, TestEqual.buf2.getvalue())
 
-    def test_equal_description_change(self):
-        dirbuf1 = structure_tools.Buffer()
-        dirbuf2 = structure_tools.Buffer()
+    def test_packing(self):
+        TestEqual.m.pack()
+        buf2 = structure_tools.Buffer()
+        TestEqual.m.serialize_to_buffer(buf2)
+        self.assertEqual(TestEqual.raw1, TestEqual.buf2.getvalue())
 
-        m.directory.serialize_to_buffer(dirbuf1)
-        m.description.uncompressed = b''
+    def test_packing_advanced(self):
+        m1 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
+        m1.unpack()
+        m2 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
+        m2.unpack()
 
-        m.pack()
-
-        m.directory.serialize_to_buffer(dirbuf2)
-
-        self.assertEqual(dirbuf1.getvalue(), dirbuf2.getvalue())
+        m1.assert_equality(m2, with_pack = True)

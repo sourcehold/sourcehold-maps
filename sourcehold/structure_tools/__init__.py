@@ -227,7 +227,7 @@ class Structure(object):
     #     self.fields[key].fset(self, value)
 
     @classmethod
-    def get_fields(cls):
+    def get_fields(cls) -> dict:
         fields = {}
         tree = []
         while cls is not None:
@@ -304,6 +304,81 @@ class Structure(object):
                 bef,
                 aft
             ))
+
+    def yield_value_inequalities(self, other, with_pack = True):
+        if with_pack:
+            self.pack()
+            other.pack()
+
+            fields_1 = self.get_fields()
+            fields_2 = other.get_fields()
+
+            assert fields_1.keys() == fields_2.keys()
+
+            for key in fields_1.keys():
+
+                a = fields_1[key].fget(self)
+                b = fields_2[key].fget(other)
+
+                if a == None and b == None:
+                    continue
+
+                if a == None and b != None or b == None and a != None:
+                    yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
+
+                if isinstance(a, Structure) and isinstance(b, Structure):
+                    for ineq in a.yield_value_inequalities(b, False):
+                        yield "inside {}:\n\t{}".format(key, ineq)
+
+                if a is not b:
+                    yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
+
+    def find_inequalities(self, other, with_pack = True):
+
+
+        if type(self) != type(other):
+            inequalities.append("unequal types for self and other: {} {}".format(type(self), type(other)))
+
+        if with_pack:
+            self.pack()
+            other.pack()
+
+            fields_1 = self.get_fields()
+            fields_2 = other.get_fields()
+
+            if fields_1 != fields_2:
+                inequalities.append("unequal variables for self and other: {} {}".format(fields_1, fields_2))
+
+            keys = fields_1.keys()
+            if keys != fields_2.keys():
+                inequalities.append("unequal keys in variables dict for self and other: {} {}".format(keys, fields_2.keys()))
+
+            for key in keys:
+                a = fields_1[key].fget(self)
+                b = fields_2[key].fget(other)
+
+                if a != b:
+                    inequalities.append("unequal values for key: {} in self and other: {} {}".format(key, a, b))
+
+
+
+        else:
+            raise NotImplementedError()
+
+        return inequalities
+
+    def test_equality(self, other, with_pack = True):
+        ineq = self.find_inequalities(other, with_pack)
+        return len(ineq) == 0
+
+    def assert_equality(self, other, with_pack = True):
+        ineq = self.find_inequalities(other, with_pack)
+        if len(ineq) > 0:
+            message = "No equality. Reasons: \n"
+            message += "\n".join("\t" + m for m in ineq)
+            raise Exception(message)
+        return True
+
 
 class Table(object):
 
