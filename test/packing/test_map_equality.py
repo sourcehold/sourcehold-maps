@@ -24,15 +24,13 @@ class TestEqual(unittest.TestCase):
         self.assertEqual(TestEqual.raw1, TestEqual.buf2.getvalue())
 
     def test_packing(self):
-        TestEqual.m.pack()
-        buf2 = structure_tools.Buffer()
-        TestEqual.m.serialize_to_buffer(buf2)
-        self.assertEqual(TestEqual.raw1, TestEqual.buf2.getvalue())
-
-    def test_packing_advanced(self):
         m1 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
         m1.unpack()
         m2 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
         m2.unpack()
 
-        m1.assert_equality(m2, with_pack = True)
+        m2.pack()
+        gen = m1.yield_inequalities(m2)
+
+        for ineq in gen:
+            self.fail("not equal: {}".format(ineq))

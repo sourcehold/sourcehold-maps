@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 /pkware/StormLib/
 /temp_files/
+/file_inspection/maps/

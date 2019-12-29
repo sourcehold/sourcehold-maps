@@ -7,41 +7,53 @@ class ChangeDescription(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        with open("resources/MxM_unseen_1_description.map", 'rb') as f:
-            cls.raw1 = f.read()
-            buf = structure_tools.Buffer(cls.raw1)
 
-        m = maps.Map().from_buffer(buf)
-        m.unpack()
+        def prepare(path, prefix):
+            with open(path, 'rb') as f:
+                setattr(cls, prefix + "_raw", f.read())
+                setattr(cls, prefix + "_buf", structure_tools.Buffer(getattr(cls, prefix + "_raw")))
 
-        buf2 = structure_tools.Buffer()
-        m.serialize_to_buffer(buf2)
-        cls.m = m
-        cls.buf2 = buf2
+            setattr(cls, prefix + "_map", maps.Map().from_buffer(getattr(cls, prefix + "_buf")))
+            getattr(cls, prefix + "_buf").seek(0)
+            getattr(cls, prefix + "_map").unpack()
+
+        prepare("resources/MxM_unseen_1_description.map", "original")
+        prepare("resources/MxM_unseen_1_desc_1.map", "desc_1")
+        prepare("resources/MxM_unseen_1_desc_2.map", "desc_2")
+        prepare("resources/MxM_unseen_1_desc_3.map", "desc_3")
 
     def no_change_description(self):
 
-        ChangeDescription.m.description.uncompressed = ChangeDescription.m.description.uncompressed
+        map2 = maps.Map().from_buffer(ChangeDescription.original_buf)
+        ChangeDescription.original_buf.seek(0)
+        map2.unpack()
 
-        ChangeDescription.m.pack()
+        map2.description.set_description(ChangeDescription.original_map.description.get_description())
 
-        buf2 = structure_tools.Buffer()
-        ChangeDescription.m.serialize_to_buffer(buf2)
+        map2.pack()
+        #
+        # buf2 = structure_tools.Buffer()
+        # map2.serialize_to_buffer(buf2)
 
-        self.assertEqual(ChangeDescription.raw1, buf2.getvalue())
+        gen = ChangeDescription.original_map.yield_inequalities(map2)
 
-        with open("resources/MxM_unseen_1_description_no_change.map", 'wb') as f:
-            f.write(buf2.getvalue())
+        for ineq in gen:
+            self.fail("not equal: {}".format(ineq))
+
 
     def change_description(self):
-        ChangeDescription.m.description.uncompressed = ChangeDescription.m.description.uncompressed[:-3] + b' ??'
 
-        ChangeDescription.m.pack()
+        map2 = maps.Map().from_buffer(ChangeDescription.desc_1_buf)
+        ChangeDescription.desc_1_buf.seek(0)
+        map2.unpack()
 
-        buf2 = structure_tools.Buffer()
-        ChangeDescription.m.serialize_to_buffer(buf2)
+        map2.unknown1 = ChangeDescription.desc_2_map.unknown1
+        map2.description.set_description(ChangeDescription.desc_2_map.description.get_description())
 
-        self.assertEqual(ChangeDescription.raw1, buf2.getvalue())
+        map2.pack()
 
-        with open("resources/MxM_unseen_1_description_change.map", 'wb') as f:
-            f.write(buf2.getvalue())
+        gen = map2.yield_inequalities(ChangeDescription.desc_2_map)
+
+        from sourcehold import save_map
+        save_map(map2, "temp_files/desc_12_test.map")
+

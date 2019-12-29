@@ -80,27 +80,37 @@ class Description(Structure):
     data = Variable("data", "B", compressed_size)
 
     def pack(self):
-        self.description_size = len(self.uncompressed.replace(b'\x00', b'')) #quick and dirty. TODO: proper sanity checks
-        self.description_size = 0 #perhaps not the size of the description after all...
-        diff = 1000 - len(self.uncompressed)
-        if diff < 0:
-            raise Exception("description text too long")
-        elif diff == 0:
-            pass
-        else:
-            self.uncompressed += b'\x00' * diff
-
         self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
+
+    def set_description(self, string : str):
+        bstring = string.encode('ascii')
+        if len(bstring) >= 1000:
+            raise Exception("description text too long: {}".format(len(bstring)))
+
+        padded = bstring + b'\x00' * (1000-len(bstring))
+        self.uncompressed = padded
+        self.uncompressed = self.uncompressed[:212] + b'\x04\x00?\x00????8?8? ??' + self.uncompressed[227:]
+        #self.description_size = len(bstring)
+
+    def get_description(self):
+        j = len(self.uncompressed) - 1
+
+        while j >= 0:
+            v = self.uncompressed[j]
+            if v != b'\x00':
+                break
+            j -= 1
+
+        return self.uncompressed[:j].decode('ascii')
 
     def unpack(self):
         self.uncompressed = compression.COMPRESSION.decompress(self.data)
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size
         assert binascii.crc32(self.uncompressed) == self.hash
-        self.uncompressed = self.uncompressed.replace(b'\x00', b'')
         # if not self.description_size == len(self.uncompressed):
         #     print(self.description_size)
         #     print(self.uncompressed)
@@ -349,7 +359,7 @@ class Map(Structure):
     magic = Variable("magic", "I")
     preview_size = Variable("preview_size", "I")
     preview = Variable("preview", Preview)
-    unknown1 = Variable("unknown1", "I", 1)
+    unknown1 = Variable("unknown1", "I", 1) #Has got something to do with description size... x-54, or 52. 20 + description_compressed_size?
     unknown2 = Variable("unknown2", "I", 1)
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
