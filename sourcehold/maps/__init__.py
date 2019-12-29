@@ -24,6 +24,25 @@ class SimpleSection(Structure):
         return self.size + 4
 
 
+class U2(SimpleSection):
+
+    def get_players_count(self):
+        return self.data[24]
+
+    def set_players_count(self, count):
+        self.data = self.data[:24] + [count] + self.data[25:]
+
+class U4(SimpleSection):
+
+    def get_unbalanced_flag(self):
+        return self.data[12]
+
+    def set_unbalanced_flag(self, value : bool):
+        if value:
+            self.data = self.data[:12] + [1] + self.data[13:]
+        else:
+            self.data = self.data[:12] + [0] + self.data[13:]
+
 class CompressedSection(Structure):
     uncompressed_size = Variable("uncompressed_size", "I")
     compressed_size = Variable("compressed_size", "I")
@@ -359,13 +378,13 @@ class Map(Structure):
     magic = Variable("magic", "I")
     preview_size = Variable("preview_size", "I")
     preview = Variable("preview", Preview)
-    unknown1 = Variable("unknown1", "I", 1) #Has got something to do with description size... x-54, or 52. 20 + description_compressed_size?
+    unknown1 = Variable("unknown1", "I", 1) #Has got something to do with description size... x-54, or 52. 20 + description_compressed_size? if no description, value is 33
     unknown2 = Variable("unknown2", "I", 1)
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
     u2 = Variable("u2", SimpleSection)
     u3 = Variable("u3", SimpleSection)
-    u4 = Variable("u4", SimpleSection)
+    u4 = Variable("u4", U4)
     ud = Variable("ud", "B", 4)
 
     directory = Variable("directory", Directory)
