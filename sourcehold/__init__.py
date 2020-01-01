@@ -10,6 +10,7 @@ def load_map(path):
     map.unpack()
     return map
 
+
 def save_map(map, path):
     buf = Buffer()
     map.pack()

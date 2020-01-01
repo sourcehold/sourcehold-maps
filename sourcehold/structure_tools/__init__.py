@@ -305,7 +305,16 @@ class Structure(object):
                 aft
             ))
 
-    def yield_inequalities(self, other, with_pack = False):
+    def yield_inequalities(self, other, with_pack = False, ignore_keys = None):
+
+        if ignore_keys is None:
+            ignore_keys = []
+        elif type(ignore_keys) == str:
+            ignore_keys = [ignore_keys]
+        elif type(ignore_keys) == list:
+            pass
+        else:
+            raise Exception("Invalid type for ignore_keys parameter: {}".format(type(ignore_keys)))
 
         if type(self) != type(other):
             yield "unequal types for self and other: {} {}".format(type(self), type(other))
@@ -326,6 +335,9 @@ class Structure(object):
 
         for key in fields_1.keys():
 
+            if key in ignore_keys:
+                continue
+
             a = fields_1[key].fget(self)
             b = fields_2[key].fget(other)
 
@@ -336,18 +348,18 @@ class Structure(object):
                 yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
 
             if isinstance(a, Structure) and isinstance(b, Structure):
-                for ineq in a.yield_inequalities(b, False):
+                for ineq in a.yield_inequalities(b, False, ignore_keys):
                     yield "inside {}:\n\t{}".format(key, ineq)
             elif a != b:
                 yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
 
-    def test_equality(self, other, with_pack = True):
-        for ineq in self.yield_inequalities(other, with_pack):
+    def test_equality(self, other, with_pack = True, ignore_keys = None):
+        for ineq in self.yield_inequalities(other, with_pack, ignore_keys):
             return False
         return True
 
-    def assert_equality(self, other, with_pack = True):
-        ineq = list(self.yield_inequalities(other, with_pack))
+    def assert_equality(self, other, with_pack = True, ignore_keys = None):
+        ineq = list(self.yield_inequalities(other, with_pack, ignore_keys))
         if len(ineq) > 0:
             message = "No equality. Reasons: \n"
             message += "\n".join("\t" + m for m in ineq)

@@ -72,7 +72,7 @@ class CompressedSection(Structure):
 
 class Preview(CompressedSection):
 
-    def create_image(self) -> Image:
+    def get_image(self) -> Image:
         palette_size = 512
 
         buff = io.BytesIO(self.uncompressed)
@@ -90,9 +90,31 @@ class Preview(CompressedSection):
 
         return img
 
+    def set_image(self, image : Image):
+        palette_size = 512
+
+        width, height = 200, 200
+
+        if image.mode != 'P':
+            image = image.convert('P')
+        if image.size != (width, height):
+            image = image.resize((width, height))
+
+        if (len(image.getpalette()) / 3) * 2 != 512:
+            #raise Exception("Used too many colors, please stick to 256 colors")
+            image = image.quantize(256) #TODO: mode P conversion may be redundant
+
+        pal = palette.pack_palette_to_stream(image.getpalette())
+        if len(pal) != 512:
+            raise Exception("Invalid length: {}".format(len(pal)))
+
+        self.uncompressed = pal + image.tobytes()
+
 
 class Description(Structure):
-    description_size = Variable("description_size", "I")  # This variable seems a little redundant
+    size = Variable("size", "I") #This structure in size, + compressed size
+    use_string_table = Variable("use_string_table", "I")
+    string_table_index = Variable("string_table_index", "I")
     uncompressed_size = Variable("uncompressed_size", "I")
     compressed_size = Variable("compressed_size", "I")
     hash = Variable("hash", "I")
@@ -103,6 +125,7 @@ class Description(Structure):
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
+        self.size = self.compressed_size + (5*4)
 
     def set_description(self, string : str):
         bstring = string.encode('ascii')
@@ -115,13 +138,13 @@ class Description(Structure):
         #self.description_size = len(bstring)
 
     def get_description(self):
-        j = len(self.uncompressed) - 1
+        j = len(self.uncompressed)
 
-        while j >= 0:
-            v = self.uncompressed[j]
-            if v != b'\x00':
-                break
+        while j > 0:
             j -= 1
+            v = self.uncompressed[j]
+            if v != 0:
+                break
 
         return self.uncompressed[:j].decode('ascii')
 
@@ -130,10 +153,7 @@ class Description(Structure):
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size
         assert binascii.crc32(self.uncompressed) == self.hash
-        # if not self.description_size == len(self.uncompressed):
-        #     print(self.description_size)
-        #     print(self.uncompressed)
-        #     assert True is False
+        assert self.compressed_size + (5*4) == self.size
 
     def get_data(self):
         if not hasattr(self, "uncompressed"):
@@ -141,7 +161,7 @@ class Description(Structure):
         return self.uncompressed
 
     def size_of(self):
-        return self.compressed_size + 4 + 4 + 4 + 4
+        return self.compressed_size + (6*4)
 
 
 class MapSection(Structure):
@@ -376,13 +396,11 @@ import os
 
 class Map(Structure):
     magic = Variable("magic", "I")
-    preview_size = Variable("preview_size", "I")
+    preview_size = Variable("preview_size", "I") #Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
     preview = Variable("preview", Preview)
-    unknown1 = Variable("unknown1", "I", 1) #Has got something to do with description size... x-54, or 52. 20 + description_compressed_size? if no description, value is 33
-    unknown2 = Variable("unknown2", "I", 1)
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
-    u2 = Variable("u2", SimpleSection)
+    u2 = Variable("u2", U2)
     u3 = Variable("u3", SimpleSection)
     u4 = Variable("u4", U4)
     ud = Variable("ud", "B", 4)
@@ -396,7 +414,7 @@ class Map(Structure):
 
     def pack(self):
         self.preview.pack()
-        # self.preview_size = self.preview.compressed_size + 4 + 4 + 4
+        self.preview_size = self.preview.size_of()
         self.description.pack()
         # self.description_size = self.preview.compressed_size + 4 + 4 + 4 + 8
         self.directory.pack()
