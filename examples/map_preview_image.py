@@ -10,22 +10,36 @@ from sourcehold import structure_tools
 from sourcehold import maps
 
 import argparse
+import PIL
 
-parser = argparse.ArgumentParser(description="Display map preview image")
-parser.add_argument("path", help="path to a .map file")
-# parser.add_argument("--pack", action='store_const', const=True, default=False, help="pack a folder into a .map file")
-# parser.add_argument("files", help=".map files (paths)", nargs='+')
-# parser.add_argument("--dest", help="a folder to (un)pack file to")
-# parser.add_argument("--test", action='store_const', const=True, default=False, help="do a test run of this program")
+parser = argparse.ArgumentParser(description="Extract, replace map preview image")
+parser.add_argument('command', help = 'either extract, or replace')
+parser.add_argument('input', help = 'input .map file')
+parser.add_argument("--replacement", help = "path to a replacement .png file")
+parser.add_argument("output", help = "file to write the new map or extracted png image to")
 
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    map_file = args.path
-    image_file = map_file[:-3] + "png"
+    if args.command == 'extract':
+        map_file = maps.Map().from_file(args.input)
+        map_file.unpack()
 
-    m = maps.Map().from_file(map_file)
-    m.unpack()
+        image_file = args.output
 
-    test_image = m.preview.create_image()
-    test_image.save(fp = image_file, format = "png")
+        map_file.preview.get_image().save(image_file, format = 'png')
+
+    elif args.command == 'replace':
+        map_file = maps.Map().from_file(args.input)
+        map_file.unpack()
+
+        image_file = args.input + ".png"
+        if args.replacement:
+            image_file = args.replacement
+
+        map_file.preview.set_image(PIL.Image.open(image_file))
+
+        map_file.to_file(args.output)
+
+    else:
+        print('unknown command: {}'.format(args.command), file=sys.stderr)

@@ -223,9 +223,9 @@ def get_section_for_index(index, compressed):
         return MapSection
 
 class Directory(Structure):
-    #Stronghold crusader has values 161, 168, or 170. Stronghold
+    #Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
     #The version differ in the amount of sections, 150 or 100.
-    _MAX_SECTIONS_COUNT = lambda obj: 150 if obj.directory_u1[0] >= 161 and obj.directory_u1[0] <= 170 else 100
+    _MAX_SECTIONS_COUNT = lambda obj: 150 if obj.directory_u1[0] >= 161 else 100
     directory_size = Variable("directory_size", "I")
     size = Variable("size", "I")
     sections_count = Variable("sections_count", "I")
