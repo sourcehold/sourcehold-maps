@@ -223,21 +223,18 @@ def get_section_for_index(index, compressed):
         return MapSection
 
 class Directory(Structure):
-    _AMOUNT_OF_SECTIONS = 122
+    #Stronghold crusader has values 161, 168, or 170. Stronghold
+    #The version differ in the amount of sections, 150 or 100.
+    _MAX_SECTIONS_COUNT = lambda obj: 150 if obj.directory_u1[0] >= 161 and obj.directory_u1[0] <= 170 else 100
     directory_size = Variable("directory_size", "I")
-    length = Variable("length", "I")
+    size = Variable("size", "I")
     sections_count = Variable("sections_count", "I")
     directory_u1 = Variable("directory_u1", "I", 5)
-    uncompressed_lengths = Variable("uncompressed_lengths", "I", _AMOUNT_OF_SECTIONS)
-    directory_u2 = Variable("directory_u2", "I", 28)
-    section_lengths = Variable("section_lengths", "I", _AMOUNT_OF_SECTIONS)
-    directory_u3 = Variable("directory_u3", "I", 28)
-    section_indices = Variable("section_indices", "I", _AMOUNT_OF_SECTIONS)
-    directory_u4 = Variable("directory_u4", "I", 28)
-    section_compressed = Variable("section_compressed", "I", _AMOUNT_OF_SECTIONS)
-    directory_u5 = Variable("directory_u5", "I", 28)
-    section_offsets = Variable("section_offsets", "I", _AMOUNT_OF_SECTIONS)
-    directory_u6 = Variable("directory_u6", "I", 28)
+    uncompressed_lengths = Variable("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_lengths = Variable("section_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_indices = Variable("section_indices", "I", _MAX_SECTIONS_COUNT)
+    section_compressed = Variable("section_compressed", "I", _MAX_SECTIONS_COUNT)
+    section_offsets = Variable("section_offsets", "I", _MAX_SECTIONS_COUNT)
     directory_u7 = Variable("directory_u7", "I")
 
     def from_buffer(self, buf: Buffer, **kwargs):
@@ -355,11 +352,6 @@ class Directory(Structure):
             write_to_file(os.path.join(path, str(self.section_indices[i])), self.sections[i].get_data())
 
         write_to_file(os.path.join(path, "directory_u1"), ints_to_byte_array(self.directory_u1))
-        write_to_file(os.path.join(path, "directory_u2"), ints_to_byte_array(self.directory_u2))
-        write_to_file(os.path.join(path, "directory_u3"), ints_to_byte_array(self.directory_u3))
-        write_to_file(os.path.join(path, "directory_u4"), ints_to_byte_array(self.directory_u4))
-        write_to_file(os.path.join(path, "directory_u5"), ints_to_byte_array(self.directory_u5))
-        write_to_file(os.path.join(path, "directory_u6"), ints_to_byte_array(self.directory_u6))
         write_to_file(os.path.join(path, "directory_u7"), struct.pack("I", self.directory_u7))
 
     @staticmethod
@@ -383,11 +375,6 @@ class Directory(Structure):
         assert len(self.sections) == self.sections_count
 
         self.directory_u1 = bytes_to_int_array(read_file(os.path.join(path, "directory_u1")))
-        self.directory_u2 = bytes_to_int_array(read_file(os.path.join(path, "directory_u2")))
-        self.directory_u3 = bytes_to_int_array(read_file(os.path.join(path, "directory_u3")))
-        self.directory_u4 = bytes_to_int_array(read_file(os.path.join(path, "directory_u4")))
-        self.directory_u5 = bytes_to_int_array(read_file(os.path.join(path, "directory_u5")))
-        self.directory_u6 = bytes_to_int_array(read_file(os.path.join(path, "directory_u6")))
         self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
 
 

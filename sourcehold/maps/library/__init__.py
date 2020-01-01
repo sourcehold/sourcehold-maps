@@ -33,13 +33,13 @@ SAVE_FILE = "Saves"
 
 class Library(object):
 
-    def __init__(self, path="~/Documents/Stronghold Crusader"):
+    def __init__(self, path):
         self.path = os.path.expanduser(path)
         self.maps = os.path.join(self.path, "Maps")
         self.saves = os.path.join(self.path, "Saves")
 
     def _as_file(self, name):
-        return name if not name.endswith(".map") else name + ".map"
+        return name if name.endswith(".map") else name + ".map"
 
     def _as_folder(self, name):
         return name if not name.endswith(".map") else name[-4:]
@@ -50,5 +50,20 @@ class Library(object):
     def get_from_maps(self, name):
         return os.path.join(self.maps, self._as_file(name))
 
+    def get_all_maps(self):
+        return [self.maps + "/" + f for f in os.listdir(self.maps)]
 
-LIBRARY = Library()
+
+class SHC_Library(Library):
+
+    def __init__(self, path="~/Documents/Stronghold Crusader"):
+        self.path = os.path.expanduser(path)
+        self.maps = os.path.join(self.path, "Maps")
+        self.saves = os.path.join(self.path, "Saves")
+
+import sourcehold
+
+SHC_MAPS_USER = Library(path = sourcehold.CONFIG['shc_user'])
+SHC_MAPS = Library(path=sourcehold.CONFIG['shc'])
+SH_MAPS_USER = Library(path = sourcehold.CONFIG['sh_user'])
+SH_MAPS = Library(path=sourcehold.CONFIG['sh'])

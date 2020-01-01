@@ -127,6 +127,10 @@ class Variable(object):
                     self.array_size.__set__(obj, len(self.__get__(obj)))
                     for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
+                elif self.array_size.__class__.__name__ == 'function':
+                    #self.array_size.__set__(obj, len(self.__get__(obj)))
+                    for o in self.__get__(obj):
+                        buf.write(struct.pack(self.type, o))
                 else:
                     raise Exception("Invalid size specification {}".format(self.array_size))
         elif self.type.__class__ == type:
@@ -141,6 +145,10 @@ class Variable(object):
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
                 elif self.array_size.__class__ == Variable:
+                    #TODO: is there a setter missing here?
+                    for o in self.__get__(obj):
+                        o.serialize_to_buffer(buf)
+                elif self.array_size.__class__.__name__ == 'function':
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
                 else:
@@ -170,6 +178,11 @@ class Variable(object):
                     s = struct.calcsize(self.type)
                     r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
                     self.__set__(obj, r)
+                elif self.array_size.__class__.__name__ == 'function':
+                    si = self.array_size(obj)
+                    s = struct.calcsize(self.type)
+                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                    self.__set__(obj, r)
                 else:
                     raise Exception("Invalid size specification {}".format(self.array_size))
         elif self.type.__class__ == type:
@@ -189,6 +202,11 @@ class Variable(object):
                 elif self.array_size.__class__ == Variable:
                     si = self.array_size.__get__(obj)
                     r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(si)]
+                    self.__set__(obj, r)
+                elif self.array_size.__class__.__name__ == 'function':
+                    si = self.array_size(obj)
+                    s = struct.calcsize(self.type)
+                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
                     self.__set__(obj, r)
                 else:
                     raise Exception("Invalid size specification {}".format(self.array_size))
