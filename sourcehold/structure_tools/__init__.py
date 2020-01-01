@@ -359,17 +359,20 @@ class Structure(object):
             a = fields_1[key].fget(self)
             b = fields_2[key].fget(other)
 
-            if a == None and b == None:
+            if a is None and b is None:
                 continue
 
-            if a == None and b != None or b == None and a != None:
-                yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
+            if a is None and b is not None or b is None and a is not None:
+                yield "unequal values for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, a, b)
 
             if isinstance(a, Structure) and isinstance(b, Structure):
                 for ineq in a.yield_inequalities(b, False, ignore_keys):
                     yield "inside {}:\n\t{}".format(key, ineq)
+
+                if a.get_data() != b.get_data():
+                    yield "unequal data for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, '', '')
             elif a != b:
-                yield "unequal values for key: {} in self and other: {} {}".format(key, a, b)
+                yield "unequal values for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, a, b)
 
     def test_equality(self, other, with_pack = True, ignore_keys = None):
         for ineq in self.yield_inequalities(other, with_pack, ignore_keys):

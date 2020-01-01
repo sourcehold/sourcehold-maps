@@ -204,7 +204,7 @@ class CompressedMapSection(CompressedSection):
     pass
 
 
-from sourcehold.maps.sections import Section1001, Section1003, Section1002
+from sourcehold.maps.sections import Section1001, Section1003, Section1002, Section1073
 
 import csv
 from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
@@ -217,6 +217,8 @@ def get_section_for_index(index, compressed):
         return Section1002
     elif index == 1003:
         return Section1003
+    elif index == 1073:
+        return Section1073
     if compressed == True:
         return CompressedMapSection
     else:
@@ -269,14 +271,15 @@ class Directory(Structure):
             section.unpack()
 
     def get_data(self):
-        raise NotImplementedError()
+        #TODO: stub
+        return self.section_indices
 
     def pack(self):
         for section in self.sections:
             section.pack()
 
         # Lets keep things simple for now and not assume change in compressed and indices
-        zeroes = Directory._AMOUNT_OF_SECTIONS - len(self.sections)
+        zeroes = Directory._MAX_SECTIONS_COUNT(self) - len(self.sections)
 
         accum = 0
 
@@ -295,7 +298,7 @@ class Directory(Structure):
             self.section_offsets[i] = accum
             accum += self.section_lengths[i]
 
-        for i in range(self.sections_count, Directory._AMOUNT_OF_SECTIONS):
+        for i in range(self.sections_count, Directory._MAX_SECTIONS_COUNT(self)):
             self.section_lengths[i] = 0
             self.uncompressed_lengths[i] = 0
             self.section_compressed[i] = 0
@@ -307,7 +310,7 @@ class Directory(Structure):
 
         super().serialize_to_buffer(buf)
 
-        for i in range(len(self.sections)):
+        for i in range(len(self.sections)): #TODO: should this not be section count?
             section = self.sections[i]
             logging.debug("serializing section {} with size {}".format(i, self.section_lengths[i]))
             section.serialize_to_buffer(buf)
@@ -378,6 +381,16 @@ class Directory(Structure):
         self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
 
 
+    def yield_inequalities(self, other, with_pack = False, ignore_keys = None):
+        for ineq in super().yield_inequalities(other, with_pack, ignore_keys):
+            yield ineq
+
+        if self.section_indices == other.section_indices:
+            for i in range(self.sections_count):
+                if self.sections[i].get_data() != other.sections[i].get_data():
+                    yield "unequal values for section: {} in\n\tself: \n{}\n\tand other: \n{}".format(self.section_indices[i], '', '')
+
+
 import os
 
 
@@ -412,8 +425,6 @@ class Map(Structure):
             os.makedirs(path)
 
         write_to_file(os.path.join(path, "preview"), self.preview.get_data())
-        write_to_file(os.path.join(path, "unknown1"), _int_array_to_bytes(self.unknown1))
-        write_to_file(os.path.join(path, "unknown2"), _int_array_to_bytes(self.unknown2))
         write_to_file(os.path.join(path, "description"), self.description.get_data())
         write_to_file(os.path.join(path, "u1"), _int_array_to_bytes(self.u1.get_data()))
         write_to_file(os.path.join(path, "u2"), _int_array_to_bytes(self.u2.get_data()))
@@ -425,9 +436,6 @@ class Map(Structure):
     def load_from_folder(self, path):
         self.preview = Preview()
         self.preview.uncompressed = read_file(os.path.join(path, "preview"))
-
-        self.unknown1 = bytes_to_int_array(read_file(os.path.join(path, "unknown1")))
-        self.unknown2 = bytes_to_int_array(read_file(os.path.join(path, "unknown2")))
 
         self.description = Description()
         self.description.uncompressed = read_file(os.path.join(path, "description"))

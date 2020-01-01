@@ -33,6 +33,25 @@ def cut(data, type, rows):
 
     return chunks[1:-1]
 
+from sourcehold.maps import MapSection
+
+class Section1073(MapSection):
+    # Object availability
+
+    def list_objects(self):
+        return []
+
+    def set_available(self, object, available):
+        if object == 'all':
+            d = b'\x00\x00' if not available else b'\x01\x00'
+            self.data = d * (len(self.data)/2)
+        else:
+            self.data[object] = b'\x01' if available else b'\x00'
+
+    def is_available(self, object):
+        return self.data[object] == 1
+
+
 
 class Section1001(Structure):
     uncompressed_size = Variable("us", "I")
