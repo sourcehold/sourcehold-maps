@@ -32,6 +32,7 @@ class U2(SimpleSection):
     def set_players_count(self, count):
         self.data = self.data[:24] + [count] + self.data[25:]
 
+
 class U4(SimpleSection):
 
     def get_unbalanced_flag(self):
@@ -42,6 +43,7 @@ class U4(SimpleSection):
             self.data = self.data[:12] + [1] + self.data[13:]
         else:
             self.data = self.data[:12] + [0] + self.data[13:]
+
 
 class CompressedSection(Structure):
     uncompressed_size = Variable("uncompressed_size", "I")
@@ -65,6 +67,9 @@ class CompressedSection(Structure):
         if not hasattr(self, "uncompressed"):
             self.unpack()
         return self.uncompressed
+
+    def set_data(self, data):
+        self.uncompressed = data
 
     def size_of(self):
         return self.compressed_size + 4 + 4 + 4
@@ -204,25 +209,22 @@ class CompressedMapSection(CompressedSection):
     pass
 
 
-from sourcehold.maps.sections import Section1001, Section1003, Section1002, Section1073
+from sourcehold.maps.sections import find_section_for_index
 
 import csv
 from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
 
 
 def get_section_for_index(index, compressed):
-    if index == 1001:
-        return Section1001
-    if index == 1002:
-        return Section1002
-    elif index == 1003:
-        return Section1003
-    elif index == 1073:
-        return Section1073
+    cls = find_section_for_index(index)
+    if cls:
+        return cls
+
     if compressed == True:
         return CompressedMapSection
     else:
         return MapSection
+
 
 class Directory(Structure):
     #Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold

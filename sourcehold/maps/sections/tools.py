@@ -1,9 +1,7 @@
-import binascii
+import struct
 
-from sourcehold import compression
+from sourcehold.iotools import Buffer
 from sourcehold.iotools import unpack
-from sourcehold.maps import Structure, Variable
-from sourcehold.structure_tools import Buffer
 
 
 def cut(data, type, rows):
@@ -33,52 +31,8 @@ def cut(data, type, rows):
 
     return chunks[1:-1]
 
-from sourcehold.maps import MapSection
 
-class Section1073(MapSection):
-    # Object availability
-
-    def list_objects(self):
-        return []
-
-    def set_available(self, object, available):
-        if object == 'all':
-            d = b'\x00\x00' if not available else b'\x01\x00'
-            self.data = d * (len(self.data)/2)
-        else:
-            self.data[object] = b'\x01' if available else b'\x00'
-
-    def is_available(self, object):
-        return self.data[object] == 1
-
-
-
-class Section1001(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
-
-    def interpret(self):
-        return cut(self.uncompressed, "H", 198)
-
+# Only applies when rows is even.
 
 def translate_diamond_to_checkerboard(data):
     sq1 = data
@@ -203,7 +157,6 @@ def interpret(data, type, opening, closing):
     return mapdata
 
 
-# Only applies when rows is even.
 def iso_xy_to_image_xy(coord, rows):
     assert rows % 2 == 0
 
@@ -223,61 +176,3 @@ def iso_xy_to_image_xy(coord, rows):
         ty = (x - cut) * 2 + 1 + y
 
     return (tx, ty)
-
-
-
-import struct
-
-
-class Section1003(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
-
-    def interpret(self):
-        return cut(self.uncompressed, "I", 198)
-
-
-class Section1002(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
-
-    def interpret(self):
-        return cut(self.uncompressed, "H", 198)

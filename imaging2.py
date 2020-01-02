@@ -1,7 +1,8 @@
 from PIL import Image
 
 from sourcehold.iotools import read_file
-from sourcehold.maps.sections import cut, translate_diamond_to_checkerboard
+from sourcehold.maps.sections import cut
+from sourcehold.maps.sections.tools import translate_diamond_to_checkerboard
 
 SAND_RAISED_LAND = (1, 512)
 MOAT = (1234, 1345)

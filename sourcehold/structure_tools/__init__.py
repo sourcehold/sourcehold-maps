@@ -231,6 +231,7 @@ def dict_join(d1, d2):
     d.update(d2)
     return d
 
+
 class Structure(object):
 
     def __init__(self):
@@ -288,6 +289,9 @@ class Structure(object):
 
     def get_data(self):
         return self.data
+
+    def set_data(self, data):
+        self.data = data
 
     def from_buffer(self, buf: Buffer, **kwargs):
         self._buf = buf
