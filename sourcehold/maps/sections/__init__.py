@@ -155,7 +155,7 @@ class Section1056(KeyValueMapSection):
     _MAPPING_ = {
         'year': 0
     }
-    _TYPE_ = "I",
+    _TYPE_ = "I"
     _CLASS_ = int
 
 
@@ -164,7 +164,7 @@ class Section1057(KeyValueMapSection):
     _MAPPING_ = {
         'month': 0
     }
-    _TYPE_ = "I",
+    _TYPE_ = "I"
     _CLASS_ = int
 
 
