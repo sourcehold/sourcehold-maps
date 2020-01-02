@@ -226,10 +226,14 @@ def get_section_for_index(index, compressed):
         return MapSection
 
 
+def determine_version(obj):
+    return 150 if obj.directory_u1[0] >= 161 else 100
+
+
 class Directory(Structure):
     # Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
     # The version differ in the amount of sections, 150 or 100.
-    _MAX_SECTIONS_COUNT = lambda obj: 150 if obj.directory_u1[0] >= 161 else 100
+    _MAX_SECTIONS_COUNT = determine_version
     directory_size = Variable("directory_size", "I")
     size = Variable("size", "I")
     sections_count = Variable("sections_count", "I")
@@ -240,6 +244,14 @@ class Directory(Structure):
     section_compressed = Variable("section_compressed", "I", _MAX_SECTIONS_COUNT)
     section_offsets = Variable("section_offsets", "I", _MAX_SECTIONS_COUNT)
     directory_u7 = Variable("directory_u7", "I")
+
+    def keys(self):
+        def all_keys():
+            if hasattr(self, "sections"):
+                for section in self.sections:
+                    if hasattr(section, "KEY"):
+                        yield section.KEY
+        return list(all_keys())
 
     def from_buffer(self, buf: Buffer, **kwargs):
         super().from_buffer(buf, **kwargs)
@@ -255,6 +267,11 @@ class Directory(Structure):
         return self
 
     def __getitem__(self, item):
+        if type(item) == str:
+            for section in self.sections:
+                if hasattr(section, "KEY"):
+                    if item == section.KEY:
+                        return section
         # access directory item by index
         if not item in self.section_indices:
             raise KeyError(item)
@@ -262,6 +279,13 @@ class Directory(Structure):
         return self.sections[i]
 
     def __setitem__(self, key, value):
+        if type(key) == str:
+            for section in self.sections:
+                if hasattr(section, "KEY"):
+                    if key == section.KEY:
+                        i = self.section_indices.index(section)
+                        self.sections[i] = value
+                        return
         # access directory item by index
         if not key in self.section_indices:
             raise KeyError(key)
@@ -368,19 +392,20 @@ class Directory(Structure):
         self.sections = []
         for i in range(self.sections_count):
             path = os.path.join(path, str(self.section_indices[i]))
-            if self.section_compressed == 1:
-                self.sections.append(create_structure_from_buffer(CompressedMapSection, Buffer(read_file(path))))
-            else:
-                buf = Buffer(read_file(path))
-                m = create_structure_from_buffer(MapSection, buf)
-                m.data = buf.read()
-                m.length = len(m.data)
-                self.sections.append(m)
+
+            cls = get_section_for_index(self.section_indices[i], self.section_compressed[i] == 1)
+
+            obj = cls()
+            obj.set_data(read_file(path))
+
+            self.sections.append(obj)
 
         assert len(self.sections) == self.sections_count
 
         self.directory_u1 = bytes_to_int_array(read_file(os.path.join(path, "directory_u1")))
         self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
+
+        #TODO: add pack() call to ensure validity of side-variables like size, crc32, and compressed_size?
 
     def yield_inequalities(self, other, with_pack=False, ignore_keys=None):
         for ineq in super().yield_inequalities(other, with_pack, ignore_keys):

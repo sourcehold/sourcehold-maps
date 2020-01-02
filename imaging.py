@@ -89,6 +89,9 @@ imageable_sections = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1
                       '1104', '1105', '1118']
 # imageable_sections.remove("1105")
 
+#TODO: 1001, 1002, and 1003 have a header at the start, and another header for each row, the others have only one header. Maybe because data is not there (empty map). Come back to this later. Test with a save game?
+#TODO: In a .sav game, section 1045 also has separate row headers, section 1037 just a separate footer, section 1036 also has many headers and footers.
+#TODO: 1008 is so random, it is probably not supposed to be cut.
 imageable_sections = {'1001': 160800, '1002': 160800, '1003': 321600, '1004': 160800, '1005': 80400, '1006': 80400,
                       '1007': 160800, '1008': 160800, '1009': 160800, '1010': 160800, '1012': 160800, '1020': 80400,
                       '1021': 160800, '1026': 160800, '1028': 80400, '1029': 80400, '1030': 80400, '1033': 160800,
@@ -125,7 +128,7 @@ def export_images(unpacked_map_folder, destination):
             continue
         print("Imaging section {}".format(section))
         s = size_mapping[size]
-        d = cut(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
+        d = cut_strict(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
         im = make_image_of_data(d, system=TiledDiamondSystem(rows=len(d), tilewidth=32, tileheight=16))
         im.save("{}/{}.png".format(destination, section))
 
@@ -134,7 +137,7 @@ def export_images(unpacked_map_folder, destination):
 
 from sourcehold import palette
 from sourcehold.iotools import read_file, write_to_file
-from sourcehold.maps.sections import cut
+from sourcehold.maps.sections.tools import cut_strict
 
 hexformat = "#{0:02x}{1:02x}{2:02x}"
 datumhexformat = "{:016x}"

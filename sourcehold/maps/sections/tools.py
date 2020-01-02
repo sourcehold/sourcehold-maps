@@ -4,6 +4,65 @@ from sourcehold.iotools import Buffer
 from sourcehold.iotools import unpack
 
 
+
+
+def cut_strict(data, type, rows):
+    data = Buffer(data)
+    if type.__class__ == int:
+        type = type + "B"
+    size = struct.calcsize(type)
+    header = data.read(size * 2)
+
+    headers = set()
+    footers = set()
+
+    if header not in headers:
+        print("header: {}".format(header))
+        headers.add(header)
+
+    chunks = []
+
+    for i in range(0, rows + 1, 1):
+        header = data.read(size * 2)
+
+        if header not in headers:
+            print("header: {}".format(header))
+            headers.add(header)
+
+        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
+        chunks.append(chunk)
+        footer = data.read(size * 2)
+
+        if footer not in footers:
+            print("footer: {}".format(footer))
+            footers.add(footer)
+
+    for i in range(rows, -1, -1):
+        header = data.read(size * 2)
+
+        if header not in headers:
+            print("header: {}".format(header))
+            headers.add(header)
+
+        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
+        chunks.append(chunk)
+        footer = data.read(size * 2)
+
+        if footer not in footers:
+            print("footer: {}".format(footer))
+            footers.add(footer)
+
+    footer = data.read(size * 2)
+
+    if footer not in footers:
+        print("footer: {}".format(footer))
+        footers.add(footer)
+
+    assert data.remaining() == 0
+
+    return chunks[1:-1]
+
+
 def cut(data, type, rows):
     data = Buffer(data)
     if type.__class__ == int:
