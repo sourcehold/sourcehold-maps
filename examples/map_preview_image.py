@@ -1,22 +1,20 @@
-
-import sys
 import os
+import sys
 
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
-from sourcehold import structure_tools
 from sourcehold import maps
 
 import argparse
 import PIL
 
 parser = argparse.ArgumentParser(description="Extract, replace map preview image")
-parser.add_argument('command', help = 'either extract, or replace')
-parser.add_argument('input', help = 'input .map file')
-parser.add_argument("--replacement", help = "path to a replacement .png file")
-parser.add_argument("output", help = "file to write the new map or extracted png image to")
+parser.add_argument('command', help='either extract, or replace')
+parser.add_argument('input', help='input .map file')
+parser.add_argument("--replacement", help="path to a replacement .png file")
+parser.add_argument("output", help="file to write the new map or extracted png image to")
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -27,7 +25,7 @@ if __name__ == "__main__":
 
         image_file = args.output
 
-        map_file.preview.get_image().save(image_file, format = 'png')
+        map_file.preview.get_image().save(image_file, format='png')
 
     elif args.command == 'replace':
         map_file = maps.Map().from_file(args.input)

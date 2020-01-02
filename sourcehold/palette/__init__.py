@@ -25,8 +25,8 @@ def rgb15bitto32bit(i):
 
     return (r, g, b)
 
-def conv32bittorgb15bit(r, g, b):
 
+def conv32bittorgb15bit(r, g, b):
     r = (r & 0x7) << 2 | ((r >> 3) & 0x3)
     ir = (r & 0x1F) << 10
 
@@ -38,6 +38,7 @@ def conv32bittorgb15bit(r, g, b):
 
     return ir | ig | ib
 
+
 assert conv32bittorgb15bit(*rgb15bitto32bit(8888)) == 8888
 
 import struct
@@ -46,7 +47,8 @@ import io
 
 import PIL
 
-def image_from_data(data : bytes):
+
+def image_from_data(data: bytes):
     palette = data[:512]
     pixels = data[512:]
 
@@ -57,15 +59,16 @@ def image_from_data(data : bytes):
     return image
 
 
-def pack_palette_to_stream(pal : list):
+def pack_palette_to_stream(pal: list):
     stream = io.BytesIO()
 
     for i in range(0, len(pal), 3):
-        d = conv32bittorgb15bit(pal[i], pal[i+1], pal[i+2])
+        d = conv32bittorgb15bit(pal[i], pal[i + 1], pal[i + 2])
         v = struct.pack("<H", d)
         stream.write(v)
 
     return stream.getvalue()
+
 
 def build_serial_palette(stream):
     palette = []

@@ -17,10 +17,8 @@ dir = tempfile.TemporaryDirectory()
 path = dir.name
 
 
-
 class TestDump(unittest.TestCase):
 
     def test_dump(self):
         m.dump_to_folder(path)
         dir.cleanup()
-

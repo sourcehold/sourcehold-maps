@@ -90,7 +90,6 @@ def get_dat_files(path):
 
 
 def compare_files_on_percentage_byte_overlap(changed_keys, filesdict, skip_equal=True):
-
     header = ["section", "file1", "file2", "percentage overlap"]
     matrix = []
 
@@ -152,6 +151,7 @@ def create_byte_comparison(files, title, outputfile):
         f.write("#{}\r\n".format(title))
         f.write("The following sections were unequal:\r\n\r\n" + "\r\n".join(changed_keys) + "\r\n")
         w.dump(f)
+
 
 def compare_unit_movement():
     fs = [

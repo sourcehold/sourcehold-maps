@@ -38,7 +38,7 @@ class U4(SimpleSection):
     def get_unbalanced_flag(self):
         return self.data[12]
 
-    def set_unbalanced_flag(self, value : bool):
+    def set_unbalanced_flag(self, value: bool):
         if value:
             self.data = self.data[:12] + [1] + self.data[13:]
         else:
@@ -95,7 +95,7 @@ class Preview(CompressedSection):
 
         return img
 
-    def set_image(self, image : Image):
+    def set_image(self, image: Image):
         palette_size = 512
 
         width, height = 200, 200
@@ -106,8 +106,8 @@ class Preview(CompressedSection):
             image = image.resize((width, height))
 
         if (len(image.getpalette()) / 3) * 2 != 512:
-            #raise Exception("Used too many colors, please stick to 256 colors")
-            image = image.quantize(256) #TODO: mode P conversion may be redundant
+            # raise Exception("Used too many colors, please stick to 256 colors")
+            image = image.quantize(256)  # TODO: mode P conversion may be redundant
 
         pal = palette.pack_palette_to_stream(image.getpalette())
         if len(pal) != 512:
@@ -117,7 +117,7 @@ class Preview(CompressedSection):
 
 
 class Description(Structure):
-    size = Variable("size", "I") #This structure in size, + compressed size
+    size = Variable("size", "I")  # This structure in size, + compressed size
     use_string_table = Variable("use_string_table", "I")
     string_table_index = Variable("string_table_index", "I")
     uncompressed_size = Variable("uncompressed_size", "I")
@@ -130,17 +130,17 @@ class Description(Structure):
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
-        self.size = self.compressed_size + (5*4)
+        self.size = self.compressed_size + (5 * 4)
 
-    def set_description(self, string : str):
+    def set_description(self, string: str):
         bstring = string.encode('ascii')
         if len(bstring) >= 1000:
             raise Exception("description text too long: {}".format(len(bstring)))
 
-        padded = bstring + b'\x00' * (1000-len(bstring))
+        padded = bstring + b'\x00' * (1000 - len(bstring))
         self.uncompressed = padded
         self.uncompressed = self.uncompressed[:212] + b'\x04\x00?\x00????8?8? ??' + self.uncompressed[227:]
-        #self.description_size = len(bstring)
+        # self.description_size = len(bstring)
 
     def get_description(self):
         j = len(self.uncompressed)
@@ -158,7 +158,7 @@ class Description(Structure):
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size
         assert binascii.crc32(self.uncompressed) == self.hash
-        assert self.compressed_size + (5*4) == self.size
+        assert self.compressed_size + (5 * 4) == self.size
 
     def get_data(self):
         if not hasattr(self, "uncompressed"):
@@ -166,7 +166,7 @@ class Description(Structure):
         return self.uncompressed
 
     def size_of(self):
-        return self.compressed_size + (6*4)
+        return self.compressed_size + (6 * 4)
 
 
 class MapSection(Structure):
@@ -227,8 +227,8 @@ def get_section_for_index(index, compressed):
 
 
 class Directory(Structure):
-    #Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
-    #The version differ in the amount of sections, 150 or 100.
+    # Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
+    # The version differ in the amount of sections, 150 or 100.
     _MAX_SECTIONS_COUNT = lambda obj: 150 if obj.directory_u1[0] >= 161 else 100
     directory_size = Variable("directory_size", "I")
     size = Variable("size", "I")
@@ -273,7 +273,7 @@ class Directory(Structure):
             section.unpack()
 
     def get_data(self):
-        #TODO: stub
+        # TODO: stub
         return self.section_indices
 
     def pack(self):
@@ -312,7 +312,7 @@ class Directory(Structure):
 
         super().serialize_to_buffer(buf)
 
-        for i in range(len(self.sections)): #TODO: should this not be section count?
+        for i in range(len(self.sections)):  # TODO: should this not be section count?
             section = self.sections[i]
             logging.debug("serializing section {} with size {}".format(i, self.section_lengths[i]))
             section.serialize_to_buffer(buf)
@@ -382,15 +382,15 @@ class Directory(Structure):
         self.directory_u1 = bytes_to_int_array(read_file(os.path.join(path, "directory_u1")))
         self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
 
-
-    def yield_inequalities(self, other, with_pack = False, ignore_keys = None):
+    def yield_inequalities(self, other, with_pack=False, ignore_keys=None):
         for ineq in super().yield_inequalities(other, with_pack, ignore_keys):
             yield ineq
 
         if self.section_indices == other.section_indices:
             for i in range(self.sections_count):
                 if self.sections[i].get_data() != other.sections[i].get_data():
-                    yield "unequal values for section: {} in\n\tself: \n{}\n\tand other: \n{}".format(self.section_indices[i], '', '')
+                    yield "unequal values for section: {} in\n\tself: \n{}\n\tand other: \n{}".format(
+                        self.section_indices[i], '', '')
 
 
 import os
@@ -398,7 +398,8 @@ import os
 
 class Map(Structure):
     magic = Variable("magic", "I")
-    preview_size = Variable("preview_size", "I") #Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
+    preview_size = Variable("preview_size",
+                            "I")  # Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
     preview = Variable("preview", Preview)
     description = Variable("description", Description)
     u1 = Variable("u1", SimpleSection)
@@ -420,7 +421,7 @@ class Map(Structure):
         self.description.pack()
         # self.description_size = self.preview.compressed_size + 4 + 4 + 4 + 8
         self.directory.pack()
-        #self.directory_size = self.directory.length + 4
+        # self.directory_size = self.directory.length + 4
 
     def dump_to_folder(self, path):
         if not os.path.exists(path):

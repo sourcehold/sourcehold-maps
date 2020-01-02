@@ -7,7 +7,6 @@ class ChangeDescription(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-
         def prepare(path, prefix):
             with open(path, 'rb') as f:
                 setattr(cls, prefix + "_raw", f.read())
@@ -23,7 +22,6 @@ class ChangeDescription(unittest.TestCase):
         prepare("resources/MxM_unseen_1_desc_3.map", "desc_3")
 
     def no_change_description(self):
-
         map2 = maps.Map().from_buffer(ChangeDescription.original_buf)
         ChangeDescription.original_buf.seek(0)
         map2.unpack()
@@ -40,9 +38,7 @@ class ChangeDescription(unittest.TestCase):
         for ineq in gen:
             self.fail("not equal: {}".format(ineq))
 
-
     def change_description(self):
-
         map2 = maps.Map().from_buffer(ChangeDescription.desc_1_buf)
         ChangeDescription.desc_1_buf.seek(0)
         map2.unpack()
@@ -56,4 +52,3 @@ class ChangeDescription(unittest.TestCase):
 
         from sourcehold import save_map
         save_map(map2, "temp_files/desc_12_test.map")
-

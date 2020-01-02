@@ -1,10 +1,9 @@
 import binascii
+import struct
 
 from sourcehold import compression
 from sourcehold.maps import Structure, Variable
 from sourcehold.maps.sections.tools import cut
-
-import struct
 
 
 class KeyValueStructure(object):

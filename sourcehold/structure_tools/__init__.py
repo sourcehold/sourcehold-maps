@@ -1,7 +1,6 @@
 import io
 
 
-
 class Buffer(io.BytesIO):
 
     def __init__(self, initial_bytes=b''):
@@ -83,14 +82,14 @@ class Variable(object):
     def __get__(self, obj, objtype=None):
         if obj is None:
             return self
-        #if not self.fget is None:
+        # if not self.fget is None:
         #    return self.fget(obj, self.name)
         if "_" + self.name not in obj.__dict__:
             raise AttributeError("object has no attribute {}".format(self.name))
         return obj.__dict__["_" + self.name]
 
     def __set__(self, obj, value):
-        #if not self.fset is None:
+        # if not self.fset is None:
         #    return self.fset(obj, self.name, value)
         obj.__dict__["_" + self.name] = value
 
@@ -128,7 +127,7 @@ class Variable(object):
                     for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
                 elif self.array_size.__class__.__name__ == 'function':
-                    #self.array_size.__set__(obj, len(self.__get__(obj)))
+                    # self.array_size.__set__(obj, len(self.__get__(obj)))
                     for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
                 else:
@@ -145,7 +144,7 @@ class Variable(object):
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
                 elif self.array_size.__class__ == Variable:
-                    #TODO: is there a setter missing here?
+                    # TODO: is there a setter missing here?
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
                 elif self.array_size.__class__.__name__ == 'function':
@@ -327,7 +326,7 @@ class Structure(object):
                 aft
             ))
 
-    def yield_inequalities(self, other, with_pack = False, ignore_keys = None):
+    def yield_inequalities(self, other, with_pack=False, ignore_keys=None):
 
         if ignore_keys is None:
             ignore_keys = []
@@ -378,12 +377,12 @@ class Structure(object):
             elif a != b:
                 yield "unequal values for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, a, b)
 
-    def test_equality(self, other, with_pack = True, ignore_keys = None):
+    def test_equality(self, other, with_pack=True, ignore_keys=None):
         for ineq in self.yield_inequalities(other, with_pack, ignore_keys):
             return False
         return True
 
-    def assert_equality(self, other, with_pack = True, ignore_keys = None):
+    def assert_equality(self, other, with_pack=True, ignore_keys=None):
         ineq = list(self.yield_inequalities(other, with_pack, ignore_keys))
         if len(ineq) > 0:
             message = "No equality. Reasons: \n"

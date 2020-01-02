@@ -87,7 +87,7 @@ def build_palette(data):
 imageable_sections = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '1012', '1020',
                       '1021', '1026', '1028', '1029', '1030', '1033', '1036', '1037', '1043', '1045', '1049', '1103',
                       '1104', '1105', '1118']
-#imageable_sections.remove("1105")
+# imageable_sections.remove("1105")
 
 imageable_sections = {'1001': 160800, '1002': 160800, '1003': 321600, '1004': 160800, '1005': 80400, '1006': 80400,
                       '1007': 160800, '1008': 160800, '1009': 160800, '1010': 160800, '1012': 160800, '1020': 80400,
@@ -115,12 +115,13 @@ def dump_spec(data):
 
 tw, th = (32, 16)
 
+
 def export_images(unpacked_map_folder, destination):
     if not os.path.exists(destination):
         os.makedirs(destination)
 
     for section, size in imageable_sections.items():
-        if size == 80400 * 9:  #skip 1105
+        if size == 80400 * 9:  # skip 1105
             continue
         print("Imaging section {}".format(section))
         s = size_mapping[size]

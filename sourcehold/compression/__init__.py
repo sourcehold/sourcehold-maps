@@ -1,7 +1,6 @@
 import struct
 import subprocess
 import sys
-import importlib
 
 
 def _int_array_to_bytes(array):

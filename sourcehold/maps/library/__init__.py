@@ -61,9 +61,10 @@ class SHC_Library(Library):
         self.maps = os.path.join(self.path, "Maps")
         self.saves = os.path.join(self.path, "Saves")
 
+
 import sourcehold
 
-SHC_MAPS_USER = Library(path = sourcehold.CONFIG['shc_user'])
+SHC_MAPS_USER = Library(path=sourcehold.CONFIG['shc_user'])
 SHC_MAPS = Library(path=sourcehold.CONFIG['shc'])
-SH_MAPS_USER = Library(path = sourcehold.CONFIG['sh_user'])
+SH_MAPS_USER = Library(path=sourcehold.CONFIG['sh_user'])
 SH_MAPS = Library(path=sourcehold.CONFIG['sh'])
