@@ -111,7 +111,7 @@ class KeyValueMapSection(KeyValueStructure, MapSection):
 
 
 class Section1073(KeyValueMapSection):
-    # Building availability, excluding units
+    # Building availability, excluding units. The empty spots at 1 and 3 are probably the stronghold buildlings from SH.
     KEY = "building_availability"
     _MAPPING_ = {
         'manor_house': 0, '': -1, 'stone_keep': 2, '': -1, 'stronghold': 4,

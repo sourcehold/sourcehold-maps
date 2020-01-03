@@ -1,58 +1,9 @@
 from PIL import Image, ImageDraw
 
 
-class DiamondSystem(object):
-
-    def __init__(self, rows=198):
-        if not rows % 2 == 0:
-            raise Exception("row count should be even")
-        self.rows = rows
-
-    def to_system(self, i, j):
-        rows = self.rows
-
-        cut = rows // 2
-
-        x = i
-        y = j
-
-        if x < cut:
-            tx = (x * 2) + 1 - y
-        else:
-            tx = rows - y
-
-        if x < cut:
-            ty = y
-        else:
-            ty = (x - cut) * 2 + 1 + y
-
-        return (tx, ty)
-
-
 # TODO: implement fact that tileset.png is mappable to datum. tiles are indexed from bottom to top.
 
-
-class TiledDiamondSystem(DiamondSystem):
-
-    def __init__(self, tilewidth=32, tileheight=16, rows=198, xoffset=15, yoffset=0):
-        self.tilewidth = tilewidth
-        self.tileheight = tileheight
-        self.rows = rows
-        self.xoffset = xoffset
-        self.yoffset = yoffset
-
-    def to_system(self, i, j):
-        i, j = super().to_system(i, j)
-        return (i * (self.tilewidth // 2), j * (self.tileheight // 2))
-
-    def system_tile_coordinates(self, i, j):
-        i, j = self.to_system(i, j)
-        xoff = i + self.xoffset
-        yoff = j + self.yoffset
-        width = self.tilewidth
-        height = self.tileheight
-        return [(xoff, yoff), (xoff + width // 2, yoff + height // 2), (xoff, yoff + height),
-                (xoff - width // 2, yoff + height // 2)]
+from sourcehold.maps.sections.tools import TiledDiamondSystem
 
 
 def make_image_of_data(dt, system: TiledDiamondSystem):
@@ -137,7 +88,7 @@ def export_images(unpacked_map_folder, destination):
 
 from sourcehold import palette
 from sourcehold.iotools import read_file, write_to_file
-from sourcehold.maps.sections.tools import cut_strict
+from sourcehold.maps.sections.tools import cut_strict, TiledDiamondSystem
 
 hexformat = "#{0:02x}{1:02x}{2:02x}"
 datumhexformat = "{:016x}"

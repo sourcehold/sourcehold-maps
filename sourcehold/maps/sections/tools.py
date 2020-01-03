@@ -235,3 +235,94 @@ def iso_xy_to_image_xy(coord, rows):
         ty = (x - cut) * 2 + 1 + y
 
     return (tx, ty)
+
+
+class DiamondSystem(object):
+
+    def __init__(self, rows=198):
+        if not rows % 2 == 0:
+            raise Exception("row count should be even")
+        self.rows = rows
+
+    def to_screen_system(self, ij_index):
+        rows = self.rows
+
+        cut = rows // 2
+
+        x, y = ij_index
+
+        if x < cut:
+            tx = (x * 2) + 1 - y
+        else:
+            tx = rows - y
+
+        if x < cut:
+            ty = y
+        else:
+            ty = (x - cut) * 2 + 1 + y
+
+        return (tx, ty)
+
+    def to_file_system(self, xy):
+        tx, ty = xy
+
+        cut = self.rows // 2
+
+        raise NotImplementedError()
+
+    def get_size_of_row(self, i):
+        if i < (self.rows//2):
+            return (i * 2) + 2
+        else:
+            return (((self.rows//2) - (i - (self.rows//2)) - 1) * 2) + 2
+
+    def retrieve_diamond_indices(self, top_ij_coord, size):
+        si, sj = top_ij_coord
+        ssize = self.get_size_of_row(si)
+
+        indices = []
+
+        for i in range(size):
+            for j in range(size):
+
+                ni = si + i
+                nj = sj + j
+
+                if ni > self.rows:
+                    raise Exception("i is out of bounds: ({}, {})".format(ni, nj))
+
+                ni_size = self.get_size_of_row(ni)
+
+                size_diff = ni_size - ssize
+
+                nj += (size_diff // 2)
+
+                if nj > ni_size:
+                    raise Exception("j is out of bounds: ({}, {})".format(ni, nj))
+
+                indices.append((ni, nj))
+
+        return indices
+
+
+class TiledDiamondSystem(DiamondSystem):
+
+    def __init__(self, tilewidth=32, tileheight=16, rows=198, xoffset=15, yoffset=0):
+        self.tilewidth = tilewidth
+        self.tileheight = tileheight
+        self.rows = rows
+        self.xoffset = xoffset
+        self.yoffset = yoffset
+
+    def to_screen_system(self, ij_index):
+        i, j = super().to_screen_system(ij_index)
+        return (i * (self.tilewidth // 2), j * (self.tileheight // 2))
+
+    def system_tile_coordinates(self, ij_index):
+        i, j = self.to_screen_system(ij_index)
+        xoff = i + self.xoffset
+        yoff = j + self.yoffset
+        width = self.tilewidth
+        height = self.tileheight
+        return [(xoff, yoff), (xoff + width // 2, yoff + height // 2), (xoff, yoff + height),
+                (xoff - width // 2, yoff + height // 2)]

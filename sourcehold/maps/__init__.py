@@ -30,7 +30,23 @@ class U2(SimpleSection):
         return self.data[24]
 
     def set_players_count(self, count):
-        self.data = self.data[:24] + [count] + self.data[25:]
+        self.data[24] = count
+
+    def get_map_type(self):
+        return self.data[0]
+
+    def set_map_type(self, type):
+        self.data[0] = type
+
+
+class U3(SimpleSection):
+
+    def is_map_original(self):
+        return self.data[8]
+
+    def set_map_original(self, value):
+        # TODO: Does not work for missions
+        self.data[8] = 1 if value else 0
 
 
 class U4(SimpleSection):
@@ -39,10 +55,7 @@ class U4(SimpleSection):
         return self.data[12]
 
     def set_unbalanced_flag(self, value: bool):
-        if value:
-            self.data = self.data[:12] + [1] + self.data[13:]
-        else:
-            self.data = self.data[:12] + [0] + self.data[13:]
+        self.data[12] = 1 if value else 0
 
 
 class CompressedSection(Structure):
