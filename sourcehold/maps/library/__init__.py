@@ -38,14 +38,14 @@ class Library(object):
         self.maps = os.path.join(self.path, "Maps")
         self.saves = os.path.join(self.path, "Saves")
 
-    def _as_file(self, name):
-        return name if name.endswith(".map") else name + ".map"
+    def _as_file(self, name, suffix = ".map"):
+        return name if name.endswith(suffix) else name + suffix
 
-    def _as_folder(self, name):
-        return name if not name.endswith(".map") else name[-4:]
+    def _as_folder(self, name, suffix = ".map"):
+        return name if not name.endswith(suffix) else name[-4:]
 
     def get_from_saves(self, name):
-        return os.path.join(self.saves, self._as_file(name))
+        return os.path.join(self.saves, self._as_file(name, suffix = '.sav'))
 
     def get_from_maps(self, name):
         return os.path.join(self.maps, self._as_file(name))
