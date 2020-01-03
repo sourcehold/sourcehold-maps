@@ -52,4 +52,10 @@ values = [d[i][j] for i, j in indices]
 
 # To save edited values
 save_map(mymap, SHC_MAPS_USERS.get_from_maps('mymap.map'))
+
+# To compare map sections
+m1 = load_map(SHC_MAPS_USER.get_from_maps('basic0.map'))
+m2 = load_map(SHC_MAPS_USER.get_from_maps('basic0_change.map'))
+for ineq in m1.yield_inequalities(m2):
+    print(ineq)
 ```
