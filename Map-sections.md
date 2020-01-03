@@ -44,7 +44,7 @@ from sourcehold.maps.sections.tools import cut, DiamondSystem
 cutdata = cut(data, "H", 198) #The type ('H') is a struct type ('short'), and depends on the size of data.
 
 # To inspect a diamond (of size 2) on the map (starting at (1,0)):
-d = DiamondSystem(198)
+d = DiamondSystem(396)
 indices = d.retrieve_diamond_indices((1, 0), 2)
 values = [d[i][j] for i, j in indices]
 
