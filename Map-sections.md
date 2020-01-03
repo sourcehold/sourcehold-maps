@@ -11,6 +11,7 @@ Generally speaking, there are two types of sections:
 | 1001 | 160800 | Tile data (short) | Contains many objects, but not units |
 | 1002 | 160800 | Tile data (short) | Contains terrain height data |
 | 1003 | 321600 | Tile data (int) | Contains information about buildings, non-buildable terrain types (water, rocks, hills) |
+| 1004 | 160800 | Tile data (short) | Trees and rocks |
 | 1036 | 160800 | Tile data (short) | Contains terrain roughness data, looks like patches (each patch tiles increment by 64), but the terrain type is mysterious |
 | 1073 | 200 | Info data (short) | Building availability in booleans |
 | 1085 | 14 | Info data (short) | Unit availability (non-arab units) |
