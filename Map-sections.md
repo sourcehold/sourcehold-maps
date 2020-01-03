@@ -3,7 +3,7 @@ We understand some of them, but not all of them yet.
 
 Generally speaking, there are two types of sections:
 1. Info data regarding the map, like building availability, starting goods, etcetera, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/sourcehold/maps/sections/__init__.py)
-2. Tile data. A map consists of 19800 tiles, and are layed out in a specific format, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/resources/tiles-illustration.pdf).
+2. Tile data. A map consists of 19800 tiles (the diagonals of the diamond are 396 tiles long), and are layed out in a specific format, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/resources/tiles-illustration.pdf).
 
 # Overview table
 | Index | Size | Type | Interpretation |
