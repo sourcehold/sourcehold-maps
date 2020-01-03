@@ -3,7 +3,7 @@ We understand some of them, but not all of them yet.
 
 Generally speaking, there are two types of sections:
 1. Info data regarding the map, like building availability, starting goods, etcetera, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/sourcehold/maps/sections/__init__.py)
-2. Tile data. A map consists of 19800 tiles (the diagonals of the diamond are 396 tiles long), and are layed out in a specific format, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/resources/tiles-illustration.pdf).
+2. Tile data. A map consists of 78804 tiles (the diagonals of the diamond are 396 tiles long), and are layed out in a specific format, see [here](https://github.com/sourcehold/sourcehold-maps/blob/master/resources/tiles-illustration.pdf).
 
 # Overview table
 | Index | Size | Type | Interpretation |
@@ -12,7 +12,8 @@ Generally speaking, there are two types of sections:
 | 1002 | 160800 | Tile data (short) | Contains terrain height data |
 | 1003 | 321600 | Tile data (int) | Contains information about buildings, non-buildable terrain types (water, rocks, hills) |
 | 1004 | 160800 | Tile data (short) | Trees and rocks |
-| 1005 | 160800 | Tile data (short) | Contains height data, including stairs |
+| 1005 | 80400 | Tile data (byte) | Contains height data, including stairs |
+| 1009 | 160800 | Tile data (short) | Something with oil and walls, and the stronghold. Odd.|
 | 1036 | 160800 | Tile data (short) | Contains terrain roughness data, looks like patches (each patch tiles increment by 64), but the terrain type is mysterious |
 | 1073 | 200 | Info data (short) | Building availability in booleans |
 | 1085 | 14 | Info data (short) | Unit availability (non-arab units) |
