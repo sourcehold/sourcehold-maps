@@ -2,7 +2,7 @@
 
 The map is shaped in a diamond, and so is the map data when stored.
 
-At least in terms of walls and buildings, the map consists of small squares.
+At least in terms of walls and buildings, the map consists of small squares 19800 in total.
 
 Placing a wall in the top right corner would correspond with coordinate point (0, 0).
 
