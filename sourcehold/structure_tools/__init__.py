@@ -247,11 +247,14 @@ class Structure(object):
     @classmethod
     def get_fields(cls) -> dict:
         fields = {}
-        tree = []
-        while cls is not None:
+        queue = [cls]
+        tree = [cls]
+        while len(queue) > 0:
+            cls = queue.pop()
             tree.insert(0, cls)
-            # Note: system does not support multiple inheritance
-            cls = cls.__base__
+            # Note: system does not really support multiple inheritance
+            for base in cls.__bases__:
+                queue.append(base)
 
         for cls in tree:
             if not hasattr(cls, "__dict__"):
@@ -298,7 +301,11 @@ class Structure(object):
         for name, prop in props.items():
             # print("setting {}. buf is at {}".format(prop, buf.tell()))
             bef = buf.tell()
-            prop.set_from_buffer(self, buf, **kwargs)
+            try:
+                prop.set_from_buffer(self, buf, **kwargs)
+            except Exception as e:
+                print("An error occurred while loading {}, at property {}".format(type(self).__name__, name))
+                raise e
             aft = buf.tell()
             l = aft - bef
             logging.debug("deserialized {:14s}. length: {:10d} before: {:10d},  after: {:10d}".format(

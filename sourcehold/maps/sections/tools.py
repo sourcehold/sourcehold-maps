@@ -65,22 +65,29 @@ def cut_strict(data, type, rows):
 
 def cut(data, type, rows):
     data = Buffer(data)
-    if type.__class__ == int:
-        type = type + "B"
+    # if type.__class__ == int:
+    #     type = type + "B"
+    import re
+    p = re.compile('[0-9]')
+    t = re.compile('[A-Za-z]')
     size = struct.calcsize(type)
+    number = 0
+    if len(p.findall(type)) > 0:
+        number = p.findall(type)[0]
+        type = t.findall(type)[0]
     header = data.read(size * 2)
 
     chunks = []
 
     for i in range(0, rows + 1, 1):
         header = data.read(size * 2)
-        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
+        chunk = [unpack(type, data.read(size), number) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 
     for i in range(rows, -1, -1):
         header = data.read(size * 2)
-        chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
+        chunk = [unpack(type, data.read(size), number) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 

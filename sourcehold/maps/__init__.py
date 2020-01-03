@@ -279,6 +279,13 @@ class Directory(Structure):
 
         return self
 
+    def indices(self):
+        indices = []
+        for i in self.section_indices:
+            if i != 0:
+                indices.append(i)
+        return indices
+
     def __getitem__(self, item):
         if type(item) == str:
             for section in self.sections:

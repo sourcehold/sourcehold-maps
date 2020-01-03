@@ -4,6 +4,8 @@ import struct
 from sourcehold import compression
 from sourcehold.maps import Structure, Variable
 from sourcehold.maps.sections.tools import cut
+from sourcehold.maps import CompressedMapSection
+from sourcehold.maps import MapSection
 
 
 class TileStructure(object):
@@ -16,14 +18,34 @@ class TileStructure(object):
     def _set_data(self, data):
         raise NotImplementedError()
 
-    def get_tile(self, x, y):
+    def get_tiles(self):
         d = self._get_data()
         dcut = cut(d, self._TYPE_, 198)
-        #TODO
+        for i in range(len(dcut)):
+            for j in range(len(dcut[i])):
+                dcut[i][j] = self._CLASS_(dcut[i][j])
+        return dcut
 
-    def set_tile(self, x, y, data):
-        pass
-        #TODO
+    def get_tiles_flattened(self):
+        return [a for b in self.get_tiles() for a in b]
+
+
+class TileMapSection(TileStructure, MapSection):
+
+    def _get_data(self):
+        return self.get_data()
+
+    def _set_data(self, data):
+        return self.set_data(data)
+
+
+class TileCompressedMapSection(TileStructure, CompressedMapSection):
+
+    def _get_data(self):
+        return self.get_data()
+
+    def _set_data(self, data):
+        return self.set_data(data)
 
 
 class KeyValueStructure(object):
@@ -98,7 +120,7 @@ class KeyValueStructure(object):
         return self._MAPPING_.keys()
 
 
-from sourcehold.maps import MapSection
+
 
 
 class KeyValueMapSection(KeyValueStructure, MapSection):
@@ -287,85 +309,140 @@ class Section1058(KeyValueMapSection):
     _CLASS_ = int
 
 
-class Section1001(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
-
-    def interpret(self):
-        return cut(self.uncompressed, "H", 198)
+class Section1001(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
 
 
-class Section1003(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
-
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
-
-    def interpret(self):
-        return cut(self.uncompressed, "I", 198)
+class Section1002(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
 
 
-class Section1002(Structure):
-    uncompressed_size = Variable("us", "I")
-    compressed_size = Variable("cs", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
+class Section1003(TileCompressedMapSection):
+    _TYPE_ = "I"
+    _CLASS_ = int
 
-    def pack(self):
-        self.data = compression.COMPRESSION.compress(self.uncompressed)
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
 
-    def unpack(self):
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
+class Section1004(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
 
-    def get_data(self):
-        if not hasattr(self, "uncompressed"):
-            self.unpack()
-        return self.uncompressed
 
-    def interpret(self):
-        return cut(self.uncompressed, "H", 198)
+class Section1005(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1006(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1007(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1008(TileMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1009(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1010(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1012(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1020(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1021(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1026(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1028(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1029(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1030(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1033(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1036(TileCompressedMapSection):
+    _TYPE_ = "H"
+    _CLASS_ = int
+
+
+class Section1037(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1043(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1045(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1049(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1103(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1104(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+
+class Section1105(TileCompressedMapSection):
+    _TYPE_ = "9B"
+    _CLASS_ = list
+
+
+class Section1118(TileCompressedMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
 
 import re
 pattern = re.compile("Section[0-9]{4}")
