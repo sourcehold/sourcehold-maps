@@ -39,6 +39,9 @@ from sourcehold import *
 mymap = load_map(SHC_MAPS_USER.get_from_map('mymap.map'))
 mymap.directory #contains the map sections
 
+# To view an image of tile data sections:
+mymap.directory[1001].create_image().show()
+
 # To inspect tile data sections:
 mymap.directory[1036] #retrieve a (tile data) section by index
 data = mymap.directory[1036].get_data()
