@@ -6,7 +6,7 @@ from sourcehold.maps import Structure, Variable
 from sourcehold.maps.sections.tools import cut
 from sourcehold.maps import CompressedMapSection
 from sourcehold.maps import MapSection
-
+from sourcehold.maps.sections.tools import make_image_of_data
 
 class TileStructure(object):
     _TYPE_ = 'B'
@@ -28,6 +28,9 @@ class TileStructure(object):
 
     def get_tiles_flattened(self):
         return [a for b in self.get_tiles() for a in b]
+
+    def create_image(self):
+        return tools.make_image_of_data(self.get_tiles())
 
 
 class TileMapSection(TileStructure, MapSection):
@@ -130,6 +133,8 @@ class KeyValueMapSection(KeyValueStructure, MapSection):
 
     def _set_data(self, data):
         return self.set_data(data)
+
+
 
 
 class Section1073(KeyValueMapSection):

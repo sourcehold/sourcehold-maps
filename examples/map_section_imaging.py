@@ -1,8 +1,12 @@
 from PIL import Image, ImageDraw
 
+import os, sys
+
+PACKAGE_PARENT = '..'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 # TODO: implement fact that tileset.png is mappable to datum. tiles are indexed from bottom to top.
-
 from sourcehold.maps.sections.tools import TiledDiamondSystem
 
 
@@ -15,7 +19,7 @@ def make_image_of_data(dt, system: TiledDiamondSystem):
 
     for i in range(len(dt)):
         for j in range(len(dt[i])):
-            coords = system.system_tile_coordinates(i, j)
+            coords = system.system_tile_coordinates((i, j))
             coords = [(im.width - coord[0], coord[1]) for coord in coords]
             draw.polygon(coords, outline=None, fill=pal[mapping.index(dt[i][j])])
 

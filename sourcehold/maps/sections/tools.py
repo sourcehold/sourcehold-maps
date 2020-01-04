@@ -4,6 +4,10 @@ from sourcehold.iotools import Buffer
 from sourcehold.iotools import unpack
 
 
+from PIL import Image, ImageDraw
+
+from sourcehold import palette
+
 
 
 def cut_strict(data, type, rows):
@@ -16,47 +20,47 @@ def cut_strict(data, type, rows):
     headers = set()
     footers = set()
 
-    if header not in headers:
-        print("header: {}".format(header))
-        headers.add(header)
+    # if header not in headers:
+    #     print("header: {}".format(header))
+    #     headers.add(header)
 
     chunks = []
 
     for i in range(0, rows + 1, 1):
         header = data.read(size * 2)
 
-        if header not in headers:
-            print("header: {}".format(header))
-            headers.add(header)
+        # if header not in headers:
+        #     print("header: {}".format(header))
+        #     headers.add(header)
 
         chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 
-        if footer not in footers:
-            print("footer: {}".format(footer))
-            footers.add(footer)
+        # if footer not in footers:
+        #     print("footer: {}".format(footer))
+        #     footers.add(footer)
 
     for i in range(rows, -1, -1):
         header = data.read(size * 2)
 
-        if header not in headers:
-            print("header: {}".format(header))
-            headers.add(header)
+        # if header not in headers:
+        #     print("header: {}".format(header))
+        #     headers.add(header)
 
         chunk = [unpack(type, data.read(size)) for v in range(i * 2)]
         chunks.append(chunk)
         footer = data.read(size * 2)
 
-        if footer not in footers:
-            print("footer: {}".format(footer))
-            footers.add(footer)
+        # if footer not in footers:
+        #     print("footer: {}".format(footer))
+        #     footers.add(footer)
 
     footer = data.read(size * 2)
 
-    if footer not in footers:
-        print("footer: {}".format(footer))
-        footers.add(footer)
+    # if footer not in footers:
+    #     print("footer: {}".format(footer))
+    #     footers.add(footer)
 
     assert data.remaining() == 0
 
@@ -314,7 +318,7 @@ class DiamondSystem(object):
 
 class TiledDiamondSystem(DiamondSystem):
 
-    def __init__(self, tilewidth=32, tileheight=16, rows=198, xoffset=15, yoffset=0):
+    def __init__(self, tilewidth=32, tileheight=16, rows=396, xoffset=15, yoffset=0):
         self.tilewidth = tilewidth
         self.tileheight = tileheight
         self.rows = rows
@@ -333,3 +337,29 @@ class TiledDiamondSystem(DiamondSystem):
         height = self.tileheight
         return [(xoff, yoff), (xoff + width // 2, yoff + height // 2), (xoff, yoff + height),
                 (xoff - width // 2, yoff + height // 2)]
+
+
+
+def build_palette(data):
+    uniq = set(x for y in data for x in y)
+
+    mapping = sorted(list(uniq))
+    pal = palette.create_palette(len(mapping))
+
+    return (mapping, pal)
+
+
+def make_image_of_data(dt, system: TiledDiamondSystem = TiledDiamondSystem()) -> Image.Image:
+    width = int(system.rows * system.tilewidth * 0.5)
+    height = int(system.rows * system.tileheight * 0.5)
+    im = Image.new('RGBA', (width, height))
+    draw = ImageDraw.Draw(im)
+    mapping, pal = build_palette(dt)
+
+    for i in range(len(dt)):
+        for j in range(len(dt[i])):
+            coords = system.system_tile_coordinates((i, j))
+            coords = [(im.width - coord[0], coord[1]) for coord in coords]
+            draw.polygon(coords, outline=None, fill=pal[mapping.index(dt[i][j])])
+
+    return im
