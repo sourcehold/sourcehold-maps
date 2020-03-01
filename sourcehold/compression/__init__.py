@@ -22,7 +22,7 @@ class AbstractCompressor(object):
 
         raise Exception("Unable to sanitize input")
 
-    def compress(self, data):
+    def compress(self, data, level):
         raise NotImplementedError()
 
     def decompress(self, data):
@@ -37,8 +37,8 @@ class DirectCompression(AbstractCompressor):
         import sourcehold.compression.compressionlib_interface_nocb as handle
         self.handle = handle
 
-    def compress(self, data):
-        return self.handle.compress(self._sanitize(data))
+    def compress(self, data, level=3):
+        return self.handle.compress(self._sanitize(data), level)
 
     def decompress(self, data):
         return self.handle.decompress(self._sanitize(data))
@@ -56,7 +56,7 @@ class SubprocessCompression(AbstractCompressor):
         result.check_returncode()
         return result.stdout
 
-    def compress(self, data):
+    def compress(self, data, level):
         result = subprocess.run(["python", "sourcehold/compression/compressionlib_interface.py", "compress"],
                                 input=self._sanitize(data),
                                 stdout=subprocess.PIPE)
@@ -75,7 +75,7 @@ class BlastDecompression(AbstractCompressor):
         result.check_returncode()
         return result.stdout
 
-    def compress(self, data):
+    def compress(self, data, level):
         raise NotImplementedError()
 
 
@@ -84,4 +84,4 @@ if sys.platform == "win32":
 else:
     raise NotImplementedError()
 
-COMPRESSION = DirectCompression()
+# COMPRESSION = DirectCompression()

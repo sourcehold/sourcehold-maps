@@ -65,12 +65,13 @@ class CompressedSection(Structure):
     data = Variable("data", "B", compressed_size)
 
     def pack(self):
-        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed)]
+        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
 
     def unpack(self):
+        self.compression_level = self.data[3]
         self.uncompressed = compression.COMPRESSION.decompress(self.data)
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size
@@ -225,7 +226,7 @@ class CompressedMapSection(CompressedSection):
 from sourcehold.maps.sections import find_section_for_index
 
 import csv
-from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, create_structure_from_buffer, Buffer
+from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, Buffer
 
 
 def get_section_for_index(index, compressed):
