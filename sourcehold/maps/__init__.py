@@ -71,7 +71,7 @@ class CompressedSection(Structure):
         self.compressed_size = len(self.data)
 
     def unpack(self):
-        self.compression_level = self.data[3]
+        self.compression_level = self.data[1]
         self.uncompressed = compression.COMPRESSION.decompress(self.data)
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size
