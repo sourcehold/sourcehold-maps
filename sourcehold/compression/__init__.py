@@ -37,7 +37,7 @@ class DirectCompression(AbstractCompressor):
         import sourcehold.compression.compressionlib_interface_nocb as handle
         self.handle = handle
 
-    def compress(self, data, level=3):
+    def compress(self, data, level=6):
         return self.handle.compress(self._sanitize(data), level)
 
     def decompress(self, data):

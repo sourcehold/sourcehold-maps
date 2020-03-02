@@ -43,7 +43,7 @@ def decompress(data):
     return b''.join(struct.pack("B", v) for v in r)
 
 
-def compress(data, level=3):
+def compress(data, level=6):
     indata = data
     indatalen = len(data)
 
@@ -61,7 +61,7 @@ def compress(data, level=3):
     # print("pbOutBuff is at {}. pbOutBuffEnd is at: {} {}".format(hex(addr), hex(newaddr), pvoid), file=sys.stderr)
 
     # dsize = ctypes.c_uint(0x1000)
-    level = ctypes.c_uint(level)
+    level = ctypes.c_uint(level - 3)
     type = ctypes.c_uint(0)
 
     # print("imploding data", file=sys.stderr)
