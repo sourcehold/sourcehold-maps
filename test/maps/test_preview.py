@@ -16,7 +16,7 @@ class TestPreview(unittest.TestCase):
         m = maps.Map().from_buffer(buf)
         m.unpack()
 
-        test_image = m.preview.create_image()
+        test_image = m.preview.get_image()
 
         expected_image_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                            "..", "..", "resources", "MxM_unseen_1.png")

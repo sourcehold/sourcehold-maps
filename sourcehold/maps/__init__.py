@@ -140,7 +140,7 @@ class Description(Structure):
     data = Variable("data", "B", compressed_size)
 
     def pack(self):
-        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed)]
+        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
         self.compressed_size = len(self.data)
@@ -168,6 +168,7 @@ class Description(Structure):
         return self.uncompressed[:j].decode('ascii')
 
     def unpack(self):
+        self.compression_level = self.data[1]
         self.uncompressed = compression.COMPRESSION.decompress(self.data)
         assert len(self.data) == self.compressed_size
         assert len(self.uncompressed) == self.uncompressed_size

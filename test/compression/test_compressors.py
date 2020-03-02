@@ -23,10 +23,13 @@ class TestCompressors(unittest.TestCase):
         self.assertEqual(c3.decompress(datac), datad)
 
     def test_direct_compress(self):
-        self.assertEqual(c1.compress(datad), datac2)
+        self.assertEqual(c1.compress(datad, level=6), datac2)
+
+    def test_direct_compress(self):
+        self.assertEqual(c1.compress(datad, level=4), datac)
 
     # def test_blast_compress(self):
     #     self.assertEqual(c2.compress(datad), datac2)
 
     def test_subprocess_compress(self):
-        self.assertEqual(c3.compress(datad), datac2)
+        self.assertEqual(c3.compress(datad, level=6), datac2)
