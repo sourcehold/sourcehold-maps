@@ -1,70 +1,70 @@
-import os
+def expand_var_path(path: str):
+    path = str(path)
+    if "~" in path:
+        i = path.index("~/")
+        j = i + 2
+        remainder = path[j:]
+        name = path[:i]
+        name = name.lower()
+        if "shc" in name:
+            if "user" in name:
+                if "sav" in name:
+                    return SHC_FILES_USER._saves / remainder
+                if "map" in name:
+                    return SHC_FILES_USER._maps / remainder
+            else:
+                if "sav" in name:
+                    return SHC_FILES._saves / remainder
+                if "map" in name:
+                    return SHC_FILES._maps / remainder
+        if "sh" in name:
+            if "user" in name:
+                if "sav" in name:
+                    return SH_FILES_USER._saves / remainder
+                if "map" in name:
+                    return SH_FILES_USER._maps / remainder
+            else:
+                if "sav" in name:
+                    return SH_FILES._saves / remainder
+                if "map" in name:
+                    return SH_FILES._maps / remainder
 
-
-class MapFile(object):
-
-    def __init__(self, name, type):
-        self.name = name
-        self.type = type
-        self.map = None
-
-    def pack_to_game_folder(self):
-        pass
-
-    def unpack_from_game_folder(self):
-        pass
-
-    def pack(self):
-        pass
-
-    def unpack(self):
-        pass
-
-    def unpack_to_folder(self, path):
-        pass
-
-    def unpack_to_file_inspection(self):
-        self.unpack_to_folder("file_inspection/maps")
-
-
-MAP_FILE = "Maps"
-SAVE_FILE = "Saves"
+    return Path(path).expanduser()
 
 
 class Library(object):
 
-    def __init__(self, path):
-        self.path = os.path.expanduser(path)
-        self.maps = os.path.join(self.path, "Maps")
-        self.saves = os.path.join(self.path, "Saves")
+    def __init__(self, path, mapsub="Maps", savsub="Saves", mapsuf=".map", savsuf=".sav"):
+        self._path = path.expanduser()
+        self._maps = self._path / mapsub
+        self._saves = self._path / savsub
+        self._mapsuf = mapsuf
+        self._savsuf = savsuf
 
-    def _as_file(self, name, suffix = ".map"):
+    def _as_file(self, name, suffix):
         return name if name.endswith(suffix) else name + suffix
 
-    def _as_folder(self, name, suffix = ".map"):
+    def _as_folder(self, name, suffix):
         return name if not name.endswith(suffix) else name[-4:]
 
-    def get_from_saves(self, name):
-        return os.path.join(self.saves, self._as_file(name, suffix = '.sav'))
+    def get_path_from_saves(self, name):
+        return self._saves / self._as_file(name, suffix=self._savsuf)
 
-    def get_from_maps(self, name):
-        return os.path.join(self.maps, self._as_file(name))
+    def get_path_from_maps(self, name):
+        return self._maps / self._as_file(name, suffix=self._mapsuf)
 
-    def get_all_maps(self):
-        return [self.maps + "/" + f for f in os.listdir(self.maps)]
+    def get_all_map_paths(self):
+        return [f for f in self._maps.iterdir()]
+
+    def get_all_save_paths(self):
+        return [f for f in self._saves.iterdir()]
 
 
-class SHC_Library(Library):
-
-    def __init__(self, path="~/Documents/Stronghold Crusader"):
-        self.path = os.path.expanduser(path)
-        self.maps = os.path.join(self.path, "Maps")
-        self.saves = os.path.join(self.path, "Saves")
-
+from pathlib import Path
 
 import sourcehold
 
-SHC_MAPS_USER = Library(path=sourcehold.CONFIG['shc_user'])
-SHC_MAPS = Library(path=sourcehold.CONFIG['shc'])
-SH_MAPS_USER = Library(path=sourcehold.CONFIG['sh_user'])
-SH_MAPS = Library(path=sourcehold.CONFIG['sh'])
+SHC_FILES_USER = Library(path=Path(sourcehold.CONFIG['shc_user']))
+SHC_FILES = Library(path=Path(sourcehold.CONFIG['shc']))
+SH_FILES_USER = Library(path=Path(sourcehold.CONFIG['sh_user']))
+SH_FILES = Library(path=Path(sourcehold.CONFIG['sh']))

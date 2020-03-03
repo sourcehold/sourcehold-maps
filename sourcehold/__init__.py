@@ -45,4 +45,4 @@ def load_config(path='config.json'):
 
 load_config()
 
-from sourcehold.maps.library import SHC_MAPS, SHC_MAPS_USER, SH_MAPS, SH_MAPS_USER
+from sourcehold.maps.library import SHC_FILES, SHC_FILES_USER, SH_FILES, SH_FILES_USER, expand_var_path

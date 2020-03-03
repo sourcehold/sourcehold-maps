@@ -32,16 +32,16 @@ python examples/map_preview_image.py replace "Close Encounters.map" --replacemen
 #### Disable buildings
 ```python
 from sourcehold import *
-map = load_map(SHC_MAPS.get_from_maps('Close Encounters.map'))
+map = load_map(SHC_FILES.get_path_from_maps('Close Encounters'))
 map.directory["building_availability"].granary = False
-save_map(map, SHC_MAPS_USER.get_from_maps('Close Encounters mod.map'))
+save_map(map, SHC_FILES_USER.get_path_from_maps('Close Encounters mod'))
 ```
 #### Set starting popularity and goods
 ```python
 from sourcehold import *
-map = load_map(SHC_MAPS.get_from_maps('Close Encounters.map'))
+map = load_map(SHC_FILES.get_path_from_maps('Close Encounters'))
 map.directory['STARTING_GOODS'].wood = 0
-save_map(map, SHC_MAPS_USER.get_from_maps('Close Encounters mod.map'))
+save_map(map, SHC_FILES_USER.get_path_from_maps('Close Encounters mod'))
 ```
 
 ## Dependencies

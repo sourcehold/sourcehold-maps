@@ -131,7 +131,7 @@ def create_byte_comparison(files, title, outputfile):
     ufs = [f for f in fs if not os.path.exists(f)]
     for uf in ufs:
         mapname = os.path.basename(uf)
-        with open(library.LIBRARY.get_from_maps(mapname) + ".map", 'rb') as f:
+        with open(library.LIBRARY.get_path_from_maps(mapname) + ".map", 'rb') as f:
             buf = maps.Buffer(f.read())
         map = maps.Map().from_buffer(buf)
         map.dump_to_folder("file_inspection/maps/" + mapname)
@@ -164,7 +164,7 @@ def compare_unit_movement():
     ufs = [f for f in fs if not os.path.exists(f)]
     for uf in ufs:
         mapname = os.path.basename(uf)
-        with open(library.LIBRARY.get_from_maps(mapname) + ".map", 'rb') as f:
+        with open(library.LIBRARY.get_path_from_maps(mapname) + ".map", 'rb') as f:
             buf = maps.Buffer(f.read())
         map = maps.Map().from_buffer(buf)
         map.dump_to_folder("file_inspection/maps/" + mapname)
