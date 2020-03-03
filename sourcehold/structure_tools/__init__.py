@@ -63,12 +63,24 @@ def ints_to_byte_array(ints: list):
     return buf.getvalue()
 
 
-class Variable(object):
+def _resolve_cls_as_type(cls):
+    if cls == int:
+        return "I"
+    if cls == str:
+        raise NotImplementedError()
+    if cls == float:
+        return "f"
+    if cls == bytes:
+        return "B"
+    return cls
 
-    def __init__(self, name, type, array_size=0, break_array=BreakFunctions.break_at_eof):
+
+class Field(object):
+
+    def __init__(self, name, typ, array_size=0, break_array=BreakFunctions.break_at_eof):
         object.__init__(self)
         self.name = name
-        self.type = type
+        self.type = typ if type(typ) != type else _resolve_cls_as_type(typ)
         self.array_size = array_size
         self.break_array = break_array
         self.fget = self.__get__
@@ -122,7 +134,7 @@ class Variable(object):
                 elif self.array_size.__class__ == int:
                     for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
-                elif self.array_size.__class__ == Variable:
+                elif self.array_size.__class__ == Field:
                     self.array_size.__set__(obj, len(self.__get__(obj)))
                     for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
@@ -143,7 +155,7 @@ class Variable(object):
                 elif self.array_size.__class__ == int:
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
-                elif self.array_size.__class__ == Variable:
+                elif self.array_size.__class__ == Field:
                     # TODO: is there a setter missing here?
                     for o in self.__get__(obj):
                         o.serialize_to_buffer(buf)
@@ -172,7 +184,7 @@ class Variable(object):
                     s = struct.calcsize(self.type)
                     r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
                     self.__set__(obj, r)
-                elif self.array_size.__class__ == Variable:
+                elif self.array_size.__class__ == Field:
                     si = self.array_size.__get__(obj)
                     s = struct.calcsize(self.type)
                     r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
@@ -198,7 +210,7 @@ class Variable(object):
                 elif self.array_size.__class__ == int:
                     r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
                     self.__set__(obj, r)
-                elif self.array_size.__class__ == Variable:
+                elif self.array_size.__class__ == Field:
                     si = self.array_size.__get__(obj)
                     r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(si)]
                     self.__set__(obj, r)
@@ -259,7 +271,7 @@ class Structure(object):
         for cls in tree:
             if not hasattr(cls, "__dict__"):
                 continue
-            props = {key: value for key, value in cls.__dict__.items() if cls.__dict__[key].__class__ == Variable}
+            props = {key: value for key, value in cls.__dict__.items() if cls.__dict__[key].__class__ == Field}
             fields.update(props)
 
         return fields

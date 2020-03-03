@@ -1,12 +1,10 @@
-import binascii
 import struct
 
-from sourcehold import compression
-from sourcehold.maps import Structure, Variable
-from sourcehold.maps.sections.tools import cut
 from sourcehold.maps import CompressedMapSection
 from sourcehold.maps import MapSection
+from sourcehold.maps.sections.tools import cut
 from sourcehold.maps.sections.tools import make_image_of_data
+
 
 class TileStructure(object):
     _TYPE_ = 'B'

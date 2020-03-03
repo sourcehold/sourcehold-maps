@@ -7,12 +7,12 @@ from PIL import Image
 
 from sourcehold import compression, palette
 from sourcehold.iotools import read_file, write_to_file, _int_array_to_bytes
-from sourcehold.structure_tools import Structure, Variable
+from sourcehold.structure_tools import Structure, Field
 
 
 class SimpleSection(Structure):
-    size = Variable("size", "I")
-    data = Variable("data", "B", size)
+    size = Field("size", "I")
+    data = Field("data", "B", size)
 
     def pack(self):
         self.size = len(self.data)
@@ -59,10 +59,10 @@ class U4(SimpleSection):
 
 
 class CompressedSection(Structure):
-    uncompressed_size = Variable("uncompressed_size", "I")
-    compressed_size = Variable("compressed_size", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
+    uncompressed_size = Field("uncompressed_size", "I")
+    compressed_size = Field("compressed_size", "I")
+    hash = Field("hash", "I")
+    data = Field("data", "B", compressed_size)
 
     def pack(self):
         self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
@@ -131,13 +131,13 @@ class Preview(CompressedSection):
 
 
 class Description(Structure):
-    size = Variable("size", "I")  # This structure in size, + compressed size
-    use_string_table = Variable("use_string_table", "I")
-    string_table_index = Variable("string_table_index", "I")
-    uncompressed_size = Variable("uncompressed_size", "I")
-    compressed_size = Variable("compressed_size", "I")
-    hash = Variable("hash", "I")
-    data = Variable("data", "B", compressed_size)
+    size = Field("size", "I")  # This structure in size, + compressed size
+    use_string_table = Field("use_string_table", "I")
+    string_table_index = Field("string_table_index", "I")
+    uncompressed_size = Field("uncompressed_size", "I")
+    compressed_size = Field("compressed_size", "I")
+    hash = Field("hash", "I")
+    data = Field("data", "B", compressed_size)
 
     def pack(self):
         self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
@@ -249,16 +249,16 @@ class Directory(Structure):
     # Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
     # The version differ in the amount of sections, 150 or 100.
     _MAX_SECTIONS_COUNT = determine_version
-    directory_size = Variable("directory_size", "I")
-    size = Variable("size", "I")
-    sections_count = Variable("sections_count", "I")
-    directory_u1 = Variable("directory_u1", "I", 5)
-    uncompressed_lengths = Variable("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_lengths = Variable("section_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_indices = Variable("section_indices", "I", _MAX_SECTIONS_COUNT)
-    section_compressed = Variable("section_compressed", "I", _MAX_SECTIONS_COUNT)
-    section_offsets = Variable("section_offsets", "I", _MAX_SECTIONS_COUNT)
-    directory_u7 = Variable("directory_u7", "I")
+    directory_size = Field("directory_size", "I")
+    size = Field("size", "I")
+    sections_count = Field("sections_count", "I")
+    directory_u1 = Field("directory_u1", "I", 5)
+    uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_lengths = Field("section_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)
+    section_compressed = Field("section_compressed", "I", _MAX_SECTIONS_COUNT)
+    section_offsets = Field("section_offsets", "I", _MAX_SECTIONS_COUNT)
+    directory_u7 = Field("directory_u7", "I")
 
     def keys(self):
         def all_keys():
@@ -266,6 +266,7 @@ class Directory(Structure):
                 for section in self.sections:
                     if hasattr(section, "KEY"):
                         yield section.KEY
+
         return list(all_keys())
 
     def from_buffer(self, buf: Buffer, **kwargs):
@@ -444,18 +445,18 @@ import os
 
 
 class Map(Structure):
-    magic = Variable("magic", "I")
-    preview_size = Variable("preview_size",
-                            "I")  # Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
-    preview = Variable("preview", Preview)
-    description = Variable("description", Description)
-    u1 = Variable("u1", SimpleSection)
-    u2 = Variable("u2", U2)
-    u3 = Variable("u3", SimpleSection)
-    u4 = Variable("u4", U4)
-    ud = Variable("ud", "B", 4)
+    magic = Field("magic", "I")
+    preview_size = Field("preview_size",
+                         "I")  # Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
+    preview = Field("preview", Preview)
+    description = Field("description", Description)
+    u1 = Field("u1", SimpleSection)
+    u2 = Field("u2", U2)
+    u3 = Field("u3", SimpleSection)
+    u4 = Field("u4", U4)
+    ud = Field("ud", "B", 4)
 
-    directory = Variable("directory", Directory)
+    directory = Field("directory", Directory)
 
     def unpack(self):
         self.preview.unpack()
