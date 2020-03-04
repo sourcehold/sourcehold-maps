@@ -1,7 +1,11 @@
 import ctypes
+import platform
 import sys
 
-dll = ctypes.CDLL("bin/compressionlib-nocb.dll")
+if 'windows' in platform.platform().lower():
+    dll = ctypes.CDLL("bin/compressionlib-nocb.dll")
+elif 'linux' in platform.platform().lower():
+    dll = ctypes.CDLL("bin/compressionlib-nocb.so")
 
 dll.explode_nocb.restype = ctypes.c_uint
 dll.explode_nocb.argtypes = [ctypes.POINTER(ctypes.c_ubyte), ctypes.POINTER(ctypes.c_int),

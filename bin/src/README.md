@@ -1,0 +1,1 @@
+Most of the code here is copy pasted and adapted from: https://github.com/ladislav-zezula/StormLib/tree/master/src/pklib
