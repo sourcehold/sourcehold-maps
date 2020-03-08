@@ -409,6 +409,28 @@ class Structure(object):
             raise Exception(message)
         return True
 
+    def __sub__(self, other):
+        """Comparison function by substraction"""
+        d0 = self.get_data()
+        d1 = other.get_data()
+        n0 = len(d0)
+        n1 = len(d1)
+        n = min(n0, n1)
+        for i in range(n):
+            yield d0[n] - d1[n]
+
+    def compare_data(self, other):
+        d0 = self.get_data()
+        d1 = other.get_data()
+        n0 = len(d0)
+        n1 = len(d1)
+        if n0 != n1:
+            yield "unequal data sizes: {} {}".format(n0, n1)
+        n = min(n0, n1)
+        for i in range(n):
+            if d0[n] != d1[n]:
+                yield "unequal values at index: {}, value 0: {}, value 1: {}".format(n, d0[n], d1[n])
+
 
 class Table(object):
 

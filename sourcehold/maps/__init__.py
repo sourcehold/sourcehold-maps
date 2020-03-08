@@ -255,7 +255,7 @@ class Directory(Structure):
     directory_u1 = Field("directory_u1", "I", 5)
     uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
     section_lengths = Field("section_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)
+    section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
     section_compressed = Field("section_compressed", "I", _MAX_SECTIONS_COUNT)
     section_offsets = Field("section_offsets", "I", _MAX_SECTIONS_COUNT)
     directory_u7 = Field("directory_u7", "I")

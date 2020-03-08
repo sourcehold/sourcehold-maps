@@ -6,6 +6,105 @@ from sourcehold.maps.sections.tools import cut
 from sourcehold.maps.sections.tools import make_image_of_data
 
 
+class TileSystemRow(object):
+
+    def __init__(self):
+        self.header = None
+        self.footer = None
+        self.data = []
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+
+from ...iotools import Buffer
+
+
+class TileSystem(object):
+
+    def __init__(self):
+        self.rows = []
+        self.header = None
+        self.footer = None
+        self.fmt = None
+
+    def __getitem__(self, item):
+        return self.rows[item]
+
+    def __setitem__(self, key, value):
+        self.rows[key] = value
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __sub__(self, other):
+        if len(self.rows) != len(other.rows):
+            raise Exception()
+        system = TileSystem()
+        for row in range(len(self.rows)):
+            r = TileSystemRow()
+            for col in range(len(self.rows[row].data)):
+                r.data.append(self.rows[row].data[col] - other.rows[row].data[col])
+            system.rows.append(r)
+        return system
+
+    def create_image(self):
+        return make_image_of_data(self.get_tiles())
+
+    def get_tiles(self):
+        return [row.data for row in self.rows]
+
+    def from_bytes(self, data, fmt):
+        self.fmt = fmt
+        self.rows.clear()
+
+        if type(data) == bytes:
+            data = Buffer(data)
+        size = struct.calcsize(fmt)
+        rows = 198
+
+        typ = fmt
+        self.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+
+        for i in range(0, rows + 1, 1):
+            row = TileSystemRow()
+            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.data = [struct.unpack(typ, data.read(size))[0] for v in range(i * 2)]
+            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            self.rows.append(row)
+
+        for i in range(rows, -1, -1):
+            row = TileSystemRow()
+            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.data = [struct.unpack(typ, data.read(size))[0] for v in range(i * 2)]
+            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            self.rows.append(row)
+
+        self.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+
+        # The first and last row are empty
+
+        assert data.remaining() == 0
+
+        return self
+
+    def to_bytes(self):
+        data = Buffer()
+        data.write(b''.join(struct.pack(self.fmt, v) for v in self.header))
+
+        for row in self.rows:
+            data.write(b''.join(struct.pack(self.fmt, v) for v in row.header))
+            data.write(b''.join(struct.pack(self.fmt, v) for v in row.data))
+            data.write(b''.join(struct.pack(self.fmt, v) for v in row.footer))
+
+        data.write(b''.join(struct.pack(self.fmt, v) for v in self.footer))
+
+        return data.getvalue()
+
+
 class TileStructure(object):
     _TYPE_ = 'B'
     _CLASS_ = int
@@ -29,6 +128,31 @@ class TileStructure(object):
 
     def create_image(self):
         return tools.make_image_of_data(self.get_tiles())
+
+    def get_system(self):
+        return TileSystem().from_bytes(self._get_data(), self._TYPE_)
+
+    def compare_tiles(self, other):
+        t0 = self.get_tiles()
+        t1 = other.get_tiles()
+        n0 = len(t0)
+        n1 = len(t1)
+        if n0 != n1:
+            yield "unequal length of tiles: {}, {}".format(n0, n1)
+        for i in range(n0):
+            for j in range(len(t0[i])):
+                if t0[i][j] != t1[i][j]:
+                    yield "unequal values for index (i, j) {}, {}. values: {}, {}".format(i, j, t0[i][j], t1[i][j])
+
+    def __sub__(self, other):
+        t0 = self.get_tiles()
+        t1 = other.get_tiles()
+        n0 = len(t0)
+        n1 = len(t1)
+        ni = min(n0, n1)
+        for i in range(ni):
+            for j in range(min(len(t0[i]), len(t1[i]))):
+                yield t0[i][j] - t1[i][j]
 
 
 class TileMapSection(TileStructure, MapSection):
