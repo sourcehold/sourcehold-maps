@@ -65,6 +65,8 @@ class CompressedSection(Structure):
     data = Field("data", "B", compressed_size)
 
     def pack(self):
+        if not hasattr(self, "compression_level"):
+            self.compression_level = 6
         self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
@@ -132,7 +134,7 @@ class Preview(CompressedSection):
 
 class Description(Structure):
     size = Field("size", "I")  # This structure in size, + compressed size
-    use_string_table = Field("use_string_table", "I")
+    use_string_table = Field("use_string_table", "I")  # TODO: serialize this to a .meta file
     string_table_index = Field("string_table_index", "I")
     uncompressed_size = Field("uncompressed_size", "I")
     compressed_size = Field("compressed_size", "I")
@@ -140,6 +142,12 @@ class Description(Structure):
     data = Field("data", "B", compressed_size)
 
     def pack(self):
+        if not hasattr(self, "compression_level"):
+            self.compression_level = 6
+        if not hasattr(self, "use_string_table"):
+            self.use_string_table = 0
+        if not hasattr(self, "string_table_index"):
+            self.string_table_index = 0
         self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
         self.hash = binascii.crc32(self.uncompressed)
         self.uncompressed_size = len(self.uncompressed)
@@ -179,6 +187,9 @@ class Description(Structure):
         if not hasattr(self, "uncompressed"):
             self.unpack()
         return self.uncompressed
+
+    def set_data(self, data):
+        self.uncompressed = data
 
     def size_of(self):
         return self.compressed_size + (6 * 4)
@@ -245,6 +256,12 @@ def determine_version(obj):
     return 150 if obj.directory_u1[0] >= 161 else 100
 
 
+import re
+
+SECTION_PATH_re = re.compile("^[0-9]+$")
+import pathlib
+
+
 class Directory(Structure):
     # Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
     # The version differ in the amount of sections, 150 or 100.
@@ -253,7 +270,7 @@ class Directory(Structure):
     size = Field("size", "I")
     sections_count = Field("sections_count", "I")
     directory_u1 = Field("directory_u1", "I", 5)
-    uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
     section_lengths = Field("section_lengths", "I", _MAX_SECTIONS_COUNT)
     section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
     section_compressed = Field("section_compressed", "I", _MAX_SECTIONS_COUNT)
@@ -335,27 +352,27 @@ class Directory(Structure):
         self.sections_count = len(self.sections)
         for i in range(self.sections_count):
             s = self.sections[i]
-            if s.__class__ == MapSection:
-                self.uncompressed_lengths[i] = s.size_of()
+            if isinstance(s, MapSection):
+                self.section_uncompressed_lengths[i] = s.size_of()
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 0
-            if s.__class__ == CompressedMapSection:
-                self.uncompressed_lengths[i] = s.uncompressed_size
+            if isinstance(s, CompressedMapSection):
+                self.section_uncompressed_lengths[i] = s.uncompressed_size
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 1
 
             self.section_offsets[i] = accum
-            accum += self.section_lengths[i]
+            accum += int(self.section_lengths[i])
 
         for i in range(self.sections_count, Directory._MAX_SECTIONS_COUNT(self)):
             self.section_lengths[i] = 0
-            self.uncompressed_lengths[i] = 0
+            self.section_uncompressed_lengths[i] = 0
             self.section_compressed[i] = 0
             self.section_indices[i] = 0
             self.section_offsets[i] = 0  # TODO check this
 
     def serialize_to_buffer(self, buf):
-        self.pack()
+        self.pack()  # TODO: why is this here?
 
         super().serialize_to_buffer(buf)
 
@@ -372,24 +389,23 @@ class Directory(Structure):
         writer.writeheader()
         for i in range(len(self.sections)):
             writer.writerow(
-                {"uncompressed_length": self.uncompressed_lengths[i], "section_length": self.section_lengths[i],
+                {"uncompressed_length": self.section_uncompressed_lengths[i], "section_length": self.section_lengths[i],
                  "section_index": self.section_indices[i], "compressed": self.section_compressed[i],
                  "section_offset": self.section_offsets[i]})
 
         return buf.getvalue().encode('ascii')
 
-    def _load_spec(self, data: bytes):
-        buf = csv.StringIO(data.decode('ascii'))
+    def _load_spec(self, data: str):
+        buf = csv.StringIO(data)
 
-        reader = csv.DictReader(buf, fieldnames=["uncompressed_length", "section_length", "section_index", "compressed",
-                                                 "section_offset"])
+        reader = csv.DictReader(buf)
         i = 0
         for line in reader:
-            self.uncompressed_lengths[i] = line['uncompressed_length']
-            self.section_lengths[i] = line['section_length']
-            self.section_indices[i] = line['section_index']
-            self.section_compressed[i] = line['compressed']
-            self.section_offsets[i] = line['section_offset']
+            self.section_uncompressed_lengths[i] = int(line['uncompressed_length'])
+            self.section_lengths[i] = int(line['section_length'])
+            self.section_indices[i] = int(line['section_index'])
+            self.section_compressed[i] = int(line['compressed'])
+            self.section_offsets[i] = int(line['section_offset'])
             i += 1
 
         self.sections_count = i
@@ -406,27 +422,35 @@ class Directory(Structure):
         write_to_file(os.path.join(path, "directory_u1"), ints_to_byte_array(self.directory_u1))
         write_to_file(os.path.join(path, "directory_u7"), struct.pack("I", self.directory_u7))
 
-    @staticmethod
-    def load_from_folder(path):
+    def load_from_folder(self, path):
 
-        self = Directory()
-        self._load_spec(read_file(os.path.join(path, "spec")))
+        self.directory_u1 = list(bytes_to_int_array(read_file(os.path.join(path, "directory_u1"))))
+        self.directory_u7 = list(bytes_to_int_array(read_file(os.path.join(path, "directory_u7"))))[0]
+
+        self.section_uncompressed_lengths = [0] * self._MAX_SECTIONS_COUNT()
+        self.section_lengths = [0] * self._MAX_SECTIONS_COUNT()
+        self.section_indices = [0] * self._MAX_SECTIONS_COUNT()
+        self.section_compressed = [0] * self._MAX_SECTIONS_COUNT()
+        self.section_offsets = [0] * self._MAX_SECTIONS_COUNT()
+
+        self._load_spec((pathlib.Path(path) / "spec").read_text('ascii'))
 
         self.sections = []
         for i in range(self.sections_count):
-            path = os.path.join(path, str(self.section_indices[i]))
+            sp = os.path.join(path, str(self.section_indices[i]))
 
             cls = get_section_for_index(self.section_indices[i], self.section_compressed[i] == 1)
 
             obj = cls()
-            obj.set_data(read_file(path))
+            obj.set_data(read_file(sp))
 
             self.sections.append(obj)
 
         assert len(self.sections) == self.sections_count
 
-        self.directory_u1 = bytes_to_int_array(read_file(os.path.join(path, "directory_u1")))
-        self.directory_u7 = bytes_to_int_array(read_file(os.path.join(path, "directory_u7")))[0]
+        self.pack()
+
+        return self
 
         #TODO: add pack() call to ensure validity of side-variables like size, crc32, and compressed_size?
 
@@ -464,6 +488,7 @@ class Map(Structure):
         self.directory.unpack()
 
     def pack(self):
+        self.magic = 0xFFFFFFFF
         self.preview.pack()
         self.preview_size = self.preview.size_of()
         self.description.pack()
@@ -486,10 +511,10 @@ class Map(Structure):
 
     def load_from_folder(self, path):
         self.preview = Preview()
-        self.preview.uncompressed = read_file(os.path.join(path, "preview"))
+        self.preview.set_data(read_file(os.path.join(path, "preview")))
 
         self.description = Description()
-        self.description.uncompressed = read_file(os.path.join(path, "description"))
+        self.description.set_data(read_file(os.path.join(path, "description")))
 
         self.u1 = bytes_to_int_array(read_file(os.path.join(path, "u1")))
         self.u2 = bytes_to_int_array(read_file(os.path.join(path, "u2")))
@@ -497,7 +522,10 @@ class Map(Structure):
         self.u4 = bytes_to_int_array(read_file(os.path.join(path, "u4")))
         self.ud = bytes_to_int_array(read_file(os.path.join(path, "ud")))
 
-        self.directory = Directory.load_from_folder(os.path.join(path, "sections"))
+        self.directory = Directory()
+        self.directory.load_from_folder(os.path.join(path, "sections"))
+
+        return self
 
     def from_file(self, fp: str):
         with open(fp, 'rb') as f:
