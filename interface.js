@@ -72,20 +72,20 @@ function test_compress() {
 function compress(data, level) {
     level = level || 6;
 
-    var OUTBUFFERSIZE = data.length || 31 * 1000 * 1000;
+    var OUTBUFFERSIZE = 31 * 1000 * 1000;
 
     implode_nocb = Module.cwrap('implode_nocb', 'number', ['number', 'number', 'number', 'number', 'number', 'number']);
     var indata = new Uint8Array(data);
     var indatalen = indata.length;
 
-    var pbInBuff = allocate(indata, 'i8', ALLOC_DYNAMIC);
+    var pbInBuff = allocate(indata, 'i8', ALLOC_NORMAL);
     var pbInBuffEnd = indatalen;
 
     var outdata = new Uint8Array(OUTBUFFERSIZE);
     var outdatalen = outdata.length;
 
-    var pbOutBuff = allocate(outdata, 'i8', ALLOC_DYNAMIC);
-    var pbOutBuffEnd = allocate([outdatalen], 'i32', ALLOC_DYNAMIC);
+    var pbOutBuff = allocate(outdata, 'i8', ALLOC_NORMAL);
+    var pbOutBuffEnd = allocate([outdatalen], 'i32', ALLOC_NORMAL);
 
     level = level - 3;
     var type = 0;
