@@ -51,6 +51,11 @@ function decompress(data, decompressed_size) {
     // Call function and get result
     var result = explode_nocb(pbOutBuff, pbOutBuffEnd, pbInBuff, pbInBuffEnd);
 
+
+    if(result != 1) {
+        throw "exploding failed";
+    }
+
     var decompressed = new Uint8Array(Module.HEAP8.subarray(pbOutBuff, pbOutBuff + getValue(pbOutBuffEnd, 'i32')));
 
     Module._free(pbInBuff);
@@ -113,4 +118,19 @@ async function convert_map_to_zip() {
     map.unpack();
     var zip = await map.export_to_zip().generateAsync({type: "blob"});
     download_blob(zip, file.name + ".zip");
+}
+
+async function convert_zip_to_map() {
+    var file = document.querySelector('#zipfileselect').files[0];
+    var buffer = await file.arrayBuffer();
+    var zip = new JSZip();
+    zip = await zip.loadAsync(buffer);
+
+    var map = await new Map().import_from_zip(zip);
+    map.pack();
+    
+    var buffer = new InterpretationBuffer();
+    map.serialize_to(buffer);
+    buffer.truncate();
+    download_blob(new Blob([new Uint8Array(buffer.getValue())], {type: "application/octet-stream"}), file.name + ".map");
 }

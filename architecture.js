@@ -6,7 +6,7 @@ var LITTLE_ENDIAN = true;
 class InterpretationBuffer {
     constructor(buffer) {
         //this.data = new Uint8Array(data);
-        this.buffer = buffer || new ArrayBuffer(0);
+        this.buffer = buffer || new ArrayBuffer(32000000); //32MB
         this.view = new DataView(this.buffer);
         this.index = 0;
         this.size = this.buffer.byteLength;
@@ -45,16 +45,18 @@ class InterpretationBuffer {
         //     this.data[this.index + i] = view.getUint8(i);
         // }
         this.index += 4;
+        this.size += 4;
     }
 
     writeInts(data) {
-        data.foreach(v => this.writeInt(v));
+        data.forEach(v => this.writeInt(v));
     }
 
     writeByte(value) {
         this.ensureSize();
         this.view.setUint8(this.index, value);
         this.index += 1;
+        this.size += 1;
     }
 
     writeBytes(data) {
@@ -63,7 +65,7 @@ class InterpretationBuffer {
 
     ensureSize(n) {
         var diff = this.size - this.index ;
-        n = n || 1000;
+        n = n || 16000000; //16MB
         if(diff < n) {
             var newBuffer = new ArrayBuffer(this.size + n);
             new Uint8Array(newBuffer).set(new Uint8Array(this.buffer));
@@ -115,21 +117,21 @@ class SizePrefixedSection extends Structure {
     }
 
     serialize_to(buffer) {
-        buffer.writeInt(this.size);
+        buffer.writeInt(this.data_size);
         buffer.writeBytes(this.data);
 
         return this;
     }
 
     deserialize_from(buffer) {
-        this.size = buffer.readInt();
-        this.data = buffer.readBytes(this.size);
+        this.data_size = buffer.readInt();
+        this.data = buffer.readBytes(this.data_size);
 
         return this;
     }
 
     pack() {
-        this.size = this.data.length;
+        this.data_size = this.data.length;
     }
 
     unpack() {
@@ -137,7 +139,7 @@ class SizePrefixedSection extends Structure {
     }
 
     validate() {
-        if(this.size != this.data.length) {
+        if(this.data_size != this.data.length) {
             throw "size not equal to data length";
         }
     }
@@ -249,7 +251,7 @@ class CompressedSection extends Section {
     }
 
     pack() {
-        this.uncompressed_size = this.data.length;
+        this.uncompressed_size = this.processed_data.length;
         this.data = compress(this.processed_data, this.compression_level || 6);
         this.hash = crc32(this.processed_data);
         this.compressed_size = this.data.length;
@@ -285,8 +287,8 @@ class Preview extends CompressedSection {
     }
 
     pack() {
-        this.preview_size = this.size;
         super.pack();
+        this.preview_size = this.size;
     }
 
     validate() {
@@ -332,8 +334,8 @@ class Description extends CompressedSection {
     }
 
     pack() {
-        this.description_size = this.compressed_size + (5 * 4);
         super.pack();
+        this.description_size = this.compressed_size + (5 * 4);
     }
 }
 
@@ -349,14 +351,14 @@ class Directory extends Structure {
 
     deserialize_from(buffer) {
         this.directory_size = buffer.readInt();
-        this.size = buffer.readInt();
+        this.total_data_size = buffer.readInt();
         this.sections_count = buffer.readInt();
         this.u1 = buffer.readInt();
         this.u2 = buffer.readInt();
         this.u3 = buffer.readInt();
         this.u4 = buffer.readInt();
         this.u5 = buffer.readInt();
-        this.section_uncompressed_lenths = buffer.readInts(this.max_sections_count);
+        this.section_uncompressed_lengths = buffer.readInts(this.max_sections_count);
         this.section_lengths = buffer.readInts(this.max_sections_count);
         this.section_indices = buffer.readInts(this.max_sections_count);
         this.section_compressed = buffer.readInts(this.max_sections_count);
@@ -378,19 +380,19 @@ class Directory extends Structure {
     serialize_to(buffer) {
 
         buffer.writeInt(this.directory_size);
-        buffer.writeInt(this.size);
+        buffer.writeInt(this.total_data_size);
         buffer.writeInt(this.sections_count);
         buffer.writeInt(this.u1);
         buffer.writeInt(this.u2);
         buffer.writeInt(this.u3);
         buffer.writeInt(this.u4);
         buffer.writeInt(this.u5);
-        buffer.writeInts(this.section_uncompressed_lenths);
-        buffer.writeInts(this.sections_lengths);
+        buffer.writeInts(this.section_uncompressed_lengths);
+        buffer.writeInts(this.section_lengths);
         buffer.writeInts(this.section_indices);
         buffer.writeInts(this.section_compressed);
         buffer.writeInts(this.section_offsets);
-        buffer.writeInt(u6);
+        buffer.writeInt(this.u6);
 
         for(let section of this.sections) {
             section.serialize_to(buffer);
@@ -411,16 +413,16 @@ class Directory extends Structure {
         for(let i in this.sections) {
             var section = this.sections[i]
             if(section instanceof CompressedSection) {
-                this.section_uncompressed_lenths[i] = section.uncompressed_size;
+                this.section_uncompressed_lengths[i] = section.uncompressed_size;
                 this.section_lengths[i] = section.size;
                 this.section_compressed[i] = 1;
             } else if(section instanceof DataSection) {
-                this.section_uncompressed_lenths[i] = section.size;
+                this.section_uncompressed_lengths[i] = section.size;
                 this.section_lengths[i] = section.size;
                 this.section_compressed[i] = 0;
             }
 
-            this.section_offets[i] = accumulator;
+            this.section_offsets[i] = accumulator;
             accumulator += this.section_lengths[i];
         }
 
@@ -431,6 +433,9 @@ class Directory extends Structure {
             this.section_indices[i] = 0;
             this.section_offsets[i] = 0;  // TODO check this
         }
+
+        this.total_data_size = accumulator;
+        this.directory_size = (20*this.max_sections_count) + 36;
     }
 
     section_for_index(index) {
@@ -495,6 +500,10 @@ class Map extends Structure {
         this.preview.pack();
         this.description.pack();
         this.directory.pack();
+        this.u1.pack();
+        this.u2.pack();
+        this.u3.pack();
+        this.u4.pack();
     }
 
     export_to_zip() {
@@ -538,6 +547,82 @@ class Map extends Structure {
         zip.file("ud", this.ud.toString());
 
         return zip;
+    }
+
+    async import_from_zip(zip) {
+
+        var preview_folder = zip.folder("preview");
+        this.preview = new Preview();
+        this.preview.processed_data = await preview_folder.file("processed_data").async("uint8array");
+
+        var description_folder = zip.folder("description");
+        this.description = new Description();
+        this.description.processed_data = await description_folder.file("processed_data").async("uint8array");
+        this.description.use_string_table = parseInt(await description_folder.file("use_string_table").async("string"));
+        this.description.string_table_index = parseInt(await description_folder.file("string_table_index").async('string'));
+
+        var directory_folder = zip.folder("directory");
+        this.directory = new Directory();
+        var compressed = await directory_folder.file("section_compressed").async("string");
+        this.directory.section_compressed = compressed.split(",").map((v) => parseInt(v));
+        var indices = await directory_folder.file("section_indices").async("string");
+        this.directory.section_indices = indices.split(",").map((v) => parseInt(v));
+
+        this.directory.sections = [];
+        this.directory.section_offsets = [];
+        this.directory.section_lengths = [];
+        this.directory.section_uncompressed_lengths = [];
+
+
+        var count = 0;
+
+        for(let index in this.directory.section_indices) {
+            var key = this.directory.section_indices[index];
+            var compressed = this.directory.section_compressed[index];
+
+            if(key == 0) {
+                this.directory.section_offsets.push(0);
+                this.directory.section_lengths.push(0);
+                this.directory.section_uncompressed_lengths.push(0);
+            } else {
+                count += 1;
+                var cls = getSectionClassForIndex(key, compressed);
+                var data = await directory_folder.file(key).async("uint8array");
+                var length = data.length;
+                var section = new cls(length);
+                section.set_data(data);
+    
+                this.directory.sections.push(section);
+                this.directory.section_offsets.push(0); //These values will be set later when pack() is called;
+                this.directory.section_lengths.push(0); //These values will be set later when pack() is called;
+                this.directory.section_uncompressed_lengths.push(0); //These values will be set later when pack() is called;
+            }
+
+
+        }
+
+        this.directory.sections_count = count;
+
+        this.directory.u1 = parseInt(await directory_folder.file("u1").async("string"));
+        this.directory.u2 = parseInt(await directory_folder.file("u2").async("string"));
+        this.directory.u3 = parseInt(await directory_folder.file("u3").async("string"));
+        this.directory.u4 = parseInt(await directory_folder.file("u4").async("string"));
+        this.directory.u5 = parseInt(await directory_folder.file("u5").async("string"));
+        this.directory.u6 = parseInt(await directory_folder.file("u6").async("string"));
+
+
+        this.u1 = new MapPropertySection1();
+        this.u1.set_data(await zip.file("u1").async("uint8array"));
+        this.u2 = new MapPropertySection2();
+        this.u2.set_data(await zip.file("u2").async("uint8array"));
+        this.u3 = new MapPropertySection3();
+        this.u3.set_data(await zip.file("u3").async("uint8array"));
+        this.u4 = new MapPropertySection4();
+        this.u4.set_data(await zip.file("u4").async("uint8array"));
+        this.ud = parseInt(await zip.file("ud").async("string"));
+        
+
+        return this;
     }
 }
 

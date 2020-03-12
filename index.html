@@ -3,13 +3,16 @@
         <script src="https://cdn.rawgit.com/mozilla/localForage/master/dist/localforage.js"></script>
         <script src="https://cdn.rawgit.com/SheetJS/js-crc32/master/crc32.js"></script>
         <script src="architecture.js"></script>
-        <script src="tools.js"></script>
         <script src="jszip.js"></script>
     </head>
     <body>
 
         <div>
             Map file: <input type="file" name="mapfile" id="mapfileselect"><button onclick="convert_map_to_zip();" type="button" id="converttozip" disabled>Convert to ZIP</button>
+        </div>
+
+        <div>
+            Zip file: <input type="file" name="zipfile" id="zipfileselect"><button onclick="convert_zip_to_map();" type="button" id="converttomap" disabled>Convert to MAP</button>
         </div>
         
         <script type="text/javascript">
@@ -33,6 +36,40 @@
                             document.querySelector('#converttozip').removeAttribute('disabled', false);
                         } else {
                             document.querySelector('#converttozip').setAttribute('disabled', true);
+                        }
+//                        reader.readAsBinaryString(file); // fires onload when done.
+                        //localforage.setItem(FILE_KEY, file);
+                    }
+    
+                    function handleFileRead(event) {
+                        return localforage.setItem(FILE_KEY, event.target.result);
+                    }
+    
+                    function retrieveSave() {
+                        return localforage.getItem(FILE_KEY);
+                    }
+                })();
+
+                (function() {
+                    // Key for local storage, use to save and access.
+                    var FILE_KEY = 'zipfile';
+    
+                    // fire processUpload when the user uploads a file.
+                    document.querySelector('#zipfileselect').addEventListener('change', handleFileUpload, false);
+    
+                    // Log any previously saved file.
+                    //console.log('previous save: ', retrieveSave());
+    
+                    // Setup file reading
+                    var reader = new FileReader();
+                    reader.onload = handleFileRead;
+    
+                    function handleFileUpload(event) {
+                        var file = event.target.files[0];
+                        if(document.querySelector('#zipfileselect').files.length > 0) {
+                            document.querySelector('#converttomap').removeAttribute('disabled', false);
+                        } else {
+                            document.querySelector('#converttomap').setAttribute('disabled', true);
                         }
 //                        reader.readAsBinaryString(file); // fires onload when done.
                         //localforage.setItem(FILE_KEY, file);
