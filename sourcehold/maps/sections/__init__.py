@@ -13,6 +13,9 @@ class TileSystemRow(object):
         self.footer = None
         self.data = []
 
+    def __len__(self):
+        return len(self.data)
+
     def __getitem__(self, item):
         return self.data[item]
 
@@ -30,6 +33,13 @@ class TileSystem(object):
         self.header = None
         self.footer = None
         self.fmt = None
+
+    def tiles(self):
+        count = -1
+        for i in range(len(self)):
+            for j in range(len(self[i])):
+                count += 1
+                yield i, j, count, self[i][j]
 
     def __getitem__(self, item):
         return self.rows[item]
@@ -51,6 +61,29 @@ class TileSystem(object):
             system.rows.append(r)
         return system
 
+    def get_index_for_tile_number(self, number, game_adjusted = False):
+        i = 0
+        j = 0
+        v = 0
+        for i in range(len(self.rows)):
+            for j in range(len(self.rows[i])):
+                if v >= number:
+                    return i, (j + (abs(199-i) if i < 200 else abs(200-i))) if game_adjusted else j
+                v += 1
+        raise Exception("number does not exist {}".format(number))
+
+    def get_tile_number_for_index(self, ij, game_adjusted = False):
+        v = 0
+        i, j = ij
+        ij = i, (j - (abs(199-i) if i < 200 else abs(200-i))) if game_adjusted else j
+        for i in range(len(self.rows)):
+            for j in range(len(self.rows[i])):
+                if i == ij[0]:
+                    if j == ij[1]:
+                        return v
+                v += 1
+        raise Exception("ij pair does not exist {}".format(ij))
+
     def create_image(self):
         return make_image_of_data(self.get_tiles())
 
@@ -64,28 +97,38 @@ class TileSystem(object):
         if type(data) == bytes:
             data = Buffer(data)
         size = struct.calcsize(fmt)
-        rows = 198
+        rows = 199
 
         typ = fmt
-        self.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+        self.header = []
+        #self.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+        # TODO: bit of a hack like it is written now.
 
         for i in range(0, rows + 1, 1):
             row = TileSystemRow()
-            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(1)]
             row.data = [struct.unpack(typ, data.read(size))[0] for v in range(i * 2)]
-            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(1)]
+            row.data = row.header + row.data + row.footer
+            row.header = []
+            row.footer = []
             self.rows.append(row)
 
         for i in range(rows, -1, -1):
             row = TileSystemRow()
-            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.header = [struct.unpack(typ, data.read(size))[0] for v in range(1)]
             row.data = [struct.unpack(typ, data.read(size))[0] for v in range(i * 2)]
-            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+            row.footer = [struct.unpack(typ, data.read(size))[0] for v in range(1)]
+            row.data = row.header + row.data + row.footer
+            row.header = []
+            row.footer = []
             self.rows.append(row)
 
-        self.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
+        #self.footer = [struct.unpack(typ, data.read(size))[0] for v in range(2)]
 
         # The first and last row are empty
+
+        self.footer = []
 
         assert data.remaining() == 0
 
@@ -127,7 +170,7 @@ class TileStructure(object):
         return [a for b in self.get_tiles() for a in b]
 
     def create_image(self):
-        return tools.make_image_of_data(self.get_tiles())
+        return self.get_system().create_image()
 
     def get_system(self):
         return TileSystem().from_bytes(self._get_data(), self._TYPE_)

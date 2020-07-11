@@ -14,7 +14,7 @@ class TestPreview(unittest.TestCase):
             buf = structure_tools.Buffer(f.read())
 
         m = maps.Map().from_buffer(buf)
-        m.unpack()
+        m.unpack(force=True)
 
         test_image = m.preview.get_image()
 

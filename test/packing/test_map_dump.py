@@ -7,8 +7,7 @@ with open("resources/MxM_unseen_1.map", 'rb') as f:
     buf = structure_tools.Buffer(raw1)
 
 m = maps.Map().from_buffer(buf)
-m.unpack()
-m.directory.unpack()
+m.unpack(force=True)
 
 import tempfile
 

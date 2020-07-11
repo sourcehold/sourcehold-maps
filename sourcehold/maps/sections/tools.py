@@ -248,9 +248,108 @@ def iso_xy_to_image_xy(coord, rows):
     return (tx, ty)
 
 
+class Point(object):
+
+    def __init__(self, i, j):
+        self.i = i
+        self.j = j
+
+    def __repr__(self):
+        return "<{}>({}, {})".format(type(self).__name__, self.i, self.j)
+
+
+class ScreenPoint(Point):
+
+    def __init__(self, i, j, tile_width, tile_height):
+        super().__init__(i, j)
+        self.tile_width = tile_width
+        self.tile_height = tile_height
+
+    def translate_to_file_point(self):
+        screen_width = int(400 * self.tile_width * 0.5)
+        i = screen_width - self.i
+        j = self.j
+        i, j = (i // (self.tile_width // 2), j // (self.tile_height // 2))
+        # TODO: inverse of staggering
+        raise NotImplementedError()
+        return FilePoint(i, j)
+
+    def get_tile_points(self):
+        return [(self.i, self.j),
+                ((self.i + self.tile_width // 2), self.j + self.tile_height // 2),
+                (self.i, self.j + self.tile_height),
+                ((self.i - self.tile_width // 2), self.j + self.tile_height // 2)]
+
+
+class GamePoint(Point):
+
+    def __init__(self, i, j):
+        super().__init__(i, j)
+
+    def translate_to_file_point(self):
+        return FilePoint(self.i, self.j - (abs(199-self.i) if self.i < 200 else abs(200-self.i)))
+
+    def translate_to_screen_point(self, tile_width=32, tile_height=16):
+        screen_width = int(400 * tile_width * 0.5)
+        txi = self.i * (tile_width // 2)
+        tyi = self.i * (tile_height // 2)
+        txj = -1 * self.j * (tile_width // 2)
+        tyj = self.j * (tile_height // 2)
+
+        return ScreenPoint(screen_width - (txi + txj), tyi + tyj, tile_width, tile_height)
+
+
+class FilePoint(Point):
+
+    def __init__(self, i, j):
+        super().__init__(i, j)
+
+    def translate_to_game_point(self):
+        return GamePoint(self.i, self.j + (abs(199-self.i) if self.i < 200 else abs(200-self.i)))
+
+    def _to_staggered(self):
+        rows = 400
+
+        cut = rows // 2
+
+        x, y = (self.i, self.j)
+
+        if x < cut:
+            tx = (x * 2) + 1 - y
+        else:
+            tx = rows - y
+
+        if x < cut:
+            ty = y
+        else:
+            ty = (x - cut) * 2 + 1 + y
+
+        return tx, ty
+
+    def translate_to_screen_point(self, tile_width=32, tile_height=16):
+        i, j = self._to_staggered()
+
+        screen_width = None
+        if screen_width is None:
+            screen_width = int(400 * tile_width * 0.5)
+
+        i, j = (i * (tile_width // 2), j * (tile_height // 2))
+
+        xoff = i + 0
+        yoff = j + 0
+        #width = tile_width
+        #height = tile_height
+
+        return ScreenPoint(screen_width-xoff, yoff, tile_width, tile_height)
+        #return [(screen_width-xoff, yoff), (screen_width-(xoff + width // 2), yoff + height // 2), (screen_width-xoff, yoff + height),
+        #        (screen_width-(xoff - width // 2), yoff + height // 2)]
+
+
+
+
 class DiamondSystem(object):
 
-    def __init__(self, rows=198):
+    def __init__(self, rows=400):
         if not rows % 2 == 0:
             raise Exception("row count should be even")
         self.rows = rows
@@ -318,7 +417,7 @@ class DiamondSystem(object):
 
 class TiledDiamondSystem(DiamondSystem):
 
-    def __init__(self, tilewidth=32, tileheight=16, rows=396, xoffset=15, yoffset=0):
+    def __init__(self, tilewidth=32, tileheight=16, rows=400, xoffset=15, yoffset=0):
         self.tilewidth = tilewidth
         self.tileheight = tileheight
         self.rows = rows

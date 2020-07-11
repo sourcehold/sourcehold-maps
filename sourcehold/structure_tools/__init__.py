@@ -1,6 +1,12 @@
 import io
 
 
+class UnderflowException(Exception):
+
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class Buffer(io.BytesIO):
 
     def __init__(self, initial_bytes=b''):
@@ -10,7 +16,7 @@ class Buffer(io.BytesIO):
     def read(self, size=-1):
         d = super().read(size)
         if len(d) < size:
-            raise Exception("Data underflow. Expected {} bytes, but got {}".format(size, len(d)))
+            raise UnderflowException("Data underflow. Expected {} bytes, but got {}".format(size, len(d)))
         return d
 
     def write(self, b):
@@ -168,62 +174,67 @@ class Field(object):
             raise Exception("Invalid type specification {}".format(self.type))
 
     def set_from_buffer(self, obj, buf: Buffer, **kwargs):
-        if self.type.__class__ == str:
-            if self.array_size == 0:
-                s = struct.calcsize(self.type)
-                r = struct.unpack(self.type, buf.read(s))[0]
-                self.__set__(obj, r)
-            else:
-                if self.array_size == "*":
+        try:
+            if self.type.__class__ == str:
+                if self.array_size == 0:
                     s = struct.calcsize(self.type)
-                    r = []
-                    while not self.break_array(buf):
-                        r.append(struct.unpack(self.type, buf.read(s))[0])
-                    self.__set__(obj, r)
-                elif self.array_size.__class__ == int:
-                    s = struct.calcsize(self.type)
-                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
-                    self.__set__(obj, r)
-                elif self.array_size.__class__ == Field:
-                    si = self.array_size.__get__(obj)
-                    s = struct.calcsize(self.type)
-                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
-                    self.__set__(obj, r)
-                elif self.array_size.__class__.__name__ == 'function':
-                    si = self.array_size(obj)
-                    s = struct.calcsize(self.type)
-                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                    r = struct.unpack(self.type, buf.read(s))[0]
                     self.__set__(obj, r)
                 else:
-                    raise Exception("Invalid size specification {}".format(self.array_size))
-        elif self.type.__class__ == type:
-            if self.array_size == 0:
-                r = create_structure_from_buffer(self.type, buf, **kwargs)
-                self.__set__(obj, r)
-            else:
-                if self.array_size == "*":
-                    s = struct.calcsize(self.type)
-                    r = []
-                    while not self.break_array(buf):
-                        r.append(create_structure_from_buffer(self.type, buf, **kwargs))
-                    self.__set__(obj, r)
-                elif self.array_size.__class__ == int:
-                    r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
-                    self.__set__(obj, r)
-                elif self.array_size.__class__ == Field:
-                    si = self.array_size.__get__(obj)
-                    r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(si)]
-                    self.__set__(obj, r)
-                elif self.array_size.__class__.__name__ == 'function':
-                    si = self.array_size(obj)
-                    s = struct.calcsize(self.type)
-                    r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                    if self.array_size == "*":
+                        s = struct.calcsize(self.type)
+                        r = []
+                        while not self.break_array(buf):
+                            r.append(struct.unpack(self.type, buf.read(s))[0])
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__ == int:
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__ == Field:
+                        si = self.array_size.__get__(obj)
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__.__name__ == 'function':
+                        si = self.array_size(obj)
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        self.__set__(obj, r)
+                    else:
+                        raise Exception("Invalid size specification {}".format(self.array_size))
+            elif self.type.__class__ == type:
+                if self.array_size == 0:
+                    r = create_structure_from_buffer(self.type, buf, **kwargs)
                     self.__set__(obj, r)
                 else:
-                    raise Exception("Invalid size specification {}".format(self.array_size))
+                    if self.array_size == "*":
+                        s = struct.calcsize(self.type)
+                        r = []
+                        while not self.break_array(buf):
+                            r.append(create_structure_from_buffer(self.type, buf, **kwargs))
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__ == int:
+                        r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__ == Field:
+                        si = self.array_size.__get__(obj)
+                        r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(si)]
+                        self.__set__(obj, r)
+                    elif self.array_size.__class__.__name__ == 'function':
+                        si = self.array_size(obj)
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        self.__set__(obj, r)
+                    else:
+                        raise Exception("Invalid size specification {}".format(self.array_size))
 
-        else:
-            raise Exception("Invalid type specification {}".format(self.type))
+            else:
+                raise Exception("Invalid type specification {}".format(self.type))
+        except UnderflowException as e:
+            raise Exception("An exception occurred during the processing of {}:\n\n".format(obj, e))
+
+
 
 
 import logging
@@ -295,11 +306,17 @@ class Structure(object):
 
         return fields
 
-    def pack(self):
+    def pack(self, force = False):
         pass
 
-    def unpack(self):
+    def unpack(self, force = False):
         pass
+
+    def get_data_as_bytearray(self):
+        return bytearray(self.get_data())
+
+    def set_data_from_bytearray(self, data):
+        self.set_data([v for v in data])
 
     def get_data(self):
         return self.data
@@ -330,7 +347,7 @@ class Structure(object):
         return self
 
     def serialize_to_buffer(self, buf: Buffer):
-        self.pack()
+#        self.pack()
         props = self.__class__.get_fields()
         for name, prop in props.items():
             # print("serializing {}. buf is at {}".format(prop, buf.tell()))
@@ -392,7 +409,11 @@ class Structure(object):
                     yield "inside {}:\n\t{}".format(key, ineq)
 
                 if a.get_data() != b.get_data():
-                    yield "unequal data for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, '', '')
+                    da = a.get_data()
+                    db = b.get_data()
+                    n = min(len(da), len(db))
+                    diffs = [i for i in range(n) if da[i] != db[i]]
+                    yield "unequal data ({}/{} = {}) for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(len(diffs), n, round(len(diffs)/n, 2), key, '', '')
             elif a != b:
                 yield "unequal values for key: {} in\n\tself: \n{}\n\tand other: \n{}".format(key, a, b)
 
@@ -500,3 +521,140 @@ class Table(object):
 TABLE_TEST = Table(["A", "B", "C"], ["D", "E", "F"])
 for i in range(len(TABLE_TEST.rownames)):
     TABLE_TEST.set(i, i, i * i)
+
+
+class DataProperty(object):
+
+    def __init__(self, cls, start=0, array_size=0):
+        object.__init__(self)
+        self.type = cls if type(cls) != type else _resolve_cls_as_type(cls)
+        self.start = start
+        self.array_size = array_size
+
+    def _whats_my_name(self, obj):
+        for field_name, field in type(obj).__dict__.items():
+            if field is self:
+                return field_name
+        raise Exception("DataProperty ({}) not found in object: {}".format(self, obj))
+
+    def __call__(self, fget):
+        self.fget = fget
+        return self
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        name = self._whats_my_name(obj)
+        data = obj.get_data_as_bytearray()[self.start:]
+        deserialized_value = self.deserialize(data)
+        return deserialized_value
+
+    def __set__(self, obj, value):
+        name = self._whats_my_name(obj)
+        data = obj.get_data_as_bytearray()
+        serialized_value = self.serialize(value)
+        obj.set_data_from_bytearray(data[:self.start] + serialized_value + data[self.start + len(serialized_value):])
+        assert len(obj.get_data_as_bytearray()) == len(data)
+
+    def __delete__(self, obj):
+        name = self._whats_my_name(obj)
+        del obj.__dict__["_" + name]
+
+    def serialize(self, value):
+        buf = Buffer()
+        self.serialize_to_buffer(buf, value)
+        return buf.getvalue()
+
+    def deserialize(self, data):
+        buf = Buffer(data)
+        buf.seek(0)
+        return self.deserialize_from_buffer(buf)
+
+    def serialize_to_buffer(self, buf: Buffer, value):
+        if self.type.__class__ == str:
+            if self.array_size == 0:
+                r = struct.pack(self.type, value)
+                buf.write(r)
+            else:
+                if self.array_size == "*":
+                    for o in value:
+                        buf.write(struct.pack(self.type, o))
+                elif self.array_size.__class__ == int:
+                    for o in value:
+                        buf.write(struct.pack(self.type, o))
+                elif self.array_size.__class__.__name__ == 'function':
+                    # self.array_size.__set__(obj, len(self.__get__(obj)))
+                    for o in value:
+                        buf.write(struct.pack(self.type, o))
+                else:
+                    raise Exception("Invalid size specification {}".format(self.array_size))
+        elif self.type.__class__ == type:
+            if self.array_size == 0:
+                o = value
+                o.serialize_to_buffer(buf)
+            else:
+                if self.array_size == "*":
+                    for o in value:
+                        o.serialize_to_buffer(buf)
+                elif self.array_size.__class__ == int:
+                    for o in value:
+                        o.serialize_to_buffer(buf)
+                elif self.array_size.__class__.__name__ == 'function':
+                    for o in value:
+                        o.serialize_to_buffer(buf)
+                else:
+                    raise Exception("Invalid size specification {}".format(self.array_size))
+        else:
+            raise Exception("Invalid type specification {}".format(self.type))
+
+    def deserialize_from_buffer(self, buf: Buffer, **kwargs):
+        try:
+            if self.type.__class__ == str:
+                if self.array_size == 0:
+                    s = struct.calcsize(self.type)
+                    r = struct.unpack(self.type, buf.read(s))[0]
+                    return r
+                else:
+                    if self.array_size == "*":
+                        s = struct.calcsize(self.type)
+                        r = []
+                        while not self.break_array(buf):
+                            r.append(struct.unpack(self.type, buf.read(s))[0])
+                        return r
+                    elif self.array_size.__class__ == int:
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
+                        return r
+                    elif self.array_size.__class__.__name__ == 'function':
+                        si = self.array_size(obj)
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        return r
+                    else:
+                        raise Exception("Invalid size specification {}".format(self.array_size))
+            elif self.type.__class__ == type:
+                if self.array_size == 0:
+                    r = create_structure_from_buffer(self.type, buf, **kwargs)
+                    return r
+                else:
+                    if self.array_size == "*":
+                        s = struct.calcsize(self.type)
+                        r = []
+                        while not self.break_array(buf):
+                            r.append(create_structure_from_buffer(self.type, buf, **kwargs))
+                        return r
+                    elif self.array_size.__class__ == int:
+                        r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
+                        return r
+                    elif self.array_size.__class__.__name__ == 'function':
+                        si = self.array_size(obj)
+                        s = struct.calcsize(self.type)
+                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        return r
+                    else:
+                        raise Exception("Invalid size specification {}".format(self.array_size))
+
+            else:
+                raise Exception("Invalid type specification {}".format(self.type))
+        except UnderflowException as e:
+            raise Exception("An exception occurred during the processing of {}:\n\n".format(obj, e))

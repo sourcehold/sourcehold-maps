@@ -10,7 +10,7 @@ Visualizing these tiles by giving different colors to different numbers visualiz
 ```python
 from sourcehold import *
 
-m = load_map(expand_var_path("shcusermap~/160cr.map"))
+m = load_map(expand_var_path("shcusermap~/xlcr.map"))
 
 m.directory.sections[0].create_image().show()
 ```

@@ -8,54 +8,88 @@ from PIL import Image
 from sourcehold import compression, palette
 from sourcehold.iotools import read_file, write_to_file, _int_array_to_bytes
 from sourcehold.structure_tools import Structure, Field
+from sourcehold.structure_tools import DataProperty
 
 
 class SimpleSection(Structure):
     size = Field("size", "I")
     data = Field("data", "B", size)
 
-    def pack(self):
+    def pack(self, force=False):
         self.size = len(self.data)
 
-    def unpack(self):
+    def unpack(self, force=False):
         assert len(self.data) == self.size
 
     def size_of(self):
         return self.size + 4
 
 
+class U1(SimpleSection):
+
+    int0 = DataProperty("I", start=0)
+    int1 = DataProperty("I", start=4)
+    # @property
+    # def int0(self):
+    #     return struct.unpack("<I", self.data[:4])[0]
+    #
+    # @int0.setter
+    # def int0(self, value):
+    #     self.data = struct.pack("<I", value) + self.data[4:]
+    #
+    # @property
+    # def int1(self):
+    #     return struct.unpack("<I", self.data[4:])[0]
+    #
+    # @int1.setter
+    # def int1(self, value):
+    #     self.data = self.data[:4] + struct.pack("<I", value)
+
+
 class U2(SimpleSection):
 
-    def get_players_count(self):
-        return self.data[24]
-
-    def set_players_count(self, count):
-        self.data[24] = count
-
-    def get_map_type(self):
-        return self.data[0]
-
-    def set_map_type(self, type):
-        self.data[0] = type
+    map_type = DataProperty("I", start=0)
+    middle = DataProperty("B", start=4, array_size=20)
+    players_count = DataProperty("I", start=24)
 
 
 class U3(SimpleSection):
 
+    int0 = DataProperty("I", start=0)
+    int1 = DataProperty("I", start=4)
+    map_original = DataProperty("I", start=8)
+    rest = DataProperty("B", start=12, array_size=lambda obj: obj.size - 12)
+
     def is_map_original(self):
-        return self.data[8]
+        return self.map_original == 1
 
     def set_map_original(self, value):
         # TODO: Does not work for missions
-        self.data[8] = 1 if value else 0
+        self.map_original = 1 if value else 0
+
+    def get_rest(self):
+        return self.data[12:]
 
 
 class U4(SimpleSection):
 
+    int0 = DataProperty("I", start=0)
+    int1 = DataProperty("I", start=4)
+    int2 = DataProperty("I", start=8)
+    unbalanced = DataProperty("I", start=12)
+    rest = DataProperty("B", array_size=64, start=16)
+
     def get_unbalanced_flag(self):
-        return self.data[12]
+        return self.unbalanced == 1
 
     def set_unbalanced_flag(self, value: bool):
-        self.data[12] = 1 if value else 0
+        self.unbalanced = 1 if value else 0
+
+    def pack(self, force=False):
+        self.size = len(self.data)
+
+    def unpack(self, force=False):
+        assert self.size == len(self.data)
 
 
 class CompressedSection(Structure):
@@ -64,28 +98,37 @@ class CompressedSection(Structure):
     hash = Field("hash", "I")
     data = Field("data", "B", compressed_size)
 
-    def pack(self):
-        if not hasattr(self, "compression_level"):
-            self.compression_level = 6
-        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
+    def __init__(self):
+        super().__init__()
+        self._dirty = False
 
-    def unpack(self):
-        self.compression_level = self.data[1]
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
+    def pack(self, force = False):
+        if self._dirty or force:
+            if not hasattr(self, "compression_level"):
+                self.compression_level = 6
+            self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
+            self.hash = binascii.crc32(self.uncompressed)
+            self.uncompressed_size = len(self.uncompressed)
+            self.compressed_size = len(self.data)
+            self._dirty = False
+
+    def unpack(self, force = False):
+        if self._dirty or force:
+            self.compression_level = self.data[1]
+            self.uncompressed = compression.COMPRESSION.decompress(self.data)
+            assert len(self.data) == self.compressed_size
+            assert len(self.uncompressed) == self.uncompressed_size
+            assert binascii.crc32(self.uncompressed) == self.hash
+            self._dirty = False
 
     def get_data(self):
         if not hasattr(self, "uncompressed"):
-            self.unpack()
+            self.unpack(force=True)
         return self.uncompressed
 
     def set_data(self, data):
         self.uncompressed = data
+        self._dirty = True
 
     def size_of(self):
         return self.compressed_size + 4 + 4 + 4
@@ -141,18 +184,23 @@ class Description(Structure):
     hash = Field("hash", "I")
     data = Field("data", "B", compressed_size)
 
-    def pack(self):
-        if not hasattr(self, "compression_level"):
-            self.compression_level = 6
-        if not hasattr(self, "use_string_table"):
-            self.use_string_table = 0
-        if not hasattr(self, "string_table_index"):
-            self.string_table_index = 0
-        self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
-        self.hash = binascii.crc32(self.uncompressed)
-        self.uncompressed_size = len(self.uncompressed)
-        self.compressed_size = len(self.data)
-        self.size = self.compressed_size + (5 * 4)
+    def __init__(self):
+        super().__init__()
+        self._dirty = False
+
+    def pack(self, force = False):
+        if self._dirty or force:
+            if not hasattr(self, "compression_level"):
+                self.compression_level = 6
+            if not hasattr(self, "use_string_table"):
+                self.use_string_table = 0
+            if not hasattr(self, "string_table_index"):
+                self.string_table_index = 0
+            self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
+            self.hash = binascii.crc32(self.uncompressed)
+            self.uncompressed_size = len(self.uncompressed)
+            self.compressed_size = len(self.data)
+            self.size = self.compressed_size + (5 * 4)
 
     def set_description(self, string: str):
         bstring = string.encode('ascii')
@@ -175,17 +223,18 @@ class Description(Structure):
 
         return self.uncompressed[:j].decode('ascii')
 
-    def unpack(self):
-        self.compression_level = self.data[1]
-        self.uncompressed = compression.COMPRESSION.decompress(self.data)
-        assert len(self.data) == self.compressed_size
-        assert len(self.uncompressed) == self.uncompressed_size
-        assert binascii.crc32(self.uncompressed) == self.hash
-        assert self.compressed_size + (5 * 4) == self.size
+    def unpack(self, force = False):
+        if self._dirty or force:
+            self.compression_level = self.data[1]
+            self.uncompressed = compression.COMPRESSION.decompress(self.data)
+            assert len(self.data) == self.compressed_size
+            assert len(self.uncompressed) == self.uncompressed_size
+            assert binascii.crc32(self.uncompressed) == self.hash
+            assert self.compressed_size + (5 * 4) == self.size
 
     def get_data(self):
         if not hasattr(self, "uncompressed"):
-            self.unpack()
+            self.unpack(force=True)
         return self.uncompressed
 
     def set_data(self, data):
@@ -211,7 +260,7 @@ class MapSection(Structure):
         self.data = buf.read(self.length)
         return self
 
-    def pack(self):
+    def pack(self, force = False):
         self.length = len(self.data)
 
     def serialize_to_buffer(self, buf):
@@ -244,9 +293,11 @@ from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, B
 def get_section_for_index(index, compressed):
     cls = find_section_for_index(index)
     if cls:
+        if issubclass(cls, CompressedMapSection) and not compressed:
+            return MapSection
         return cls
 
-    if compressed == True:
+    if compressed is True:
         return CompressedMapSection
     else:
         return MapSection
@@ -332,17 +383,17 @@ class Directory(Structure):
         i = self.section_indices.index(key)
         self.sections[i] = value
 
-    def unpack(self):
+    def unpack(self, force = False):
         for section in self.sections:
-            section.unpack()
+            section.unpack(force)
 
     def get_data(self):
         # TODO: stub
         return self.section_indices
 
-    def pack(self):
+    def pack(self, force = False):
         for section in self.sections:
-            section.pack()
+            section.pack(force)
 
         # Lets keep things simple for now and not assume change in compressed and indices
         zeroes = Directory._MAX_SECTIONS_COUNT(self) - len(self.sections)
@@ -356,7 +407,7 @@ class Directory(Structure):
                 self.section_uncompressed_lengths[i] = s.size_of()
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 0
-            if isinstance(s, CompressedMapSection):
+            elif isinstance(s, CompressedMapSection):
                 self.section_uncompressed_lengths[i] = s.uncompressed_size
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 1
@@ -370,6 +421,9 @@ class Directory(Structure):
             self.section_compressed[i] = 0
             self.section_indices[i] = 0
             self.section_offsets[i] = 0  # TODO check this
+
+        self.size = accum
+        self.directory_size = 3036 if self._MAX_SECTIONS_COUNT() == 150 else 2036
 
     def serialize_to_buffer(self, buf):
         self.pack()  # TODO: why is this here?
@@ -455,14 +509,31 @@ class Directory(Structure):
         #TODO: add pack() call to ensure validity of side-variables like size, crc32, and compressed_size?
 
     def yield_inequalities(self, other, with_pack=False, ignore_keys=None):
-        for ineq in super().yield_inequalities(other, with_pack, ignore_keys):
-            yield ineq
+        # for ineq in super().yield_inequalities(other, with_pack, ignore_keys):
+        #     yield ineq
 
         if self.section_indices == other.section_indices:
             for i in range(self.sections_count):
-                if self.sections[i].get_data() != other.sections[i].get_data():
-                    yield "unequal values for section: {} in\n\tself: \n{}\n\tand other: \n{}".format(
+                da = self.sections[i].get_data()
+                db = other.sections[i].get_data()
+                n = min(len(da), len(db))
+                diffs = [i for i in range(n) if da[i] != db[i]]
+                if len(diffs) > 0:
+                    yield "unequal values ({}/{} = {}) for section: {} in\n\tself: \n{}\n\tand other: \n{}".format(
+                        len(diffs), n, round(len(diffs)/n, 2),
                         self.section_indices[i], '', '')
+
+    def different_sections(self, other):
+        if self.section_indices == other.section_indices:
+            for i in range(self.sections_count):
+                da = self.sections[i].get_data()
+                db = other.sections[i].get_data()
+                n = min(len(da), len(db))
+                diffs = [i for i in range(n) if da[i] != db[i]]
+                if len(diffs) > 0:
+                    yield self.section_indices[i]
+        else:
+            return "ALL"
 
 
 import os
@@ -474,27 +545,35 @@ class Map(Structure):
                          "I")  # Not sure whether to move this in Preview, or leave it here. makes sense in preview from a manipulation perspective.
     preview = Field("preview", Preview)
     description = Field("description", Description)
-    u1 = Field("u1", SimpleSection)
+    u1 = Field("u1", U1)
     u2 = Field("u2", U2)
-    u3 = Field("u3", SimpleSection)
+    u3 = Field("u3", U3)
     u4 = Field("u4", U4)
     ud = Field("ud", "B", 4)
 
     directory = Field("directory", Directory)
 
-    def unpack(self):
-        self.preview.unpack()
-        self.description.unpack()
-        self.directory.unpack()
+    def unpack(self, force = False):
+        self.preview.unpack(force)
+        self.description.unpack(force)
+        self.directory.unpack(force)
+        self.u1.unpack(force)
+        self.u2.unpack(force)
+        self.u3.unpack(force)
+        self.u4.unpack(force)
 
-    def pack(self):
+    def pack(self, force = False):
         self.magic = 0xFFFFFFFF
-        self.preview.pack()
+        self.preview.pack(force)
         self.preview_size = self.preview.size_of()
-        self.description.pack()
+        self.description.pack(force)
         # self.description_size = self.preview.compressed_size + 4 + 4 + 4 + 8
-        self.directory.pack()
+        self.directory.pack(force)
         # self.directory_size = self.directory.length + 4
+        self.u1.pack(force)
+        self.u2.pack(force)
+        self.u3.pack(force)
+        self.u4.pack(force)
 
     def dump_to_folder(self, path):
         if not os.path.exists(path):
@@ -502,10 +581,10 @@ class Map(Structure):
 
         write_to_file(os.path.join(path, "preview"), self.preview.get_data())
         write_to_file(os.path.join(path, "description"), self.description.get_data())
-        write_to_file(os.path.join(path, "u1"), _int_array_to_bytes(self.u1.get_data()))
-        write_to_file(os.path.join(path, "u2"), _int_array_to_bytes(self.u2.get_data()))
-        write_to_file(os.path.join(path, "u3"), _int_array_to_bytes(self.u3.get_data()))
-        write_to_file(os.path.join(path, "u4"), _int_array_to_bytes(self.u4.get_data()))
+        write_to_file(os.path.join(path, "u1"), self.u1.get_data_as_bytearray())
+        write_to_file(os.path.join(path, "u2"), self.u2.get_data_as_bytearray())
+        write_to_file(os.path.join(path, "u3"), self.u3.get_data_as_bytearray())
+        write_to_file(os.path.join(path, "u4"), self.u4.get_data_as_bytearray())
         write_to_file(os.path.join(path, "ud"), _int_array_to_bytes(self.ud))
         self.directory.dump_to_folder(os.path.join(path, "sections"))
 
@@ -516,10 +595,18 @@ class Map(Structure):
         self.description = Description()
         self.description.set_data(read_file(os.path.join(path, "description")))
 
-        self.u1 = bytes_to_int_array(read_file(os.path.join(path, "u1")))
-        self.u2 = bytes_to_int_array(read_file(os.path.join(path, "u2")))
-        self.u3 = bytes_to_int_array(read_file(os.path.join(path, "u3")))
-        self.u4 = bytes_to_int_array(read_file(os.path.join(path, "u4")))
+        self.u1 = U1()
+        self.u1.set_data(bytes_to_int_array(read_file(os.path.join(path, "u1"))))
+
+        self.u2 = U2()
+        self.u2.set_data(bytes_to_int_array(read_file(os.path.join(path, "u2"))))
+
+        self.u3 = U3()
+        self.u3.set_data(bytes_to_int_array(read_file(os.path.join(path, "u3"))))
+
+        self.u4 = U4()
+        self.u4.set_data(bytes_to_int_array(read_file(os.path.join(path, "u4"))))
+
         self.ud = bytes_to_int_array(read_file(os.path.join(path, "ud")))
 
         self.directory = Directory()

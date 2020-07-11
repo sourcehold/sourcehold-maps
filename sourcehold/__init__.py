@@ -4,19 +4,21 @@ from .iotools import write_to_file
 from .maps import Map
 
 
-def load_map(path, strict=True):
+def load_map(path, strict=True, unpack=True, force=False):
     buf = Buffer(read_file(path))
     map = Map().from_buffer(buf)
     if strict:
         if buf.remaining() != 0:
             raise Exception("Error, bytes remaining at end of buffer")
-    map.unpack()
+    if unpack:
+        map.unpack(force)
     return map
 
 
-def save_map(map, path):
+def save_map(map, path, pack=True, force=False):
     buf = Buffer()
-    map.pack()
+    if pack:
+        map.pack(force)
     map.serialize_to_buffer(buf)
     write_to_file(path, buf.getvalue())
 
