@@ -1,7 +1,9 @@
-- Home.md
-- Map-preview.md
-- Unknown-preview-data.md
-- Map-sections.md
-  - Section-1001.md
-  - Section-1005.md
-  - Section-1008.md
+[Home](https://github.com/sourcehold/sourcehold-maps/wiki/Home)
+* [Map header](https://github.com/sourcehold/sourcehold-maps/wiki/Map-header)
+  * [Map preview](https://github.com/sourcehold/sourcehold-maps/wiki/Map-preview)
+  * [Unknown header data](https://github.com/sourcehold/sourcehold-maps/wiki/Unknown-header-data)
+* [Known map sections](https://github.com/sourcehold/sourcehold-maps/wiki/Known-map-sections)
+  * [Section-1001.md](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1001)
+  * [Section-1005.md](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1005)
+  * [Section-1008.md](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1008)
+* [Unknown map sections](https://github.com/sourcehold/sourcehold-maps/wiki/Unknown-map-sections)
