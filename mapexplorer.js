@@ -28,7 +28,7 @@ async function load_tilesection() {
 
 
     var first_row = Math.min(document.getElementById("load_tiles_from_row").value)
-    var last_row = Math.min(400 - first_row, first_row + document.getElementById("load_tiles_n_rows").value)
+    var last_row = Math.min(400 - first_row, first_row + parseInt(document.getElementById("load_tiles_n_rows").value))
 
     var tile_width = parseInt(document.getElementById("load_tiles_tile_width").value)
     var tile_height = parseInt(document.getElementById("load_tiles_tile_height").value)
