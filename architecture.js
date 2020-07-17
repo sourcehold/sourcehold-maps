@@ -12,6 +12,16 @@ class InterpretationBuffer {
         this.size = this.buffer.byteLength;
     }
 
+    readShort() {
+        var value = this.view.getUint16(this.index, LITTLE_ENDIAN);
+        this.index += 2;
+        return value;
+    }
+
+    readShorts(n) {
+        return new Uint16Array([...Array(n).keys()].map(() => this.readShort()));
+    }
+
     readInt() {
         var value = this.view.getUint32(this.index, LITTLE_ENDIAN);
         this.index += 4;
