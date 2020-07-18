@@ -90,14 +90,14 @@ class TileSystem(object):
     def get_tiles(self):
         return [row.data for row in self.rows]
 
-    def from_bytes(self, data, fmt):
+    def from_bytes(self, data, fmt, rows=199):
         self.fmt = fmt
         self.rows.clear()
 
         if type(data) == bytes:
             data = Buffer(data)
         size = struct.calcsize(fmt)
-        rows = 199
+        #rows = 199
 
         typ = fmt
         self.header = []
@@ -288,9 +288,6 @@ class KeyValueStructure(object):
         return self._MAPPING_.keys()
 
 
-
-
-
 class KeyValueMapSection(KeyValueStructure, MapSection):
 
     def _get_data(self):
@@ -300,6 +297,97 @@ class KeyValueMapSection(KeyValueStructure, MapSection):
         return self.set_data(data)
 
 
+class ArrayMapStructure(object):
+    _TYPE_ = None
+    _LENGTH_ = 0
+
+    def __init__(self):
+        self.items = {}
+        self._dirty = False
+
+    def _get_data(self):
+        raise NotImplementedError()
+
+    def _set_data(self, data):
+        raise NotImplementedError()
+
+    def __len__(self):
+        return len(self.items.keys())
+
+    def __getitem__(self, item):
+        return self.items[item]
+
+    def __setitem__(self, key, value):
+        self.items[key] = value
+        self._dirty = True
+
+    def unpack(self, force=False):
+        buf = Buffer(self._get_data())
+        for i in range(self._LENGTH_):
+            peek = buf.peek(self._TYPE_.size_of())
+            if set(peek) == {0}:
+                buf.read(self._TYPE_.size_of())
+            else:
+                self.items[i] = self._TYPE_().from_buffer(buf)
+
+    def pack(self, force=False):
+        buf = Buffer()
+
+        for i in range(self._LENGTH_):
+            if i in self.items:
+                self.items[i].serialize_to_buffer(buf)
+            else:
+                buf.write(b'\x00'*self._TYPE_.size_of())
+
+        self._set_data(buf.getvalue())
+        self._dirty = True
+
+
+class ArrayMapSection(ArrayMapStructure, MapSection):
+
+    def _get_data(self):
+        return self.get_data()
+
+    def _set_data(self, data):
+        return self.set_data(data)
+
+    def pack(self, force=False):
+        ArrayMapStructure.pack(self, force)
+        MapSection.pack(self, force)
+
+    def unpack(self, force=False):
+        MapSection.unpack(self, force)
+        ArrayMapStructure.unpack(self, force)
+
+
+class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
+
+    def _get_data(self):
+        return self.get_data()
+
+    def _set_data(self, data):
+        return self.set_data(data)
+
+    def pack(self, force=False):
+        ArrayMapStructure.pack(self, force)
+        CompressedMapSection.pack(self, force)
+
+    def unpack(self, force=False):
+        CompressedMapSection.unpack(self, force)
+        ArrayMapStructure.unpack(self, force)
+
+
+from sourcehold.maps.sections.objects import Building, Unit
+
+
+class Section1013(ArrayMapCompressedSection):
+    _TYPE_ = Building
+    _LENGTH_ = 2000
+
+
+class Section1015(ArrayMapCompressedSection):
+    _TYPE_ = Unit
+    _LENGTH_ = 2500
 
 
 class Section1073(KeyValueMapSection):
@@ -532,6 +620,9 @@ class Section1010(TileCompressedMapSection):
 class Section1012(TileCompressedMapSection):
     _TYPE_ = "H"
     _CLASS_ = int
+
+
+
 
 
 class Section1020(TileCompressedMapSection):

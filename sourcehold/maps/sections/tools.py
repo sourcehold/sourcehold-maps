@@ -248,6 +248,114 @@ def iso_xy_to_image_xy(coord, rows):
     return (tx, ty)
 
 
+class TileLocationTranslator(object):
+
+    def __init__(self, square_width=400):
+        import math
+
+        self.size = square_width
+
+        size = square_width
+        n_serialized_tiles = (2*((size/2)*((size/2)+1)))
+
+        class Point(object):
+
+            def __init__(self, **kwargs):
+                for key, value in kwargs.items():
+                    setattr(self, key, value)
+
+            def __repr__(self):
+                return "{}<{}>".format(self.__class__.__name__, ",".join("{}={}".format(key, value) for key, value in self.__dict__.items()))
+
+        class SerializedPoint(Point):
+
+            def __init__(self, i, j):
+                super().__init__(i=i, j=j)
+
+            def to_tile_index(self):
+                if self.i < size//2:
+                    return TileIndex((self.i*(self.i+1)) + self.j)
+                else:
+                    return TileIndex((n_serialized_tiles - ((size - self.i)*(size-self.i+1))) + self.j)
+
+            def to_square_index(self):
+                if self.i < size/2:
+                    return SquareIndex(((size/2)-1-self.i) + (self.i*size) + self.j)
+                else:
+                    return SquareIndex((-(size/2)+0+self.i) + (self.i*size) + self.j)
+
+        class TileIndex(Point):
+
+            def __init__(self, index):
+                super().__init__(index=index)
+
+            def to_serialized_point(self):
+                if self.index < n_serialized_tiles/2:
+                    i = math.floor(0.5 * ((math.sqrt((4 * self.index) + 1)) - 1))
+                else:
+                    i = math.floor(size - (0.5 * ((math.sqrt((4 * ((2 * ((size / 2) * ((size / 2) + 1))) - self.index)) + 1)) - 1)))
+
+                index = SerializedPoint(i, 0).to_tile_index().index
+                j = self.index - index
+
+                return SerializedPoint(i, j)
+
+        class SquareIndex(Point):
+
+            def __init__(self, index):
+                super().__init__(index=index)
+
+            def to_serialized_point(self):
+                i = math.floor(self.index / size)
+                if i < size/2:
+                    j = (self.index % size)-((size/2)-i-1)
+                else:
+                    j = (self.index % size) - (-(size/2)+0+i)
+                return SerializedPoint(i, j)
+
+            def to_square_point(self):
+                i = math.floor(self.index / size)
+                j = math.floor(self.index % size)
+                return SquarePoint(i, j)
+
+        class SquarePoint(Point):
+
+            def __init__(self, i, j):
+                super().__init__(i=i, j=j)
+
+            def to_square_index(self):
+                return SquareIndex(index=(size*self.i) + self.j)
+
+        self.SquareIndex = SquareIndex
+        self.SquarePoint = SquarePoint
+        self.TileIndex = TileIndex
+        self.SerializedPoint = SerializedPoint
+
+
+class TileIndexTranslator(object):
+
+    def __init__(self, square_size = 400):
+        self.square_size = square_size
+
+    def translate_file_index_to_game_tile_index(self, i, j=None):
+        if j is None:
+            i, j = i
+        if i < (self.square_size / 2):
+            return ((self.square_size / 2) - 1 - i) + (i * self.square_size) + j
+        else:
+            return (-(self.square_size / 2) + 0 + i) + (i * self.square_size) + j
+
+    def translate_game_tile_index_to_file_index(self, index):
+        i = index//self.square_size
+        if i < (self.square_size / 2):
+            j = (index % self.square_size) - ((self.square_size / 2) - i - 1)
+        else:
+            j = (index % self.square_size) - (-(self.square_size/2) + 0 + i)
+        return i, j
+
+
+
+
 class Point(object):
 
     def __init__(self, i, j):
@@ -303,6 +411,13 @@ class FilePoint(Point):
 
     def __init__(self, i, j):
         super().__init__(i, j)
+
+    def translate_to_game_index(self):
+        size = 400
+        if self.i < 200:
+            return (self.i * (self.i + 1)) + self.j
+        else:
+            return (2 * (200 * (200 + 1))) - ((400 - self.i) * (400 - self.i + 1)) + self.j
 
     def translate_to_game_point(self):
         return GamePoint(self.i, self.j + (abs(199-self.i) if self.i < 200 else abs(200-self.i)))

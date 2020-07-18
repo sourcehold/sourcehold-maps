@@ -1,26 +1,43 @@
 from .. import KeyValueStructure
 from struct import unpack, pack
 
-
-class Unit(KeyValueStructure):
-    _MAPPING_ = {
-                 'player': 8,
-                    'player_2': 64,  # TODO: same data!?
-        'player_3': 75,  # TODO: same data!?
-                 'location_i': 112,
-                 'location_j': 113,
-                 'location_number': 114,
-                 'health_hypothesis1': 12,
-                 'health_hypothesis2': 13,
-                 'health_hypothesis3': 362,
-        'id': 363,
-        'id_2': 364,  # TODO: same data?
-    }
-    _TYPE_ = 'H'
-    _CLASS_ = int
+from sourcehold.structure_tools import Structure, Field, DataProperty
 
 
-class Building(KeyValueStructure):
+class Unit(Structure):
+    data = Field("data", "B", array_size=1168)
+
+    owner = DataProperty("I", start=16)
+    owner_2 = DataProperty("I", start=128)
+    location_j = DataProperty("H", start=224)
+    location_i = DataProperty("H", start=226)
+    location_tile_number = DataProperty("H", start=228)
+    identifier = DataProperty("H", start=726)
+    identifier_2 = DataProperty("H", start=728)
+    unit_type = DataProperty("B", start=142)
+
+    @classmethod
+    def size_of(cls):
+        return cls.data.array_size
+
+
+class Building(Structure):
+    data = Field("data", "B", array_size=812)
+
+    building_type = DataProperty("H", start=0)
+    building_type_or_cost = DataProperty("I", start=144)
+    building_type_2 = DataProperty("B", start=210)
+    owner = DataProperty("H", start=214)
+    building_id = DataProperty("H", start=216)
+    building_type_sub = DataProperty("H", start=644)
+    locations = DataProperty("I", start=456, array_size=6*6)
+
+    @classmethod
+    def size_of(cls):
+        return cls.data.array_size
+
+
+class BuildingDeprecated(KeyValueStructure):
     _MAPPING_ = {
         'building_type': 0,
         'player': 107, # TODO: which player built a building.

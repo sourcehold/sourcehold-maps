@@ -1,7 +1,7 @@
 
 
 from sourcehold import *
-from sourcehold.maps.sections.objects import Building
+from sourcehold.maps.sections.objects import BuildingDeprecated
 from discoveries.tools import *
 import pathlib
 
@@ -14,7 +14,7 @@ data = map.directory[1013].get_data()
 
 buf = Buffer(data)
 
-buildings = [Building().deserialize_from(buf) for b in range(0, 100)]
+buildings = [BuildingDeprecated().deserialize_from(buf) for b in range(0, 100)]
 
 img = map.directory[1012].get_system().create_image()
 img.save("resources/many-buildings-1012.png")
@@ -41,7 +41,7 @@ save_map(map, expand_var_path("shcusermap~/xlcr_almost_buildings_mod.map"), pack
 
 m = load_map(expand_var_path("shcusermap~/xlcr_almost_buildings_mod.map"), unpack=False)
 buf = Buffer(m.directory[1013].get_data())
-buildings = [Building().deserialize_from(buf) for b in range(0, 100)]
+buildings = [BuildingDeprecated().deserialize_from(buf) for b in range(0, 100)]
 
 # When the building is clicked, it now says training ground! and shows the top right corner training ground texture.
 # Overlayed on the original barracks texture!
@@ -123,7 +123,7 @@ data = map.directory[1013].get_data()
 
 buf = Buffer(data)
 
-buildings = [Building().deserialize_from(buf) for b in range(0, 100)]
+buildings = [BuildingDeprecated().deserialize_from(buf) for b in range(0, 100)]
 
 buf = Buffer()
 buildings[0].serialize_to(buf)

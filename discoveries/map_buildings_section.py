@@ -129,8 +129,8 @@ for i in range(len(tiles)):
 building_infos_data = maps[-1].directory[1013].get_data()
 buf = Buffer(building_infos_data)
 
-from sourcehold.maps.sections.objects import Building
-buildings = [Building() for b in range(0, 6)]
+from sourcehold.maps.sections.objects import BuildingDeprecated
+buildings = [BuildingDeprecated() for b in range(0, 6)]
 for building in buildings:
     building.deserialize_from(buf)
 
@@ -158,8 +158,8 @@ moddata = mmod_resave.directory[1013].get_data()
 
 buf = Buffer(moddata)
 
-from sourcehold.maps.sections.objects import Building
-buildings = [Building() for b in range(0, 6)]
+from sourcehold.maps.sections.objects import BuildingDeprecated
+buildings = [BuildingDeprecated() for b in range(0, 6)]
 for building in buildings:
     building.deserialize_from(buf)
 
@@ -175,8 +175,8 @@ moddata = damaged.directory[1013].get_data()
 
 buf = Buffer(moddata)
 
-from sourcehold.maps.sections.objects import Building
-buildings = [Building() for b in range(0, 6)]
+from sourcehold.maps.sections.objects import BuildingDeprecated
+buildings = [BuildingDeprecated() for b in range(0, 6)]
 for building in buildings:
     building.deserialize_from(buf)
 

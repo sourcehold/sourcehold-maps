@@ -316,7 +316,7 @@ class Structure(object):
         return bytearray(self.get_data())
 
     def set_data_from_bytearray(self, data):
-        self.set_data([v for v in data])
+        self.set_data(bytes(bytearray([v for v in data])))
 
     def get_data(self):
         return self.data
