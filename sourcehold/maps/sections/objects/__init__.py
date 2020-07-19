@@ -26,7 +26,7 @@ class Building(Structure):
 
     building_type = DataProperty("H", start=0)
     building_type_or_cost = DataProperty("I", start=144)
-    building_type_2 = DataProperty("B", start=210)
+    building_type_2 = DataProperty("B", start=210) # Succesfully changes type when clicked, but skin is not changed well.
     owner = DataProperty("H", start=214)
     building_id = DataProperty("H", start=216)
     building_type_sub = DataProperty("H", start=644)

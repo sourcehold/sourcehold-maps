@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="31">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>8</ID>
+      <Description>"buildingsectionstart?"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>00f98534</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>7</ID>
+      <Description>"building1"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>00F98860</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>6</ID>
+      <Description>"building2"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>00F98B8C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>11</ID>
+      <Description>"building3"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>00F98EB8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>12</ID>
+      <Description>"building4"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>00F991E4</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>16</ID>
+      <Description>"unit1"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"Stronghold Crusader.exe"+F88A6A</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>17</ID>
+      <Description>"unit_animation_frame"</Description>
+      <VariableType>2 Bytes</VariableType>
+      <Address>013889E0</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>18</ID>
+      <Description>"unit2"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>01388E6C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>19</ID>
+      <Description>"section1008"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>01A28318</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <Structures StructVersion="2">
+    <Structure Name="Building0" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+      <Elements>
+        <Element Offset="0" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="12" Vartype="Array of byte" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="16" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="20" Vartype="4 Bytes" Bytesize="4" Description="some_time_counter_1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="24" Vartype="4 Bytes" Bytesize="4" Description="some_time_counter_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="28" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="32" Vartype="2 Bytes" Bytesize="2" Description="some_timer_3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="34" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="40" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="44" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="48" Vartype="4 Bytes" Bytesize="4" Description="starts_blinking_when_building_selected" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="52" Vartype="4 Bytes" Bytesize="4" RLECount="22" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="140" Vartype="4 Bytes" Bytesize="4" Description="last_location_tile_index" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="144" Vartype="4 Bytes" Bytesize="4" Description="some_kind_of_counter_tied_to_timer_resets" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="148" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="152" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="156" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="164" Vartype="4 Bytes" Bytesize="4" Description="changes_back_to_nonzero_on_selection" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="168" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="192" Vartype="4 Bytes" Bytesize="4" Description="timer_gamespeed_relative_resets_after_0x100" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="196" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="204" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="208" Vartype="2 Bytes" Bytesize="2" Description="can_be_0_unknown" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="210" Vartype="4 Bytes" Bytesize="4" Description="building_type_id" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="214" Vartype="2 Bytes" Bytesize="2" Description="owner" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="216" Vartype="2 Bytes" Bytesize="2" Description="building_uid" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="218" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="220" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="232" Vartype="Byte" Bytesize="1" RLECount="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="236" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="238" Vartype="2 Bytes" Bytesize="2" Description="location_j_serialized" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="240" Vartype="2 Bytes" Bytesize="2" Description="location_i_serialized" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="242" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="244" Vartype="2 Bytes" Bytesize="2" Description="location_serialized_tile_index_adjusted" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="245" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="246" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="248" Vartype="4 Bytes" Bytesize="4" Description="width_or_height" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="252" Vartype="2 Bytes" Bytesize="2" Description="width_or_height_times_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="254" Vartype="2 Bytes" Bytesize="2" Description="location_j_serialized_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="256" Vartype="2 Bytes" Bytesize="2" Description="location_i_serialized_plus_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="258" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="260" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="268" Vartype="2 Bytes" Bytesize="2" Description="health" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="270" Vartype="2 Bytes" Bytesize="2" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="272" Vartype="4 Bytes" Bytesize="4" RLECount="46" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="456" Vartype="4 Bytes" Bytesize="4" Description="location0_serialized_tile_index_only_if_non_passible" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="460" Vartype="4 Bytes" Bytesize="4" Description="location1" DisplayMethod="Signed Integer"/>
+        <Element Offset="464" Vartype="4 Bytes" Bytesize="4" Description="location2" DisplayMethod="Signed Integer"/>
+        <Element Offset="468" Vartype="4 Bytes" Bytesize="4" Description="location3" DisplayMethod="Signed Integer"/>
+        <Element Offset="472" Vartype="4 Bytes" Bytesize="4" RLECount="31" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="596" Vartype="4 Bytes" Bytesize="4" Description="location_35_serialized_index_max" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="600" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="636" Vartype="4 Bytes" Bytesize="4" Description="time_in_existence" DisplayMethod="Signed Integer"/>
+        <Element Offset="640" Vartype="4 Bytes" Bytesize="4" RLECount="7" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="668" Vartype="4 Bytes" Bytesize="4" Description="subtype_or_skin?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="672" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="696" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Signed Integer"/>
+        <Element Offset="700" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="708" Vartype="4 Bytes" Bytesize="4" Description="cooldown_timer" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="712" Vartype="4 Bytes" Bytesize="4" RLECount="25" DisplayMethod="Unsigned Integer"/>
+      </Elements>
+    </Structure>
+    <Structure Name="Unit" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
+      <Elements>
+        <Element Offset="0" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="4" Vartype="4 Bytes" Bytesize="4" Description="animation_frame" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="8" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="16" Vartype="4 Bytes" Bytesize="4" Description="owner" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="20" Vartype="2 Bytes" Bytesize="2" RLECount="12" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="44" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="52" Vartype="4 Bytes" Bytesize="4" Description="unit_selected" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="56" Vartype="4 Bytes" Bytesize="4" Description="health_percentage_displayed" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="60" Vartype="4 Bytes" Bytesize="4" Description="time_alive_1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="64" Vartype="4 Bytes" Bytesize="4" Description="time_alive_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="68" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="72" Vartype="4 Bytes" Bytesize="4" Description="animation_frame_standing_sitting_horse" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="76" Vartype="4 Bytes" Bytesize="4" RLECount="12" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="124" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="128" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="140" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="142" Vartype="2 Bytes" Bytesize="2" Description="unit_type" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="144" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="148" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="152" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="176" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="178" Vartype="2 Bytes" Bytesize="2" Description="unit_selected" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="180" Vartype="2 Bytes" Bytesize="2" RLECount="8" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="196" Vartype="2 Bytes" Bytesize="2" Description="location_j" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="198" Vartype="2 Bytes" Bytesize="2" Description="location_i" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="200" Vartype="2 Bytes" Bytesize="2" Description="destination_location_j" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="202" Vartype="2 Bytes" Bytesize="2" Description="destination_location_i" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="204" Vartype="2 Bytes" Bytesize="2" Description="previous_location_j" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="206" Vartype="2 Bytes" Bytesize="2" Description="previous_location_i" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="208" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="212" Vartype="4 Bytes" Bytesize="4" Description="location_tile_index" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="216" Vartype="4 Bytes" Bytesize="4" Description="destination_location_tile_index" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="220" Vartype="4 Bytes" Bytesize="4" Description="previous_location_tile_index" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="224" Vartype="2 Bytes" Bytesize="2" Description="location_j_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="226" Vartype="2 Bytes" Bytesize="2" Description="location_i_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="228" Vartype="4 Bytes" Bytesize="4" Description="location_tile_index_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="232" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="236" Vartype="2 Bytes" Bytesize="2" Description="destination_location_j_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="238" Vartype="2 Bytes" Bytesize="2" Description="destination_location_i_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="240" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="244" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="246" Vartype="2 Bytes" Bytesize="2" Description="if_moving_is_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="248" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="250" Vartype="2 Bytes" Bytesize="2" Description="current_distance_walked_from_previous_location_tilecount" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="252" Vartype="2 Bytes" Bytesize="2" Description="distance_walked_from_previous_to_destination_tilecount" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="254" Vartype="Byte" Bytesize="1" Description="something_planned_path_orientation" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="255" Vartype="Byte" Bytesize="1" RLECount="25" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="281" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="282" Vartype="Byte" Bytesize="1" RLECount="26" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="308" Vartype="4 Bytes" Bytesize="4" RLECount="92" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="676" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="680" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="684" Vartype="2 Bytes" Bytesize="2" Description="total_health?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="686" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="688" Vartype="4 Bytes" Bytesize="4" Description="animation_timer?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="692" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="724" Vartype="2 Bytes" Bytesize="2" Description="health_2?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="726" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="732" Vartype="2 Bytes" Bytesize="2" Description="planned_destination_j_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="734" Vartype="2 Bytes" Bytesize="2" Description="planned_destination_i_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="736" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="740" Vartype="4 Bytes" Bytesize="4" RLECount="25" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="840" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="844" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="848" Vartype="4 Bytes" Bytesize="4" Description="time_alive_1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="852" Vartype="4 Bytes" Bytesize="4" Description="time_alive_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="856" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="860" Vartype="4 Bytes" Bytesize="4" RLECount="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="876" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="880" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="888" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="890" Vartype="2 Bytes" Bytesize="2" Description="animation_timer_2?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="892" Vartype="2 Bytes" Bytesize="2" RLECount="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="900" Vartype="4 Bytes" Bytesize="4" RLECount="16" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="964" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="968" Vartype="4 Bytes" Bytesize="4" Description="health" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="972" Vartype="4 Bytes" Bytesize="4" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="976" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="988" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="992" Vartype="4 Bytes" Bytesize="4" RLECount="21" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1076" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1080" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1088" Vartype="4 Bytes" Bytesize="4" Description="alive_timer_3?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1092" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1096" Vartype="4 Bytes" Bytesize="4" RLECount="7" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1124" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      </Elements>
+    </Structure>
+  </Structures>
+  <LuaScript>-- [Execute script] will open Lua Engine
+print("Start Lua Engine")
+-- Alternative
+-- [Memory View] -&gt; [Tools] -&gt; [Lua Engine]
+-- [Memory View] -&gt; [CTRL] + [L]
+
+
+
+---------------
+-- BUILDINGS --
+---------------
+
+BUILDING_COST_ID = {}                   -- maybe more general BUILDING_ID ?
+-- left out building names from stronghold 1 demo
+-- STRUCT_NULL
+BUILDING_COST_ID.hovel            = 1
+-- STRUCT_HOUSE
+BUILDING_COST_ID.woodcuttershut   = 3
+BUILDING_COST_ID.oxtether         = 4
+BUILDING_COST_ID.ironmine         = 5
+BUILDING_COST_ID.pitchrig         = 6
+BUILDING_COST_ID.huntershut       = 7
+BUILDING_COST_ID.mercenarypost    = 8
+BUILDING_COST_ID.barracks         = 9
+BUILDING_COST_ID.stockpile        = 10
+BUILDING_COST_ID.armory           = 11
+BUILDING_COST_ID.fletcher         = 12
+BUILDING_COST_ID.blacksmith       = 13
+BUILDING_COST_ID.poleturner       = 14
+BUILDING_COST_ID.armourer         = 15
+BUILDING_COST_ID.tanner           = 16
+BUILDING_COST_ID.bakery           = 17
+BUILDING_COST_ID.brewery          = 18
+BUILDING_COST_ID.granary          = 19
+BUILDING_COST_ID.quarry           = 20
+-- STRUCT_QUARRYPILE
+BUILDING_COST_ID.inn              = 22
+BUILDING_COST_ID.apothecary       = 23
+BUILDING_COST_ID.engineerguild    = 24
+BUILDING_COST_ID.tunnelerguild    = 25
+BUILDING_COST_ID.marketplace      = 26
+BUILDING_COST_ID.well             = 27
+BUILDING_COST_ID.oilsmelter       = 28
+-- STRUCT_SIEGE_TENT
+BUILDING_COST_ID.wheat_farm       = 30
+BUILDING_COST_ID.hop_farm         = 31
+BUILDING_COST_ID.apple_farm       = 32
+BUILDING_COST_ID.dairy_farm       = 33
+BUILDING_COST_ID.mill             = 34
+BUILDING_COST_ID.stables          = 35
+BUILDING_COST_ID.chapel           = 36
+BUILDING_COST_ID.church           = 37
+BUILDING_COST_ID.cathedral        = 38
+-- STRUCT_UNUSED
+-- STRUCT_KEEP_ONE
+-- STRUCT_KEEP_TWO
+-- STRUCT_KEEP_THREE
+-- STRUCT_KEEP_FOUR
+-- STRUCT_KEEP_FIVE
+BUILDING_COST_ID.large_gatehouse  = 45
+BUILDING_COST_ID.small_gatehouse  = 46
+-- -- STRUCT_MAIN_WOOD
+-- -- STRUCT_POSTERN_GATE
+BUILDING_COST_ID.drawbridge       = 49
+BUILDING_COST_ID.tunnel           = 50
+-- STRUCT_CAMP_FIRE
+-- STRUCT_SIGNPOST
+-- STRUCT_PARADE_GROUND
+BUILDING_COST_ID.s_fballista      = 54
+-- STRUCT_CAMPGROUND
+-- STRUCT_PARADE_GROUND
+-- STRUCT_PARADE_GROUND
+-- STRUCT_PARADE_GROUND
+-- STRUCT_PARADE_GROUND
+-- STRUCT_GATEHOUSE
+-- STRUCT_TOWER
+BUILDING_COST_ID.gallows          = 62
+BUILDING_COST_ID.stocks           = 63
+-- STRUCT_WITCH_HOIST
+BUILDING_COST_ID.maypole          = 65
+BUILDING_COST_ID.garden           = 66  -- all 3 garden types
+BUILDING_COST_ID.killingpit       = 67
+BUILDING_COST_ID.pitchditch       = 68
+-- STRUCT_UNUSED
+BUILDING_COST_ID.waterpot         = 70
+-- KEEPDOOR_LEFT
+-- KEEPDOOR_RIGHT
+-- KEEPDOOR
+BUILDING_COST_ID.tower_one        = 74
+BUILDING_COST_ID.tower_two        = 75
+BUILDING_COST_ID.tower_three      = 76
+BUILDING_COST_ID.tower_four       = 77
+BUILDING_COST_ID.tower_five       = 78
+-- STRUCT_UNUSED
+BUILDING_COST_ID.s_catapult       = 80
+BUILDING_COST_ID.s_trebuchet      = 81
+BUILDING_COST_ID.s_batteringram   = 82
+BUILDING_COST_ID.s_siegetower     = 83
+BUILDING_COST_ID.s_shield         = 84
+-- STRUCT_UNUSED
+BUILDING_COST_ID.s_mangonel       = 86
+BUILDING_COST_ID.s_balista        = 87
+-- STRUCT_UNUSED
+-- STRUCT_UNUSED
+-- STRUCT_UNUSED
+BUILDING_COST_ID.cesspit          = 91
+BUILDING_COST_ID.burningstake     = 92
+BUILDING_COST_ID.gibbet           = 93
+BUILDING_COST_ID.dungeon          = 94
+BUILDING_COST_ID.stretchingrack   = 95
+-- STRUCT_RACK_FLOGGING
+BUILDING_COST_ID.choppingblock    = 97
+BUILDING_COST_ID.dunkingstool     = 98
+BUILDING_COST_ID.dogcage          = 99
+BUILDING_COST_ID.statue           = 100
+BUILDING_COST_ID.shrine           = 101
+-- STRUCT_BEE_HIVE
+BUILDING_COST_ID.dancingbear      = 103
+-- STRUCT_POND
+-- STRUCT_BEAR_CAVE
+BUILDING_COST_LENGTH              = 106
+
+BUILDING_RESOURCE = {}
+BUILDING_RESOURCE.wood    = 0
+BUILDING_RESOURCE.stone   = 1
+BUILDING_RESOURCE.iron    = 2
+BUILDING_RESOURCE.pitch   = 3
+BUILDING_RESOURCE.gold    = 4
+BUILDING_RESOURCE_LENGTH  = 5
+
+
+function getBuildingCostAddress(building, resource)
+  local BUILDING_COST_BASE = 0x01124CF4  -- 1.4.1
+  return BUILDING_COST_BASE 
+  + 4 * BUILDING_RESOURCE_LENGTH * BUILDING_COST_ID[building]
+  + 4 * BUILDING_RESOURCE[resource]
+end
+
+function getSiegEquipmentGoldAddress(siege_equipment)
+  -- Redundant, but might be helpful
+  return getBuildingCostAddress(siege_equipment, gold)
+end
+
+
+--[[ TODO: check
+BUILDING_MATERAL_INDICES = {}
+BUILDING_MATERAL_INDICES.wood   = 0
+BUILDING_MATERAL_INDICES.stone  = 1
+BUILDING_MATERAL_INDICES.iron   = 2
+BUILDING_MATERAL_INDICES.pitch  = 3
+BUILDING_MATERAL_INDICES.gold   = 4
+BUILDING_MATERAL_INDICES.count  = 5  -- ?
+
+
+function getBuildingCostAddress(building, material)  -- ?
+  -- uses relative adresses with square_tower as base;
+  local ref = 0x11242f0  -- 1.?.?
+  local base = ref + 4 * BUILDING_MATERAL_INDICES.count * (BUILDING_INDICES[building] - BUILDING_INDICES.square_tower)
+  return base + 4 * BUILDING_MATERAL_INDICES[material]
+end
+--]]
+
+
+
+---------------------------------------
+-- CITIZEN, ANIMALS, SIEGE_EQUIPMENT --
+---------------------------------------
+
+TROOP_ID = {}  -- TODO: find better name
+TROOP_ID.peasant        = 1
+TROOP_ID.burningman     = 2
+TROOP_ID.woodcutter     = 3
+TROOP_ID.fletcher       = 4
+TROOP_ID.tunneler       = 5
+TROOP_ID.hunter         = 6
+--TROOP_ID.???          = 7
+--TROOP_ID.???          = 8
+--TROOP_ID.???          = 9
+--TROOP_ID.???          = 10
+--TROOP_ID.???          = 11
+--TROOP_ID.???          = 12
+--TROOP_ID.???          = 13
+--TROOP_ID.???          = 14
+TROOP_ID.child          = 15
+TROOP_ID.baker          = 16
+TROOP_ID.woman          = 17
+TROOP_ID.poleturner     = 18
+TROOP_ID.smith          = 19
+TROOP_ID.armorer        = 20
+TROOP_ID.tanner         = 21
+TROOP_ID.e_archer       = 22
+TROOP_ID.e_xbow         = 23
+TROOP_ID.e_spear        = 24
+TROOP_ID.e_pike         = 25
+TROOP_ID.e_mace         = 26
+TROOP_ID.e_sword        = 27
+TROOP_ID.e_knight       = 28
+TROOP_ID.e_ladder       = 29
+TROOP_ID.e_engineer     = 30
+--TROOP_ID.???          = 31
+--TROOP_ID.???          = 32
+TROOP_ID.priest         = 33
+--TROOP_ID.???          = 34
+TROOP_ID.drunk          = 35
+TROOP_ID.innkeep        = 36
+TROOP_ID.e_monk         = 37
+--TROOP_ID.???          = 38
+TROOP_ID.s_catapult     = 39
+TROOP_ID.s_trebuchet    = 40
+TROOP_ID.s_mangonel     = 41
+--TROOP_ID.???          = 42
+--TROOP_ID.???          = 43
+TROOP_ID.antelope       = 44
+TROOP_ID.lion           = 45
+TROOP_ID.rabbit         = 46
+TROOP_ID.camel          = 47
+--TROOP_ID.???          = 48
+--TROOP_ID.???          = 49
+TROOP_ID.siegetent      = 50 --  s_siegetent?
+--TROOP_ID.???          = 51
+--TROOP_ID.???          = 52
+TROOP_ID.fireman        = 53  -- firefighter?
+TROOP_ID.ghost          = 54
+TROOP_ID.lord           = 55
+TROOP_ID.lady           = 56
+TROOP_ID.chester        = 57
+TROOP_ID.stower         = 58
+TROOP_ID.s_batteringram = 59
+TROOP_ID.s_shield       = 60
+TROOP_ID.s_ballista     = 61
+TROOP_ID.chicken        = 62
+--TROOP_ID.???          = 63
+--TROOP_ID.???          = 64
+TROOP_ID.juggler        = 65
+TROOP_ID.fireeater      = 66
+TROOP_ID.dog            = 67
+--TROOP_ID.???          = 68
+--TROOP_ID.???          = 69
+TROOP_ID.a_archer       = 70
+TROOP_ID.a_slave        = 71
+TROOP_ID.a_slinger      = 72
+TROOP_ID.a_assassin     = 73
+TROOP_ID.a_harcher      = 74
+TROOP_ID.a_sword        = 75
+TROOP_ID.a_firethrower  = 76
+TROOP_ID.s_fballista    = 77
+--TROOP_ID.???          = 78
+--TROOP_ID.???          = 79
+TROOP_LENGTH            = 80
+
+
+
+------------------
+-- HUMAN AND AI --
+------------------
+
+AI_ID = {}
+AI_ID.rat       = 1
+AI_ID.snake     = 2
+AI_ID.pig       = 3
+AI_ID.wolf      = 4
+AI_ID.saladin   = 5
+AI_ID.caliph    = 6
+AI_ID.sultan    = 7
+AI_ID.richard   = 8
+AI_ID.frederick = 9
+AI_ID.philipp   = 10
+AI_ID.wazir     = 11
+AI_ID.emir      = 12
+AI_ID.nizar     = 13
+AI_ID.sheriff   = 14
+AI_ID.marshal   = 15
+AI_ID.abbot     = 16
+AI_LENGTH       = 16
+
+LORD_TYPE_ID = {}
+LORD_TYPE_ID.euro = 1
+LORD_TYPE_ID.arab = 2
+LORD_TYPE_LENGTH  = 2
+
+PLAYER_TYPE_ID = {}
+PLAYER_TYPE_ID.human  = 1
+PLAYER_TYPE_ID.ai     = 2
+PLAYER_TYPE_LENGTH    = 2
+
+PLAYER_OFFSET = 0x39F4  -- == 4 * 0xE7D
+-- here could be potentially a 0xE7D = 3709 entry table with lots of things in it... number of resources, number of buildings, number of troops, %drunk, ... some important ones below
+
+
+-- player always ranges from 1 up to 8 (no player 0)!
+
+function getGoldAddress(player)
+  local PLAYER_GOLD_BASE = 0x0115FCF8  -- 1.4.1
+  return PLAYER_GOLD_BASE
+  + PLAYER_OFFSET * (player - 1) 
+end
+
+function getPopularityAddress(player)
+  local PLAYER_POPULARITY_BASE = 0x115F84C  -- 1.4.1
+  return PLAYER_POPULARITY_BASE
+  + PLAYER_OFFSET * (player - 1)
+end  -- returns 0 - 10000
+
+--[[ TODO: does not work for non-european units. suggests UNIT_COST_ID
+function getTroopCountAddress(player, troop)
+  local PLAYER_TROOP_COUNT_BASE = 0x116184C  -- 1.4.1
+  return PLAYER_TROOP_COUNT_BASE
+  + PLAYER_OFFSET * (player - 1)
+  + 4 * TROOP_ID[troop]
+end
+--]]
+
+function getGoodCountAddress(player, good)
+  local PLAYER_GOOD_BASE = 0x0115FCBC  -- 1.4.1
+  return PLAYER_GOOD_BASE
+  + PLAYER_OFFSET * (player - 1)
+  + 4 * GOOD_ID[good]
+end
+
+
+
+------------------
+-- GAME STARTUP --
+------------------
+
+GAME_TYPE_ID = {}
+GAME_TYPE_ID.normal     = 1
+GAME_TYPE_ID.crusader   = 2
+GAME_TYPE_ID.deathmatch = 3
+GAME_TYPE_LENGTH        = 3
+
+GAME_DIFFICULTY_ID = {}
+GAME_DIFFICULTY_ID.human_big  = 1
+GAME_DIFFICULTY_ID.human      = 2
+GAME_DIFFICULTY_ID.balanced   = 3
+GAME_DIFFICULTY_ID.ai         = 4
+GAME_DIFFICULTY_ID.ai_big     = 5
+GAME_DIFFICULTY_LENGTH        = 5
+
+UNIT_STARTUP_ID = {}
+-- UNIT_STARTUP_ID.???        = 0 -- does not spawn anything, always zero
+UNIT_STARTUP_ID.e_archer      = 1
+UNIT_STARTUP_ID.e_xbow        = 2
+UNIT_STARTUP_ID.e_spear       = 3
+UNIT_STARTUP_ID.e_pike        = 4
+UNIT_STARTUP_ID.e_mace        = 5
+UNIT_STARTUP_ID.e_sword       = 6
+UNIT_STARTUP_ID.e_knight      = 7
+-- UNIT_STARTUP_ID.???        = 8  -- does not get spawned, but most likely ladderman (ai uses startup units as initial defense, so ladderman don't make sense)
+UNIT_STARTUP_ID.e_engineer    = 9
+UNIT_STARTUP_ID.e_monk        = 10
+UNIT_STARTUP_ID.a_archer      = 11
+UNIT_STARTUP_ID.a_slave       = 12
+UNIT_STARTUP_ID.a_slinger     = 13
+UNIT_STARTUP_ID.a_assasin     = 14
+UNIT_STARTUP_ID.a_haracher    = 15
+UNIT_STARTUP_ID.a_sword       = 16
+UNIT_STARTUP_ID.a_firethrower = 17
+UNIT_STARTUP_ID.s_fballista   = 18 -- spawns unmanned fire_ballista, ai does not seem to man it
+-- UNIT_STARTUP_ID.???        = 19 -- completely bugged: displays archers, but just adds 10 unusable peasants (could replace this with e_tunneler)
+UNIT_STARTUP_LENGTH           = 20
+
+
+AI_STARTUP_UNIT_BASE = 0x0000614444  -- 1.3.0
+AI_STARTUP_UNIT_AOB = "00 00 00 00 00 00 00 00 00 00 00 00 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 28 00 00 00"
+
+function getAIUnitStartupAddress(ai, game_type, unit)
+  return AI_STARTUP_UNIT_BASE
+  + 4 * UNIT_STARTUP_LENGTH * GAME_TYPE_LENGTH * (AI_ID[ai] - 1)
+  + 4 * UNIT_STARTUP_LENGTH * (GAME_TYPE_ID[game_type] - 1)
+  + 4 * UNIT_STARTUP_ID[unit]
+end
+
+function getPlayerUnitStartupAddress(lord_type, game_type, unit)
+  -- same as getAIStartupTroopAddress, but ai_id==17 for euro and ai_id==18 for arab lord
+  return AI_STARTUP_UNIT_BASE
+  + 4 * UNIT_STARTUP_LENGTH * GAME_TYPE_LENGTH * (17 + (LORD_TYPE_ID[lord_type] - 1))
+  + 4 * UNIT_STARTUP_LENGTH * (GAME_TYPE_ID[game_type] - 1)
+  + 4 * UNIT_STARTUP_ID[unit]
+end
+
+STARTUP_GOLD_BASE = 0x00615680  -- 1.3.0
+STARTUP_GOLD_AOB = "40 1F 00 00 D0 07 00 00 A0 0F 00 00 D0 07 00 00 D0 07 00 00 D0 07 00 00 D0 07 00 00 A0 0F 00 00 D0 07 00 00 40 1F 00 00 40 1F 00 00 D0 07 00 00 A0 0F 00 00 D0 07 00 00 D0 07 00 00 D0 07 00 00 D0 07 00 00 A0 0F 00 00 D0 07 00 00 40 1F 00 00 40 9C 00 00 B8 0B 00 00 20 4E 00 00 58 1B 00 00 10 27 00 00 10 27 00 00 58 1B 00 00 20 4E 00 00 B8 0B 00 00 40 9C 00 00"
+
+function getStartupGoldAddress(game_type, game_difficulty, player_type)
+  return STARTUP_GOLD_BASE
+  + 4 * PLAYER_TYPE_LENGTH * GAME_DIFFICULTY_LENGTH * (GAME_TYPE_ID[game_type] - 1)
+  + 4 * PLAYER_TYPE_LENGTH * GAME_DIFFICULTY_ID[game_difficulty]
+  + 4 * PLAYER_TYPE_ID[player_type]
+end
+
+
+
+------------------------
+-- UNITS AND FIGHTING --
+------------------------
+
+-- TODO: redo this section; shift UNIT_COST_ID one up
+
+--[[
+UNIT_COST_ID = {}
+UNIT_COST_ID.e_archer   = 0
+UNIT_COST_ID.e_xbow     = 1
+UNIT_COST_ID.e_spear    = 2
+UNIT_COST_ID.e_pike     = 3
+UNIT_COST_ID.e_mace     = 4
+UNIT_COST_ID.e_sword    = 5
+UNIT_COST_ID.e_knight   = 6
+-- UNIT_COST_ID.???     = 7
+-- UNIT_COST_ID.???     = 8
+-- UNIT_COST_ID.???     = 9
+UNIT_COST_ID.a_archer   = 10
+UNIT_COST_ID.a_slave    = 11
+UNIT_COST_ID.a_slinger  = 12
+UNIT_COST_ID.a_assassin = 13
+-- UNIT_COST_ID.???     = 14
+UNIT_COST_ID.a_harcher  = 15
+-- missing: engineer, ladderman, tunneler (7,8,9?); a_sword (14?), a_firethrower (16?); monk?
+-- UNIT_COST_ID_LENGTH = 16?
+
+
+function getUnitGoldAddress(unit)  -- displayed address?
+  local UNIT_COST_BASE = 0x00AB8114  -- 1.?.?
+	return UNIT_COST_BASE + 4 * UNIT_COST_INDICES[unit]
+end
+
+function getHPAddress(troop)
+  local UNIT_HP_BASE = 0x00B4D960  -- 1.?.?
+	return UNIT_HP_BASE + 4 * TROOP_INDICES[troop]
+end
+
+function getArrowDamageAddress(troop)
+	local ARROW_DAMAGE_BASE = 0x00B4DAA0  -- 1.?.?
+	return ARROW_DAMAGE_BASE + 4 * TROOP_ID[troop]
+end
+
+function getStoneDamageAddress(troop)
+	local STONE_DAMAGE_BASE = 0x00B4DBE0  -- 1.?.?
+	return STONE_DAMAGE_BASE + 4 * TROOP_INDICES[troop]
+end
+
+function getBoltDamageAddress(troop)
+	local BOLT_DAMAGE_BASE = 0x00B4DD20  -- 1.?.?
+	return BOLT_DAMAGE_BASE + 4 * TROOP_INDICES[troop]
+end
+
+function getDamageAddress(attacker, attacked)
+-- knight vs peasant:   0xB50164
+-- knight vs sword      0xB501CC
+-- sword vs sword       0xB5008C
+-- distance (byte): 320 = 0x140
+-- distance          80 =  0x50
+
+  local knight_base   = 0xB50160;  -- not 1.4.1
+  local entry_size    = 0x140;  -- not 1.4.1
+  local attacker_base = (TROOP_INDICES[attacker] - TROOP_INDICES.knight) * entry_size + knight_base
+  local offset = 4 * TROOP_INDICES[attacked]
+  return attacker_base + offset
+end
+
+function getBuildingHPAddress(building)
+  local base = 0x005B9218  -- 1.?.?
+return base + 4 * BUILDING_INDICES[building]
+end
+
+-- Health table: UnitID * 4 + 0xB4E960
+
+-- Xbow dmg table: 0xB4ED20
+-- Bow dmg table: 0xB4EAA0
+-- Sling dmg table: 0xB4EBE0
+
+-- Melee dmg table: 0xB4EE60 + (defenderID + 0x50 * attackerID)*4
+--]]
+
+
+
+-----------------
+-- MARKETPLACE --
+-----------------
+
+GOOD_ID = {}
+GOOD_ID.wood    = 2
+GOOD_ID.hop     = 3
+GOOD_ID.stone   = 4
+GOOD_ID.iron    = 6
+GOOD_ID.pitch   = 7
+GOOD_ID.wheat   = 9
+GOOD_ID.bread   = 10
+GOOD_ID.cheese  = 11
+GOOD_ID.meat    = 12
+GOOD_ID.fruit   = 13
+GOOD_ID.beer    = 14
+GOOD_ID.flour   = 16
+GOOD_ID.bow     = 17
+GOOD_ID.xbow    = 18
+GOOD_ID.spear   = 19
+GOOD_ID.pike    = 20
+GOOD_ID.mace    = 21
+GOOD_ID.sword   = 22
+GOOD_ID.leather = 23
+GOOD_ID.armor   = 24
+GOOD_ID_LENGTH  = 25
+
+GOOD_TRADE_BASE = 0x117CFD4  -- 1.4.1, on runtime
+
+TRADE_ACTION_ID = {}
+TRADE_ACTION_ID.buy   = 1
+TRADE_ACTION_ID.sell  = 2
+TRADE_ACTION_LENGTH   = 2
+
+function getGoodTradeAddress(good, action)
+  -- price for batches of 5
+  return GOOD_TRADE_BASE
+  + 4 * TRADE_ACTION_LENGTH * GOOD_ID[good]
+  + 4 * (TRADE_ACTION_ID[action] - 1)
+end
+
+function getGoodBuyAddress(good)
+  -- price for batches of 5 
+  return GOOD_TRADE_BASE
+  + 4 * TRADE_ACTION_LENGTH * GOODS_ID[good]
+  + 4 * (TRADE_ACTION_ID["buy"] - 1)
+end
+
+function getGoodSellAddress(good)
+  -- price for batches of 5
+  return GOOD_TRADE_BASE
+  + 4 * TRADE_ACTION_LENGTH * GOODS_ID[good]
+  + 4 * (TRADE_ACTION_ID["sell"] - 1)
+end
+
+
+
+--------------------
+-- HELP FUNCTIONS --
+--------------------
+
+function printAddress(address)
+  -- prints address in format 0xAB12CD34
+  print(string.format("0x%8.8X", address))
+end
+
+function printHex(number)
+  -- prints number in hex AB11CD22
+  print(string.format("0x%X", number))
+end
+
+
+
+-----------
+-- OTHER --
+-----------
+
+GAME_MODE = 0x0191DD80  -- 1.4.1
+GAME_MODE_ID = {}
+GAME_MODE_ID.stronghold = 0x00  -- castle builder, scenario,...?
+GAME_MODE_ID.skirmish   = 0x99  -- skirmish mode
+</LuaScript>
+</CheatTable>
