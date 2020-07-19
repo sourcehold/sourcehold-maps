@@ -1,5 +1,48 @@
 Welcome to the sourcehold-maps wiki!
 
+# Current progress
+
+## World
+ - [x] Understand the [coordinate system](https://github.com/sourcehold/sourcehold-maps/wiki/Map-coordinates)
+
+## Units
+ - [x] Manipulate unit type
+   - [x] Figure out [unit type IDs](https://github.com/J-T-de/CrusaderData/blob/master/data/crusader_data.CT)
+ - [X] Manipulate unit location
+ - [ ] Manipulate unit health
+ - [ ] Manipulate unit owner
+ - [ ] Manipulate unit task
+ - [ ] Manipulate unit destination
+ - [ ] Manipulate unit grouping
+ - [ ] Manipulate items carried by worker
+ - [ ] Manipulate unit health
+  
+## Buildings
+ - [x] Manipulate building type
+   - [ ] Figure out [building type IDs](https://github.com/J-T-de/CrusaderData/blob/master/data/crusader_data.CT)
+   - [ ] Correct building tile drawing
+ - [ ] Manipulate worker associated with building
+ - [ ] Manipulate building sleep state
+ - [ ] Manipulate building health/damage
+ - [ ] Manipulate building on fire
+ 
+## Terrain
+ - [ ] Manipulate terrain height
+ - [ ] Manipulate terrain type
+ - [ ] Manipulate terrain type pattern
+
+## General map info
+ - [ ] Manipulate balanced/unbalanced
+ - [ ] Manipulate type (deathmatch, ...)
+ 
+## General game experience
+ - [ ] Manipulate view box
+ - [ ] Manipulate game speed
+ - [ ] Manipulate zoom level
+ - [ ] Manipulate rotation
+
+# Getting started with debugging
+
 ## The general layout of a .map file (and .sav file)
 A map file is a zip file with a header and data sections.
 The header consists of:
