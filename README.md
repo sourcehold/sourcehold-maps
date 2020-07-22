@@ -2,18 +2,17 @@
 Reverse engineering the map file format of Stronghold & Stronghold Crusader.
 
 ### Project goal
-The goal is to understand the .map file format of Stronghold (& Stronghold Crusader).
-And to be able to manipulate it.
+The goal is to understand the .map file format of Stronghold & Stronghold Crusader and to be able to manipulate it.
 
 # Current progress
-We understand the layout of a .map file (the [file format](https://github.com/sourcehold/sourcehold-maps/blob/master/sourcehold/maps/map_structure.h)).
-
-Basically, a .map file is divided into sections, and each section contains a kind of map data. We understand some of the sections, but not all.
+We understand the layout of a map file (e.g., see this header [file](https://github.com/sourcehold/sourcehold-maps/blob/master/sourcehold/maps/map_structure.h)).
+Further details and explanation can be found in the wiki of this repository.
 
 ## Contribute
-If you want to contribute, have a look [here](https://github.com/sourcehold/sourcehold-maps/wiki/Map-sections) and help us understand all the sections! 
+If you want to contribute, have a look [here](https://github.com/sourcehold/sourcehold-maps/wiki/Map-sections), and in the wiki, and help us understand all the sections! 
 
-## Current functionalities
+
+## Current functionalities of the Python library
 ### Unpacking
 Unpack map/sav files to a folder:
 ```console

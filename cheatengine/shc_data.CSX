@@ -108,12 +108,13 @@
       <Element Offset="240" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="244" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="246" Vartype="2 Bytes" Bytesize="2" Description="if_moving_is_2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="248" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="250" Vartype="2 Bytes" Bytesize="2" Description="current_distance_walked_from_previous_location_tilecount" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="252" Vartype="2 Bytes" Bytesize="2" Description="distance_walked_from_previous_to_destination_tilecount" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="254" Vartype="Byte" Bytesize="1" Description="something_planned_path_orientation" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="255" Vartype="Byte" Bytesize="1" RLECount="5" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="260" Vartype="4 Bytes" Bytesize="4" RLECount="104" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="248" Vartype="2 Bytes" Bytesize="2" Description="changes_when_moving_0_7_tile_tracker?" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="250" Vartype="2 Bytes" Bytesize="2" Description="current_point_in_path_plan" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="252" Vartype="2 Bytes" Bytesize="2" Description="size_of_path_plan" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="254" Vartype="Byte" Bytesize="1" Description="direction_to_move_to_in_3_degrees_steps_from_map_north_clockwise" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="255" Vartype="Byte" Bytesize="1" RLECount="28" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="282" Vartype="Byte" Bytesize="1" RLECount="230" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="512" Vartype="4 Bytes" Bytesize="4" RLECount="41" DisplayMethod="Unsigned Integer"/>
       <Element Offset="676" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="680" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="684" Vartype="2 Bytes" Bytesize="2" Description="total_health?" DisplayMethod="Unsigned Integer"/>
@@ -143,7 +144,9 @@
       <Element Offset="972" Vartype="4 Bytes" Bytesize="4" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
       <Element Offset="976" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="988" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="992" Vartype="4 Bytes" Bytesize="4" RLECount="21" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="992" Vartype="4 Bytes" Bytesize="4" RLECount="16" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1056" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1060" Vartype="4 Bytes" Bytesize="4" RLECount="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1076" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1080" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1088" Vartype="4 Bytes" Bytesize="4" Description="alive_timer_3?" DisplayMethod="Unsigned Integer"/>
