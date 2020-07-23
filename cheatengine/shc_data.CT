@@ -53,9 +53,16 @@
     <CheatEntry>
       <ID>19</ID>
       <Description>"section1008"</Description>
-      <LastState Value="81" RealAddress="01A28318"/>
+      <LastState Value="0" RealAddress="01A1E6EA"/>
       <VariableType>Byte</VariableType>
-      <Address>01A28318</Address>
+      <Address>1a1e6ea</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>21</ID>
+      <Description>"Section1037"</Description>
+      <LastState Value="4" RealAddress="01C471E8"/>
+      <VariableType>Byte</VariableType>
+      <Address>01C471E8</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
@@ -136,26 +143,40 @@
         <Element Offset="56" Vartype="4 Bytes" Bytesize="4" Description="health_percentage_displayed" DisplayMethod="Unsigned Integer"/>
         <Element Offset="60" Vartype="4 Bytes" Bytesize="4" Description="time_alive_1" DisplayMethod="Unsigned Integer"/>
         <Element Offset="64" Vartype="4 Bytes" Bytesize="4" Description="time_alive_2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="68" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="68" Vartype="4 Bytes" Bytesize="4" Description="unit_activity_2_archer_shoot_5_nothing" DisplayMethod="Unsigned Integer"/>
         <Element Offset="72" Vartype="4 Bytes" Bytesize="4" Description="animation_frame_standing_sitting_horse" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="76" Vartype="4 Bytes" Bytesize="4" RLECount="12" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="76" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="84" Vartype="4 Bytes" Bytesize="4" Description="attack_angle_melee" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="88" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
         <Element Offset="124" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="128" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
         <Element Offset="140" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="142" Vartype="2 Bytes" Bytesize="2" Description="unit_type" DisplayMethod="Unsigned Integer"/>
         <Element Offset="144" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="148" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="152" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="148" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="150" Vartype="2 Bytes" Bytesize="2" Description="attack_4_stand_1_0_disables_selection_id?_owner_2?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="152" Vartype="4 Bytes" Bytesize="4" Description="some_sort_of_id_for_attacking" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="156" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="160" Vartype="4 Bytes" Bytesize="4" Description="attack_target_selection?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="164" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
         <Element Offset="176" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="178" Vartype="2 Bytes" Bytesize="2" Description="unit_selected" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="180" Vartype="2 Bytes" Bytesize="2" RLECount="8" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="178" Vartype="2 Bytes" Bytesize="2" Description="unit_selected_owner_?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="180" Vartype="2 Bytes" Bytesize="2" Description="unit_attack_stance?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="182" Vartype="2 Bytes" Bytesize="2" RLECount="2" Description="some_kind_of_location_where_to_aim" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="186" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="190" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="190" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_1?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="191" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="192" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_2?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="193" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="194" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_3?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="196" Vartype="2 Bytes" Bytesize="2" Description="location_j" DisplayMethod="Unsigned Integer"/>
         <Element Offset="198" Vartype="2 Bytes" Bytesize="2" Description="location_i" DisplayMethod="Unsigned Integer"/>
         <Element Offset="200" Vartype="2 Bytes" Bytesize="2" Description="destination_location_j" DisplayMethod="Unsigned Integer"/>
         <Element Offset="202" Vartype="2 Bytes" Bytesize="2" Description="destination_location_i" DisplayMethod="Unsigned Integer"/>
         <Element Offset="204" Vartype="2 Bytes" Bytesize="2" Description="previous_location_j" DisplayMethod="Unsigned Integer"/>
         <Element Offset="206" Vartype="2 Bytes" Bytesize="2" Description="previous_location_i" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="208" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="208" Vartype="4 Bytes" Bytesize="4" Description="defense_cooldown_timer?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="212" Vartype="4 Bytes" Bytesize="4" Description="location_tile_index" DisplayMethod="Unsigned Integer"/>
         <Element Offset="216" Vartype="4 Bytes" Bytesize="4" Description="destination_location_tile_index" DisplayMethod="Unsigned Integer"/>
         <Element Offset="220" Vartype="4 Bytes" Bytesize="4" Description="previous_location_tile_index" DisplayMethod="Unsigned Integer"/>
@@ -167,20 +188,22 @@
         <Element Offset="238" Vartype="2 Bytes" Bytesize="2" Description="destination_location_i_2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="240" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
         <Element Offset="244" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="246" Vartype="2 Bytes" Bytesize="2" Description="if_moving_is_2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="246" Vartype="2 Bytes" Bytesize="2" Description="unit_state_moving_2_melee_5" DisplayMethod="Unsigned Integer"/>
         <Element Offset="248" Vartype="2 Bytes" Bytesize="2" Description="changes_when_moving_0_7_tile_tracker?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="250" Vartype="2 Bytes" Bytesize="2" Description="current_point_in_path_plan" DisplayMethod="Unsigned Integer"/>
         <Element Offset="252" Vartype="2 Bytes" Bytesize="2" Description="size_of_path_plan_max_680" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="254" Vartype="Byte" Bytesize="1" Description="direction_to_move_to_in_3_degrees_steps_from_map_north_clockwise" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="255" Vartype="Byte" Bytesize="1" RLECount="28" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="282" Vartype="Byte" Bytesize="1" RLECount="314" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="254" Vartype="Byte" Bytesize="1" Description="direction_to_move_to_in_4bit_format_0_to_7_degrees_steps_from_map_north_clockwise" DisplayMethod="Hexadecimal"/>
+        <Element Offset="255" Vartype="Byte" Bytesize="1" RLECount="28" DisplayMethod="Hexadecimal"/>
+        <Element Offset="282" Vartype="Byte" Bytesize="1" RLECount="314" DisplayMethod="Hexadecimal"/>
         <Element Offset="596" Vartype="4 Bytes" Bytesize="4" RLECount="20" DisplayMethod="Unsigned Integer"/>
         <Element Offset="676" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="680" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
         <Element Offset="684" Vartype="2 Bytes" Bytesize="2" Description="total_health?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="686" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="688" Vartype="4 Bytes" Bytesize="4" Description="animation_timer?" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="692" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="692" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="700" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="704" Vartype="4 Bytes" Bytesize="4" RLECount="5" DisplayMethod="Unsigned Integer"/>
         <Element Offset="724" Vartype="2 Bytes" Bytesize="2" Description="health_2?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="726" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
         <Element Offset="732" Vartype="2 Bytes" Bytesize="2" Description="planned_destination_j_2" DisplayMethod="Unsigned Integer"/>
@@ -198,13 +221,19 @@
         <Element Offset="888" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="890" Vartype="2 Bytes" Bytesize="2" Description="animation_timer_2?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="892" Vartype="2 Bytes" Bytesize="2" RLECount="4" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="900" Vartype="4 Bytes" Bytesize="4" RLECount="16" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="900" Vartype="4 Bytes" Bytesize="4" RLECount="7" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="928" Vartype="4 Bytes" Bytesize="4" Description="attack_target" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="932" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
         <Element Offset="964" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="968" Vartype="4 Bytes" Bytesize="4" Description="health" DisplayMethod="Unsigned Integer"/>
         <Element Offset="972" Vartype="4 Bytes" Bytesize="4" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
         <Element Offset="976" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
         <Element Offset="988" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="992" Vartype="4 Bytes" Bytesize="4" RLECount="16" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="992" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1016" Vartype="4 Bytes" Bytesize="4" Description="?" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1020" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1028" Vartype="4 Bytes" Bytesize="4" Description="some_location_thing" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="1032" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
         <Element Offset="1056" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="1060" Vartype="4 Bytes" Bytesize="4" RLECount="4" DisplayMethod="Unsigned Integer"/>
         <Element Offset="1076" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
@@ -773,5 +802,142 @@ GAME_MODE = 0x0191DD80  -- 1.4.1
 GAME_MODE_ID = {}
 GAME_MODE_ID.stronghold = 0x00  -- castle builder, scenario,...?
 GAME_MODE_ID.skirmish   = 0x99  -- skirmish mode
+
+
+
+---------
+--- gynt---
+-----------
+
+function serialized_tile_point_move_north(i,j)
+    return {i-1,j-1}
+end
+
+function serialized_tile_point_move_east(i,j)
+    return {i,j+1}
+end
+
+function serialized_tile_point_move_south(i,j)
+    return {i+1,j+1}
+end
+
+function serialized_tile_point_move_west(i,j)
+    return {i,j-1}
+end
+
+function serialized_tile_point_to_adjusted_serialized_tile_point(i,j)
+    return {i,j+(math.abs(((i&lt;200) and (199) or (200))-i))}
+end
+
+function serialized_tile_point_to_serialized_tile_index(i,j)
+    size = 400
+
+    n_serialized_tiles = (2*(math.floor(size/2)*(math.floor(size/2)+1)))
+    if i&lt;math.floor(size/2) then
+        return (i*(i+1))+j
+    else
+        return (n_serialized_tiles-((size-i)*(size-i+1)))+j
+    end
+end
+
+function adjusted_serialized_point_to_serialized_point(i,j)
+    return {i,j-(math.abs(((i&lt;200) and (199) or (200))-i))}
+end
+
+function serialized_tile_point_to_game_tile_index(i,j)
+    size = 400
+
+    if i&lt;math.floor(size/2) then
+        return (math.floor(size/2)-1-i)+(i*size)+j
+    else
+        return (-math.floor(size/2)+0+i)+(i*size)+j
+    end
+end
+
+
+
+function getSection1037Address()
+ local section1037Base = 0x01C471E8
+ return section1037Base
+end
+
+
+function getUnitAddress(unit)
+ local sectionUnitsBase = 0x013889DC
+ return sectionUnitsBase + (unit*1126)
+end
+
+function splitBytesIn4bits(bytes)
+ local result = {}
+ for i,b in pairs(bytes) do
+    result[((i-1)*2)+1] = b &amp; 15
+    result[((i-1)*2)+2] = b &gt;&gt; 4
+ end
+ return result
+end
+
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
+-- e.g. drawUnitPath(1) to draw the pathing of unit number 1.
+function drawUnitPath(unit_number)
+ local mod_addr = getSection1037Address()
+ local addr = getUnitAddress(unit_number-1)
+ local path_length_offset = 0xFC
+ local path_offset = 0xFE
+ local bytes_to_read = math.ceil(readSmallInteger(addr + path_length_offset) / 2)
+ print("reading bytes: " .. tostring(bytes_to_read))
+ local data = readBytes(addr + path_offset, bytes_to_read, true)
+ local directions = splitBytesIn4bits(data)
+  print("direction data: " .. tostring(dump(directions)))
+
+ local j = readSmallInteger(addr + 0xCC) -- Previous location
+ local i = readSmallInteger(addr + 0xCE) -- Previous location
+
+ local serialized_point = adjusted_serialized_point_to_serialized_point(i, j)
+
+ for index,direction in pairs(directions) do
+
+  if direction == 0 then
+   serialized_point = serialized_tile_point_move_north(serialized_point[1], serialized_point[2])
+  elseif direction == 1 then
+   serialized_point = serialized_tile_point_move_north(serialized_point[1], serialized_point[2])
+   serialized_point = serialized_tile_point_move_east(serialized_point[1], serialized_point[2])
+  elseif direction == 2 then
+   serialized_point = serialized_tile_point_move_east(serialized_point[1], serialized_point[2])
+  elseif direction == 3 then
+     serialized_point = serialized_tile_point_move_east(serialized_point[1], serialized_point[2])
+        serialized_point = serialized_tile_point_move_south(serialized_point[1], serialized_point[2])
+  elseif direction == 4 then
+        serialized_point = serialized_tile_point_move_south(serialized_point[1], serialized_point[2])
+  elseif direction == 5 then
+          serialized_point = serialized_tile_point_move_south(serialized_point[1], serialized_point[2])
+                  serialized_point = serialized_tile_point_move_west(serialized_point[1], serialized_point[2])
+  elseif direction == 6 then
+                    serialized_point = serialized_tile_point_move_west(serialized_point[1], serialized_point[2])
+  elseif direction == 7 then
+                  serialized_point = serialized_tile_point_move_west(serialized_point[1], serialized_point[2])
+   serialized_point = serialized_tile_point_move_north(serialized_point[1], serialized_point[2])
+  end
+
+  serialized_index = serialized_tile_point_to_serialized_tile_index(serialized_point[1], serialized_point[2])
+
+  writeBytes(mod_addr + serialized_index, 0x10)
+
+ end
+
+end
+
+
 </LuaScript>
 </CheatTable>

@@ -306,10 +306,10 @@ class Structure(object):
 
         return fields
 
-    def pack(self, force = False):
+    def pack(self, force=False):
         pass
 
-    def unpack(self, force = False):
+    def unpack(self, force=False):
         pass
 
     def get_data_as_bytearray(self):

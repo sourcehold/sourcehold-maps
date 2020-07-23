@@ -53,6 +53,19 @@ class TileLocationTranslator(object):
                 return AdjustedSerializedTilePoint(i=self.i, j=self.j + (abs((199 if self.i < 200 else 200)-self.i)))
 
 
+            # TODO: test these
+            def move_north(self):
+                return SerializedTilePoint(self.i - 1, self.j - 1)
+
+            def move_east(self):
+                return SerializedTilePoint(self.i, self.j + 1)
+
+            def move_south(self):
+                return SerializedTilePoint(self.i + 1, self.j + 1)
+
+            def move_west(self):
+                return SerializedTilePoint(self.i, self.j - 1)
+
         class SerializedTileIndex(Point):
 
             def __init__(self, index):
@@ -102,6 +115,18 @@ class TileLocationTranslator(object):
 
             def to_game_tile_index(self):
                 return GameTileIndex(index=(size*self.i) + self.j)
+
+            def move_north(self):
+                return SerializedTilePoint(self.i - 1, self.j)
+
+            def move_east(self):
+                return SerializedTilePoint(self.i, self.j + 1)
+
+            def move_south(self):
+                return SerializedTilePoint(self.i + 1, self.j)
+
+            def move_west(self):
+                return SerializedTilePoint(self.i, self.j - 1)
 
         class ScreenTilePoint(Point):
 
