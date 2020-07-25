@@ -1,11 +1,54 @@
 
+tile_explorer_data = {};
 
-async function load_tilesection() {
-    var file = document.querySelector('#tilesectionfileselect').files[0];
+async function cache_tile_section_explorer_map() {
+    var file = document.querySelector('#tilesectionexplorerfileselect').files[0];
     var buffer = await file.arrayBuffer().then((buffer) => new InterpretationBuffer(buffer));
+    var map = new Map().deserialize_from(buffer);
+    map.unpack();
+
+    tile_explorer_data.map = map;
+
+    populate_section_selection();
+
+    return map;
+}
+
+function populate_section_selection() {
+    var opts = document.getElementById("tile_explorer_section_selection");
+
+    while(opts.length > 0) {
+        opts.remove(0);
+    }
+
+    var map = tile_explorer_data.map;
+
+    for(var i = 0; i < map.directory.section_indices.length; i++) {
+        var index = map.directory.section_indices[i];
+        var uncompressed_length = map.directory.section_uncompressed_lengths[i];
+        if(uncompressed_length % 80400 == 0 & uncompressed_length != 0) {
+            var option = document.createElement("option");
+            option.value = index ;
+            option.text = index ;
+            opts.add(option)
+        }
+    }
+
+}
+
+async function load_tilesection(section_index) {
+
+    var section_index = section_index || document.getElementById("tile_explorer_section_selection").value;
+
+    section_index = parseInt(section_index);
+
+    var section = tile_explorer_data.map.directory.sections[tile_explorer_data.map.directory.section_indices.indexOf(section_index)];
+
+    var buffer = new InterpretationBuffer(section.get_data().buffer);
 
     var denominator = 80400;
     var datasize = buffer.size / denominator;
+    
     
     if(datasize == 2) {
         var data = buffer.readShorts(80400);
@@ -14,6 +57,9 @@ async function load_tilesection() {
     } else if(datasize == 4) {
         var data = buffer.readInts(80400);
     } else {
+        if(datasize == 9) {
+            alert("Sorry, this explorer currently does not support this section")
+        }
         throw `invalid datasize, are you sure it is a proper tilesection? ${datasize}`
     }
 
@@ -51,7 +97,7 @@ async function load_tilesection() {
 
         var el = paper.path(coords).attr({fill: colour, stroke: colour}).data('serialized_point', sp).data('value', value).data('index', index);
         el.hover(function onEnter(ctx) {
-            top_left_text.attr({text: `x: ${this.data('serialized_point').i}, y: ${this.data('serialized_point').j}, index: ${this.data('index')}, value: ${this.data('value')}`})
+            top_left_text.attr({text: `section: ${section_index}, x: ${this.data('serialized_point').i}, y: ${this.data('serialized_point').j}, serialized index: ${this.data('index')}, value: ${this.data('value')}`})
         }, function onLeave(ctx) {
 
         });

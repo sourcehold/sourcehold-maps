@@ -31,14 +31,54 @@
         <br><br>
 
         <div style="display: flex">
-            <div style="flex: 0 0 25%">
-                Tile section file: <input type="file" name="tilesectionfile" id="tilesectionfileselect"><button onclick="load_tilesection();" type="button" id="loadtilesection" disabled>Load tilesection</button>
+            <div style="flex: 0 0 20%">
+                Select map file: <input type="file" name="tilesectionexplorerfile" id="tilesectionexplorerfileselect" onchange="cache_tile_section_explorer_map()">
             </div>
+            <div style="flex: 0 0 20%">
+                Choose section: 
+                <select name="section_options" id="tile_explorer_section_selection">
+                    <option value="1001">1001</option>
+                    <option value="1033">1033</option>
+                    <option value="1002">1002</option>
+                    <option value="1003">1003</option>
+                    <option value="1037">1037</option>
+                    <option value="1043">1043</option>
+                    <option value="1004">1004</option>
+                    <option value="1020">1020</option>
+                    <option value="1036">1036</option>
+                    <option value="1005">1005</option>
+                    <option value="1045">1045</option>
+                    <option value="1006">1006</option>
+                    <option value="1007">1007</option>
+                    <option value="1008">1008</option>
+                    <option value="1009">1009</option>
+                    <option value="1010">1010</option>
+                    <option value="1030">1030</option>
+                    <option value="1026">1026</option>
+                    <option value="1118">1118</option>
+                    <option value="1012">1012</option>
+                    <option value="1021">1021</option>
+                    <option value="1049">1049</option>
+                    <option value="1028">1028</option>
+                    <option value="1029">1029</option>
+                    <option value="1103">1103</option>
+                    <option value="1104">1104</option>
+                    <option value="1105">1105</option>
+                </select>
+            </div>
+            <div style="flex: 0 0 15%">
+                
+                <button onclick="load_tilesection();" type="button" id="loadtilesectionexplorersection" disabled>Load/draw/render selected section</button>
+            </div>
+        </div>
+
+        <h3>Rendering options</h3>
+        <div style="display: flex">
             <div style="flex: 0 0 15%">
                 Render from row: <input type="number" id="load_tiles_from_row" name="load_tiles_from_row_element" step="1" min=1 max=400 value=0>
             </div>
             <div style="flex: 0 0 15%">
-                Render n rows: <input type="number" id="load_tiles_n_rows" name="load_tiles_n_rows_element" step="1" min=1 max=400 value=40>
+                Render n rows (max 400): <input type="number" id="load_tiles_n_rows" name="load_tiles_n_rows_element" step="1" min=1 max=400 value=40>
             </div>
             <div style="flex: 0 0 15%">
                 Tile width: <input type="number" id="load_tiles_tile_width" name="load_tiles_tile_width" step="1" min=1 value=8>
@@ -128,7 +168,7 @@
                     var FILE_KEY = 'tilesectionfile';
     
                     // fire processUpload when the user uploads a file.
-                    document.querySelector('#tilesectionfileselect').addEventListener('change', handleFileUpload, false);
+                    document.querySelector('#tilesectionexplorerfileselect').addEventListener('change', handleFileUpload, false);
     
                     // Log any previously saved file.
                     //console.log('previous save: ', retrieveSave());
@@ -139,10 +179,10 @@
     
                     function handleFileUpload(event) {
                         var file = event.target.files[0];
-                        if(document.querySelector('#tilesectionfileselect').files.length > 0) {
-                            document.querySelector('#loadtilesection').removeAttribute('disabled', false);
+                        if(document.querySelector('#tilesectionexplorerfileselect').files.length > 0) {
+                            document.querySelector('#loadtilesectionexplorersection').removeAttribute('disabled', false);
                         } else {
-                            document.querySelector('#loadtilesection').setAttribute('disabled', true);
+                            document.querySelector('#loadtilesectionexplorersection').setAttribute('disabled', true);
                         }
 //                        reader.readAsBinaryString(file); // fires onload when done.
                         //localforage.setItem(FILE_KEY, file);
