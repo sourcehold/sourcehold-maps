@@ -12,4 +12,5 @@
   * [Section 1015 (unit data)](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1015)
   * [Section 1037 (texture data)](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1037)
   * [Section 1049 (building type ids)](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1049)
+  * [Section 1063 (events)](https://github.com/sourcehold/sourcehold-maps/wiki/Section-1063)
 * [Unknown map section data](https://github.com/sourcehold/sourcehold-maps/wiki/Unknown-map-sections)

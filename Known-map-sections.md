@@ -43,7 +43,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 |1029|80400|Tile data||
 | 1030 | 80400|Tile data||
 |1031|103200|||
-| 1033 ||Tile data| Buildings, including destroyed ones. |
+| 1033 |160800|Tile data| Buildings, including destroyed ones. |
 |1034|256000|||
 |1035|4|||
 | 1036 | 160800 | Tile data (short) | Contains terrain roughness data, looks like patches (each patch tiles increment by 64), but the terrain type is mysterious |
@@ -71,7 +71,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 |1059|80|||
 |1061|4|||
 |1062|4|||
-|1063|45600|||
+|1063|45600|Event data| Events |
 |1064|32000|||
 |1065|100|||
 |1066|4|||
