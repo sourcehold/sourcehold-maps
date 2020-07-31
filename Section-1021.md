@@ -1,0 +1,1 @@
+When wiped, workers disappear and buildings go sleep.

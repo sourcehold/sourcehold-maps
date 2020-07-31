@@ -10,6 +10,7 @@ Welcome to the sourcehold-maps wiki!
    - [x] Figure out [unit type IDs](https://github.com/J-T-de/CrusaderData/blob/master/data/crusader_data.CT)
  - [X] Manipulate unit location
  - [X] Manipulate unit path
+ - [ ] Manipulate unit checkpoints
  - [ ] Manipulate unit health
  - [ ] Manipulate unit owner
  - [ ] Manipulate unit task
