@@ -26,6 +26,20 @@ class TileSystemRow(object):
 from ...iotools import Buffer
 
 
+
+def bytes_to_tiles(x: Buffer, rows = 401, fmt = "B"):
+    fmt_size = struct.calcsize(fmt)
+
+    data = []
+    for i in range(1, rows+1, 1):
+        if i <= rows//2:
+            data.append([struct.unpack(fmt, x.read(fmt_size))[0] for j in range(i*2)])
+        else:
+            data.append([struct.unpack(fmt, x.read(fmt_size))[0] for j in range((rows-i)*2)])
+    return data
+
+
+
 class TileSystem(object):
 
     def __init__(self):
@@ -302,7 +316,7 @@ class ArrayMapStructure(object):
     _LENGTH_ = 0
 
     def __init__(self):
-        self.items = {}
+        self.items = None
         self._dirty = False
 
     def _get_data(self):
@@ -322,25 +336,28 @@ class ArrayMapStructure(object):
         self._dirty = True
 
     def unpack(self, force=False):
-        buf = Buffer(self._get_data())
-        for i in range(self._LENGTH_):
-            peek = buf.peek(self._TYPE_.size_of())
-            if set(peek) == {0}:
-                buf.read(self._TYPE_.size_of())
-            else:
-                self.items[i] = self._TYPE_().from_buffer(buf)
+        if self._dirty or force:
+            self.items = {}
+            buf = Buffer(self._get_data())
+            for i in range(self._LENGTH_):
+                peek = buf.peek(self._TYPE_.size_of())
+                if set(peek) == {0}:
+                    buf.read(self._TYPE_.size_of())
+                else:
+                    self.items[i] = self._TYPE_().from_buffer(buf)
 
     def pack(self, force=False):
-        buf = Buffer()
+        if self._dirty or force:
+            buf = Buffer()
 
-        for i in range(self._LENGTH_):
-            if i in self.items:
-                self.items[i].serialize_to_buffer(buf)
-            else:
-                buf.write(b'\x00'*self._TYPE_.size_of())
+            for i in range(self._LENGTH_):
+                if i in self.items:
+                    self.items[i].serialize_to_buffer(buf)
+                else:
+                    buf.write(b'\x00'*self._TYPE_.size_of())
 
-        self._set_data(buf.getvalue())
-        self._dirty = True
+            self._set_data(buf.getvalue())
+            self._dirty = True
 
 
 class ArrayMapSection(ArrayMapStructure, MapSection):

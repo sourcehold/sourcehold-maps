@@ -51,18 +51,221 @@
       <Address>01388E6C</Address>
     </CheatEntry>
     <CheatEntry>
+      <ID>32</ID>
+      <Description>"section1001"</Description>
+      <LastState Value="76" RealAddress="01AE5688"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+16E5688</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>39</ID>
+      <Description>"section1033"</Description>
+      <LastState Value="00" RealAddress="01B0CAA8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+170CAA8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>33</ID>
+      <Description>"section1002"</Description>
+      <LastState Value="01" RealAddress="01B5B2E8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+175B2E8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>38</ID>
+      <Description>"section1003"</Description>
+      <LastState Value="10" RealAddress="01BF8368"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+17F8368</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>21</ID>
+      <Description>"section1037"</Description>
+      <LastState Value="0" RealAddress="01C471E8"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+18471E8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>25</ID>
+      <Description>"section1043"</Description>
+      <LastState Value="00" RealAddress="01D5A058"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+195A058</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>47</ID>
+      <Description>"section1004"</Description>
+      <LastState Value="0" RealAddress="01C6E798"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+186e798</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>"section1020"</Description>
+      <LastState Value="00" RealAddress="01DBC2A8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+19BC2A8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>34</ID>
+      <Description>"section1036"</Description>
+      <LastState Value="00" RealAddress="01DCFCB8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+19CFCB8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>48</ID>
+      <Description>"section1005"</Description>
+      <LastState Value="8" RealAddress="01D32C38"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1932c38</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>24</ID>
+      <Description>"section1045"</Description>
+      <LastState Value="08" RealAddress="01D46648"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1946648</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>26</ID>
+      <Description>"section1006"</Description>
+      <LastState Value="00" RealAddress="01D81478"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1981478</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>35</ID>
+      <Description>"section1007"</Description>
+      <LastState Value="00" RealAddress="01D94E88"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1994E88</Address>
+    </CheatEntry>
+    <CheatEntry>
       <ID>19</ID>
       <Description>"section1008"</Description>
       <LastState Value="0" RealAddress="01A1E6EA"/>
       <VariableType>Byte</VariableType>
-      <Address>1a1e6ea</Address>
+      <Address>"Stronghold Crusader.exe"+161e6ea</Address>
     </CheatEntry>
     <CheatEntry>
-      <ID>21</ID>
-      <Description>"Section1037"</Description>
-      <LastState Value="4" RealAddress="01C471E8"/>
+      <ID>45</ID>
+      <Description>"section1009?"</Description>
+      <LastState Value="0" RealAddress="01B82708"/>
       <VariableType>Byte</VariableType>
-      <Address>01C471E8</Address>
+      <Address>"Stronghold Crusader.exe"+1782708</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>46</ID>
+      <Description>"section1010?"</Description>
+      <LastState Value="0" RealAddress="01CD09E8"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+18d09e8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>36</ID>
+      <Description>"section1030"</Description>
+      <LastState Value="00" RealAddress="01E1E4F8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1A1E4F8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>44</ID>
+      <Description>"section1026?"</Description>
+      <LastState Value="0" RealAddress="01CF7E08"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+18f7e08</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>23</ID>
+      <Description>"section1118"</Description>
+      <LastState Value="00" RealAddress="01D1F228"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+191F228</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>37</ID>
+      <Description>"section1012"</Description>
+      <LastState Value="00" RealAddress="01C95BB8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1895BB8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>41</ID>
+      <Description>"section1021"</Description>
+      <LastState Value="00" RealAddress="01DF70D8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+19F70D8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>22</ID>
+      <Description>"section1049"</Description>
+      <LastState Value="00" RealAddress="01CBCFD8"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+18BCFD8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>28</ID>
+      <Description>"section1028"</Description>
+      <LastState Value="00" RealAddress="01E94158"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1A94158</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>29</ID>
+      <Description>"section1029"</Description>
+      <LastState Value="00" RealAddress="01EA7B68"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1AA7B68</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>30</ID>
+      <Description>"section1103"</Description>
+      <LastState Value="00" RealAddress="01EBB578"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1ABB578</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>31</ID>
+      <Description>"section1104"</Description>
+      <LastState Value="00" RealAddress="01ECEF88"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+1ACEF88</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>43</ID>
+      <Description>"section1105?"</Description>
+      <LastState Value="0" RealAddress="01EE2998"/>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+01AE2998</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>49</ID>
+      <Description>"section1008? correct?"</Description>
+      <LastState Value="AE 33 E6 63 A8 2B D4 60 E6 1A 1C 23 A9 5D 25 11 3B 77 88 05 63 12 3F 18 55 46 42 6E 5C 4C 20 2B 8A 73 5A 3C 31 4B 82 34 FE 01 6F 5C DC 26 0B 13 0F 22 7D 18 32 30 C4 07 F0 35 F7 19 AF 3A CC 68 93 09 16 52 76 33 4E 6C CD 41 70 3C 94 29 B0 1F B5 46 CC 2F 85 2B 0D 5F 4D 2D 35 31 F9 1D E6 60 64 64 4D 7D D8 6F 14 2A BA 28 E4 3B 83 4F 01 7E 66 04 C9 11 5D 45 18 1F 75 5D E0 04 8A 57 7A 73 D4 57 75 66 F6 1A F3 61 70 0E D0 37 99 55 2C 7B 9B 67 0A 3D FA 15 22 43 B2 08 1F 32 F2 63 D6 2E FC 2C 43 56 B3 6E 47 2A D6 63 7A 41 08 5C 9D 3A 0D 7A 63 38 DF 1C A7 10 8C 12 54 72 04 6B 87 1F 37 32 AC 05 2F 54 AC 0B 16 43 65 6E 41 76 01 06 B6 52 E9 62 CB 50 64 67 CC 0F 27 6B D0 4F 5A 20 1C 4B E5 6D CC 73 01 51 99 7F 58 28 F4 3A 46 1D CE 25 F2 43 C0 2F 57 11 7C 56 7B 7E A7 40 5C 2A 85 00 63 18 29 45 62 57 08 36 57 7D 13 54 97 06 CE 54 12 5B FF 4E BD 12 E5 0D 76 1A 1A 47 D9 24 8A 10 DB 6E 2A 1F 2B 5E 4D 5C A7 6F CF 0E 63 5E 6F 7E 1E 70 08 6B 12 7A 8F 3E 7C 09 FA 57 5F 35 85 7E 41 0B ED 47 FB 56 8F 51 CD 45 98 6B 57 27 AB 0E 2C 63 9E 77 14 30 43 62 33 42 58 63 BB 0F 0F 23 CC 07 D5 04 AE 35 38 6E 8E 5A 1F 2E 5E 1A B9 4E 91 7C C0 2F BF 47 0B 74 80 37 85 64 F9 45 01 3C EF 4E 82 2A 61 40 F1 13 EF 6C 56 6D A7 76 14 75 E0 3C B1 25 50 4E 2F 00 87 28 13 72 67 18 73 7C 61 6B D6 2C 70 5F A2 3D 36 70 6E 23 9E 51 74 35 F0 2C F0 52 46 1B 39 34 AE 70 D1 4D 92 45 BF 1C 15 58 F0 2E 7A 6D 76 0F E6 5B D7 3D F0 66 D2 50 D6 2D 3E 28 5B 20 F1 6E 9A 57 D1 74 47 5A 7E 6A 41 50 34 13 5B 07 D5 66 C6 7B 43 2D 8B 68 68 25 E6 48 9E 1D 8F 39 61 50 2F 61 65 2F 93 01 89 58 5A 1F 40 0B 30 5C 68 6A DA 3F A3 75 9B 4E AE 3E B5 7F 50 42 1C 7D D1 49 93 1D 1D 21 C2 54 F8 0E 14 71 F7 27 56 7D 18 1A 67 0C 27 3E 8D 27 5C 65 19 1C D4 4C 81 0B CB 2D 2A 79 C9 58 62 2B 25 7B 66 21 79 69 69 2E 0D 5F F2 09 40 61 0E 68 6D 2F 26 00 EC 2A 7B 5F 17 40 9A 0C 7C 60 40 6B A8 5F 84 0C 28 4F 48 35 B2 1B 41 75 A1 7C 0C 3B 1A 10 31 76 99 11 06 1E BE 45 C8 6C 86 4D 69 58 5B 64 E2 5E A3 67 0F 2A AF 3B 57 6F 38 01 B3 51 DA 67 D0 00 1C 0D 60 66 0A 15 D9 7A 78 50 29 65 57 26 37 65 CD 60 1B 47 EC 43 7B 4D 39 43 70 33 68 14 D7 2A F6 10 05 22 84 25 31 34 23 45 0F 02 F5 47 76 5C C7 17 09 39 94 62 31 69 13 0A F1 0D BC 00 5C 57 E7 07 B3 54 F3 1F 75 02 98 42 E6 6D CD 00 D5 41 F1 28 B6 6E 0E 7F 3E 70 77 20 21 05 0F 35 B3 11 F1 63 67 6C 63 6E 8C 0B 28 2B BB 05 B9 2D C9 22 EC 7F 3F 69 04 4A A7 34 57 64 2F 03 DA 66 71 5D 56 2E 5C 11 1A 4C 99 01 64 3C DD 14 D2 60 07 6D 99 67 01 0C 60 4D B1 7C E4 56 88 08 D7 08 6C 06 95 17 12 76 A4 55 01 73 1E 1F D7 24 71 71 84 3E 1A 1A 99 6C 49 7C E1 52 8E 2C D7 7B FD 5A B8 70 6F 07 44 27 C7 18 6B 1A 65 77 77 4D 2E 0C 75 35 CF 50 E4 22 29 43 FD 55 07 5D 0B 7A 87 7A AA 68 E7 2C EF 5B 8E 24 BA 2E 8C 74 CA 04 E3 42 4E 40 59 54 FF 18 AA 17 08 09 3F 33 50 26 ED 71 D8 72 3C 0E 51 45 42 19 13 33 22 61 1C 6F A8 1C C6 6D 9A 0C 47 5B B3 08 49 23 68 5D 13 7A E9 48 17 1C F1 18 E6 5E 6B 38 DC 46 FA 32 FC 2E D8 25 D0 3C B2 10 59 68 6E 4E 44 60 F3 7C 02 15 72 14 7A 49 C5 31 6C 3E D2 74 BA 75 24 1B 35 35 0A 00 A2 6C 03 37 12 01" RealAddress="01A2832A"/>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Array of byte</VariableType>
+      <ByteLength>1000</ByteLength>
+      <Address>"Stronghold Crusader.exe"+162832A</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
@@ -810,7 +1013,13 @@ GAME_MODE_ID.skirmish   = 0x99  -- skirmish mode
 -----------
 
 function serialized_tile_point_move_north(i,j)
-    return {i-1,j-1}
+    if i &lt; 400/2 then
+        return {i-1,j-1}
+    elseif i == 400/2 then
+        return {i-1, j}
+    else
+        return {i-1,j+1}
+    end
 end
 
 function serialized_tile_point_move_east(i,j)
@@ -818,7 +1027,14 @@ function serialized_tile_point_move_east(i,j)
 end
 
 function serialized_tile_point_move_south(i,j)
-    return {i+1,j+1}
+    if i &gt;= 400/2 then
+        return {i+1,j-1}
+    elseif i == 199 then
+        return {i+1, j}
+    else
+        return {i+1,j+1}
+    end
+
 end
 
 function serialized_tile_point_move_west(i,j)
@@ -854,7 +1070,9 @@ function serialized_tile_point_to_game_tile_index(i,j)
     end
 end
 
-
+function getSection1001Address()
+ return 0x01AE5688
+end
 
 function getSection1037Address()
  local section1037Base = 0x01C471E8
@@ -891,7 +1109,7 @@ end
 
 -- e.g. drawUnitPath(1) to draw the pathing of unit number 1.
 function drawUnitPath(unit_number)
- local mod_addr = getSection1037Address()
+ local mod_addr = getSection1001Address()
  local addr = getUnitAddress(unit_number-1)
  local path_length_offset = 0xFC
  local path_offset = 0xFE
@@ -932,12 +1150,18 @@ function drawUnitPath(unit_number)
 
   serialized_index = serialized_tile_point_to_serialized_tile_index(serialized_point[1], serialized_point[2])
 
-  writeBytes(mod_addr + serialized_index, 0x10)
+  writeBytes(mod_addr + (serialized_index*2), (95 &lt;&lt; 8) | ((1) + (118)))
 
  end
 
 end
 
-
+function newZeroArray(size)
+    local t = {}
+    for i = 1, size do
+        t[i] = 0
+    end
+    return t
+end
 </LuaScript>
 </CheatTable>

@@ -58,6 +58,7 @@ class U3(SimpleSection):
     int0 = DataProperty("I", start=0)
     int1 = DataProperty("I", start=4)
     map_original = DataProperty("I", start=8)
+    map_locked = DataProperty("I", start=8)
     rest = DataProperty("B", start=12, array_size=lambda obj: obj.size - 12)
 
     def is_map_original(self):
@@ -65,6 +66,7 @@ class U3(SimpleSection):
 
     def set_map_original(self, value):
         # TODO: Does not work for missions
+        # Unlocks a map!
         self.map_original = 1 if value else 0
 
     def get_rest(self):

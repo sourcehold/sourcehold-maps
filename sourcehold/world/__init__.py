@@ -55,16 +55,41 @@ class TileLocationTranslator(object):
 
             # TODO: test these
             def move_north(self):
-                return SerializedTilePoint(self.i - 1, self.j - 1)
+                if self.i < size//2:
+
+                    return SerializedTilePoint(self.i - 1, self.j - 1)
+                elif self.i == size//2:
+                    return SerializedTilePoint(self.i-1, self.j)
+                else:
+                    return SerializedTilePoint(self.i-1, self.j + 1)
 
             def move_east(self):
                 return SerializedTilePoint(self.i, self.j + 1)
 
             def move_south(self):
-                return SerializedTilePoint(self.i + 1, self.j + 1)
+                if self.i >= size//2:
+                    return SerializedTilePoint(self.i+1, self.j-1)
+                elif self.i == (size//2) - 1:
+                    return SerializedTilePoint(self.i+1, self.j)
+                else:
+                    return SerializedTilePoint(self.i + 1, self.j + 1)
 
             def move_west(self):
                 return SerializedTilePoint(self.i, self.j - 1)
+
+            def get_points_for_diamond(self, width, height):
+                points = []
+
+                left_most = self
+                for j in range(height):
+                    moving = left_most
+                    for i in range(width):
+                        points.append(moving)
+                        moving = moving.move_east()
+                    left_most = left_most.move_south()
+
+                return points
+
 
         class SerializedTileIndex(Point):
 
@@ -77,10 +102,14 @@ class TileLocationTranslator(object):
                 else:
                     i = math.floor(size - (0.5 * ((math.sqrt((4 * ((2 * ((size / 2) * ((size / 2) + 1))) - self.index)) + 1)) - 1)))
 
-                index = SerializedTilePoint(i, 0).to_tile_index().index
+                index = SerializedTilePoint(i, 0).to_serialized_tile_index().index
                 j = self.index - index
 
                 return SerializedTilePoint(i, j)
+
+            def get_indices_for_diamond(self, width, height):
+                return [v.to_serialized_tile_index() for v in self.to_serialized_tile_point().get_points_for_diamond(width, height)]
+
 
         class AdjustedSerializedTilePoint(Point):
 
@@ -89,6 +118,10 @@ class TileLocationTranslator(object):
 
             def to_serialized_tile_point(self):
                 return SerializedTilePoint(i=self.i, j = self.j - (abs((199 if self.i < 200 else 200)-self.i)))
+
+            def get_adjusted_points_for_diamond(self, width, height):
+                return [v.to_adjusted_serialized_tile_point() for v in self.to_serialized_tile_point().get_points_for_diamond(width, height)]
+
 
         class GameTileIndex(Point):
 
