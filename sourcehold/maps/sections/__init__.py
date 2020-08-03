@@ -386,25 +386,27 @@ class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
         return self.set_data(data)
 
     def pack(self, force=False):
-        ArrayMapStructure.pack(self, force)
-        CompressedMapSection.pack(self, force)
+        if force or self._dirty:
+            ArrayMapStructure.pack(self, force)
+            CompressedMapSection.pack(self, force)
 
     def unpack(self, force=False):
-        CompressedMapSection.unpack(self, force)
-        ArrayMapStructure.unpack(self, force)
+        if force or self._dirty:
+            CompressedMapSection.unpack(self, force)
+            ArrayMapStructure.unpack(self, force)
 
 
 from sourcehold.maps.sections.objects import Building, Unit
 
-
-class Section1013(ArrayMapCompressedSection):
-    _TYPE_ = Building
-    _LENGTH_ = 2000
-
-
-class Section1015(ArrayMapCompressedSection):
-    _TYPE_ = Unit
-    _LENGTH_ = 2500
+#
+# class Section1013(ArrayMapCompressedSection):
+#     _TYPE_ = Building
+#     _LENGTH_ = 2000
+#
+#
+# class Section1015(ArrayMapCompressedSection):
+#     _TYPE_ = Unit
+#     _LENGTH_ = 2500
 
 
 class Section1073(KeyValueMapSection):
@@ -640,6 +642,11 @@ class Section1012(TileCompressedMapSection):
 
 
 
+class Section1017(KeyValueMapSection):
+    KEY = "SECTION1017"
+    _TYPE_ = "I"
+    _CLASS_ = int
+
 
 
 class Section1020(TileCompressedMapSection):
@@ -700,6 +707,24 @@ class Section1045(TileCompressedMapSection):
 class Section1049(TileCompressedMapSection):
     _TYPE_ = "B"
     _CLASS_ = int
+
+
+class Section1089(CompressedMapSection):
+
+    def get_string(self):
+        v = self.get_data().decode('ascii')
+        i = v.index('\x00')
+        return v[:i]
+
+    def set_string(self, s):
+        v = s.encode('ascii')
+        remaining = 128 - len(v)
+        if remaining < 0:
+            raise Exception(f"string should be max 128 bytes in size, is {len(v)}")
+
+        self.set_data(v + b'\x00' * remaining)
+
+
 
 
 class Section1103(TileCompressedMapSection):

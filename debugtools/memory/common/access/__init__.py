@@ -9,6 +9,10 @@ def read_all_mem(p):
     return p.read_bytes(p.process_base.lpBaseOfDll, 34148352)
 
 
+def load_cheat_table(path=(pathlib.Path() / "cheatengine" / "shc_data.CT")):
+    return ET.parse(str(path))
+
+
 def load_address_list_from_cheat_table(path=(pathlib.Path() / "cheatengine" / "shc_data.CT"), offset=0):
     #data = path.read_bytes()
 
@@ -16,12 +20,14 @@ def load_address_list_from_cheat_table(path=(pathlib.Path() / "cheatengine" / "s
 
     root = ET.parse(str(path))
 
-    entries = root.findall(".//CheatEntry")
+    imported = [entry for entry in root.findall(".//CheatEntry") if "imported" in entry.find(".//Description").text][0]
+
+    entries = imported.findall(".//CheatEntry")
     for entry in entries:
-        description = entry.find('./Description').text
+        description = entry.find('./Description').text.replace('"', '')
         address = entry.find('./Address').text
-        print(description)
-        if not description.startswith('"section'):
+
+        if not description[:4].isalnum():
             continue
 
         if "Stronghold Crusader.exe" in address:

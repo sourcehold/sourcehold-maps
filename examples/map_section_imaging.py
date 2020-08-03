@@ -2,6 +2,8 @@ from PIL import Image, ImageDraw
 
 import os, sys
 
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
@@ -39,9 +41,9 @@ def build_palette(data):
     return (mapping, pal)
 
 
-imageable_sections = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '1012', '1020',
-                      '1021', '1026', '1028', '1029', '1030', '1033', '1036', '1037', '1043', '1045', '1049', '1103',
-                      '1104', '1105', '1118']
+# imageable_sections = ['1001', '1002', '1003', '1004', '1005', '1006', '1007', '1008', '1009', '1010', '1012', '1020',
+#                       '1021', '1026', '1028', '1029', '1030', '1033', '1036', '1037', '1043', '1045', '1049', '1103',
+#                       '1104', '1105', '1118']
 # imageable_sections.remove("1105")
 
 #TODO: 1001, 1002, and 1003 have a header at the start, and another header for each row, the others have only one header. Maybe because data is not there (empty map). Come back to this later. Test with a save game?
@@ -73,6 +75,8 @@ def dump_spec(data):
 
 tw, th = (32, 16)
 
+from sourcehold.maps.sections import TileSystem
+
 
 def export_images(unpacked_map_folder, destination):
     if not os.path.exists(destination):
@@ -83,11 +87,38 @@ def export_images(unpacked_map_folder, destination):
             continue
         print("Imaging section {}".format(section))
         s = size_mapping[size]
-        d = cut_strict(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
-        im = make_image_of_data(d, system=TiledDiamondSystem(rows=len(d), tilewidth=32, tileheight=16))
+        #d = cut_strict(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
+        #d = TileSystem().from_bytes(read_file("{}/sections/{}".format(unpacked_map_folder, section), fmt=s)).get_tiles()
+        #im = make_image_of_data(d, system=TiledDiamondSystem(rows=len(d), tilewidth=32, tileheight=16))
+        im = TileSystem().from_bytes(read_file("{}/sections/{}".format(unpacked_map_folder, section), fmt=s)).create_image()
         im.save("{}/{}.png".format(destination, section))
 
-        write_to_file("{}/{}.spec".format(destination, section), dump_spec(d))
+        # write_to_file("{}/{}.spec".format(destination, section), dump_spec(d))
+
+
+def export_images_from_map(map, destination):
+
+    if not os.path.exists(destination):
+        os.makedirs(destination)
+
+    for i, index in enumerate(map.directory.section_indices):
+        if index == 0:
+            continue
+
+        if map.directory.section_uncompressed_lengths[i] == 80400 * 9:  # skip 1105
+            continue
+
+        if map.directory.section_uncompressed_lengths[i] % 80400 != 0:
+            continue
+
+        print("Imaging section {}".format(index))
+        # d = cut_strict(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
+        # d = TileSystem().from_bytes(read_file("{}/sections/{}".format(unpacked_map_folder, section), fmt=s)).get_tiles()
+        # im = make_image_of_data(d, system=TiledDiamondSystem(rows=len(d), tilewidth=32, tileheight=16))
+        im = map.directory[index].create_image()
+        im.save("{}/{}.png".format(destination, index))
+        #
+        # write_to_file("{}/{}.spec".format(destination, index), dump_spec(d))
 
 
 from sourcehold import palette
@@ -107,7 +138,12 @@ parser.add_argument("dst", help="destination folder for images", nargs=1)
 
 import sys
 
+from sourcehold import load_map
+
 if __name__ == "__main__":
     args = parser.parse_args(sys.argv[1:])
 
-    export_images(args.src[0], args.dst[0])
+    if args.src[0].endswith(".map") or args.src[0].endswith(".sav"):
+        export_images_from_map(load_map(args.src[0]), args.dst[0])
+    else:
+        export_images(args.src[0], args.dst[0])

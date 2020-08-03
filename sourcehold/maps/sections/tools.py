@@ -532,7 +532,7 @@ class DiamondSystem(object):
 
 class TiledDiamondSystem(DiamondSystem):
 
-    def __init__(self, tilewidth=32, tileheight=16, rows=400, xoffset=15, yoffset=0):
+    def __init__(self, tilewidth=32, tileheight=16, rows=400, xoffset=16, yoffset=16):
         self.tilewidth = tilewidth
         self.tileheight = tileheight
         self.rows = rows
@@ -564,8 +564,8 @@ def build_palette(data):
 
 
 def make_image_of_data(dt, system: TiledDiamondSystem = TiledDiamondSystem()) -> Image.Image:
-    width = int(system.rows * system.tilewidth * 0.5)
-    height = int(system.rows * system.tileheight * 0.5)
+    width = int(system.rows * system.tilewidth * 0.5) + 32
+    height = int(system.rows * system.tileheight * 0.5) + 32
     im = Image.new('RGBA', (width, height))
     draw = ImageDraw.Draw(im)
     mapping, pal = build_palette(dt)

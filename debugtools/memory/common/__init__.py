@@ -4,24 +4,22 @@ def read_all_mem(p):
 
 
 def memory_find(data, memdump):
-
-    try:
-        return [memdump.index(data)]
-    except:
+    i = memdump.find(data)
+    if i == -1:
         return []
+    return [i]
 
 
 def memory_findall(data, memdump):
 
     occurences = []
     i = 0
-    while True:
-        try:
-            i = memdump.index(data, i)
-            occurences.append(i)
-            i += 1
-        except:
-            break
+
+    i = memdump.find(data, i)
+
+    while i != -1:
+        occurences.append(i)
+        i = memdump.find(data, i + 1)
 
     return occurences
 
