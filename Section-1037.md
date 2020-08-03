@@ -1,3 +1,4 @@
+
 Terrain data in tile map format: oasis (all types), earth, earth and stones, sand?
 
 |value|type|
@@ -13,7 +14,9 @@ Terrain data in tile map format: oasis (all types), earth, earth and stones, san
 |0x80|thick scrub|
 
 It is a bit flag, because:
+
 |value|type|
+|---|---|
 |0x03|earth & stones|
 |0x04| earth or sand? (changes to earth on update)|
 |0x08| earth or sand? (changes to earth on update)|
@@ -21,3 +24,10 @@ It is a bit flag, because:
 |0x50|oasis grass|
 |0x60|driven sand|
 |0x70|oasis grass|
+
+
+When wiped, grass is gone and farms cannot be placed anymore. Everything is one texture.
+
+## Example image of this section
+See [this](https://github.com/sourcehold/sourcehold-maps/tree/master/resources/example_section_images/1037.png)
+which is based on [this map](https://github.com/sourcehold/sourcehold-maps/tree/master/resources/example_section_images/example.sav)

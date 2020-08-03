@@ -1,5 +1,6 @@
 ## Basic section information
-Every section has a four digit key identifier in the 1000-1126 range. Not every number in this range is used.
+Every section has a four digit key identifier in the 1000-1136 range. Not every number in this range is used.
+Numbers >= 1100 seem applicable to Crusader only.
 
 Every section is fixed in size, even for different map sizes.
 
@@ -15,7 +16,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | Index | Size | Type | Interpretation |
 | ------------- | ------------- | --- | --- |
 | 1001 | 160800 | Tile data (short) | Contains many objects, but not units. Seems to be a cache for drawing the screen |
-| 1002 | 160800 | Tile data (short) | Contains terrain height data (as well as section 1005) |
+| 1002 | 160800 | Tile data (short) | Contains terrain data: keeps, stockpile, boulders, iron  |
 | 1003 | 321600 | Tile data (int) | Contains information about buildings, non-buildable terrain types (water, rocks, hills) |
 | 1004 | 160800 | Tile data (short) | Trees and rocks |
 | 1005 | 80400  | Tile data (byte) | Contains height data, including stairs |
