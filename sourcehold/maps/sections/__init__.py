@@ -39,6 +39,8 @@ def bytes_to_tiles(x: Buffer, rows = 401, fmt = "B"):
     return data
 
 
+from bitstring import BitArray
+
 
 class TileSystem(object):
 
@@ -173,12 +175,15 @@ class TileStructure(object):
         raise NotImplementedError()
 
     def get_tiles(self):
-        d = self._get_data()
-        dcut = cut(d, self._TYPE_, 198)
-        for i in range(len(dcut)):
-            for j in range(len(dcut[i])):
-                dcut[i][j] = self._CLASS_(dcut[i][j])
-        return dcut
+        return TileSystem().from_bytes(self._get_data(), self._TYPE_)
+
+        ## TODO: validate the above to be the same as this:
+        # d = self._get_data()
+        # dcut = cut(d, self._TYPE_, 198)
+        # for i in range(len(dcut)):
+        #     for j in range(len(dcut[i])):
+        #         dcut[i][j] = self._CLASS_(dcut[i][j])
+        # return dcut
 
     def get_tiles_flattened(self):
         return [a for b in self.get_tiles() for a in b]
@@ -737,9 +742,21 @@ class Section1104(TileCompressedMapSection):
     _CLASS_ = int
 
 
-class Section1105(TileCompressedMapSection):
-    _TYPE_ = "9B"
-    _CLASS_ = list
+class TileMap(TileMapSection):
+    _TYPE_ = "B"
+    _CLASS_ = int
+
+    def from_buffer(self, buf, **kwargs):
+        return super().from_buffer(buf, length=80400)
+
+    @classmethod
+    def size_of(cls):
+        return 80400
+
+
+class Section1105(ArrayMapCompressedSection):
+    _TYPE_ = TileMap
+    _LENGTH_ = 9
 
 
 class Section1118(TileCompressedMapSection):

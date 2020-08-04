@@ -57,6 +57,14 @@ imageable_sections = {'1001': 160800, '1002': 160800, '1003': 321600, '1004': 16
 
 size_mapping = {160800: "H", 80400: "B", 321600: "I", 723600: "9B"}
 
+
+def unpack_big_integer(data, fmt="uintle:72"):
+    from bitstring import BitStream
+    return BitStream(bytes=data).unpack(fmt)
+
+
+
+
 import os
 
 
@@ -106,7 +114,7 @@ def export_images_from_map(map, destination):
             continue
 
         if map.directory.section_uncompressed_lengths[i] == 80400 * 9:  # skip 1105
-            continue
+            pass
 
         if map.directory.section_uncompressed_lengths[i] % 80400 != 0:
             continue
