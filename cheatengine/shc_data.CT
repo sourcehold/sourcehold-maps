@@ -618,9 +618,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>113</ID>
-          <Description>"1048?"</Description>
+          <Description>"1048"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+19d</Address>
+          <Address>"Stronghold Crusader.exe"+1be7d78</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>114</ID>
@@ -636,9 +636,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>116</ID>
-          <Description>"1053?"</Description>
+          <Description>"1053"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+11</Address>
+          <Address>"Stronghold Crusader.exe"+1be5b2c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>117</ID>
@@ -672,9 +672,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>122</ID>
-          <Description>"1061?"</Description>
+          <Description>"1061"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+18</Address>
+          <Address>"Stronghold Crusader.exe"+12539b0</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>123</ID>
@@ -690,9 +690,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>125</ID>
-          <Description>"1064?"</Description>
+          <Description>"1064"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+6b917d</Address>
+          <Address>"Stronghold Crusader.exe"+125f028</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>126</ID>
@@ -852,9 +852,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>152</ID>
-          <Description>"1117?"</Description>
+          <Description>"1117"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+4</Address>
+          <Address>"Stronghold Crusader.exe"+1624a4c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>153</ID>
@@ -864,9 +864,9 @@
         </CheatEntry>
         <CheatEntry>
           <ID>154</ID>
-          <Description>"1120?"</Description>
+          <Description>"1120"</Description>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+11</Address>
+          <Address>"Stronghold Crusader.exe"+1be9ca8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>155</ID>
@@ -935,6 +935,24 @@
           <Address>"Stronghold Crusader.exe"+6b917d</Address>
         </CheatEntry>
         <CheatEntry>
+          <ID>166</ID>
+          <Description>"1136?"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>"Stronghold Crusader.exe"+3</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>172</ID>
+          <Description>"1044_option_a"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"Stronghold Crusader.exe"+739624</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>173</ID>
+          <Description>"1044_option_b"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"Stronghold Crusader.exe"+1be7aa4</Address>
+        </CheatEntry>
+        <CheatEntry>
           <ID>168</ID>
           <Description>"1046_option_a"</Description>
           <VariableType>Byte</VariableType>
@@ -957,12 +975,6 @@
           <Description>"1117_option_b"</Description>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1624a4c</Address>
-        </CheatEntry>
-        <CheatEntry>
-          <ID>166</ID>
-          <Description>"1136?"</Description>
-          <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+3</Address>
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
@@ -1200,12 +1212,12 @@ BUILDING_COST_ID.stables          = 35
 BUILDING_COST_ID.chapel           = 36
 BUILDING_COST_ID.church           = 37
 BUILDING_COST_ID.cathedral        = 38
--- STRUCT_UNUSED
--- STRUCT_KEEP_ONE
--- STRUCT_KEEP_TWO
--- STRUCT_KEEP_THREE
--- STRUCT_KEEP_FOUR
--- STRUCT_KEEP_FIVE
+-- STRUCT_UNUSED: ?
+-- STRUCT_KEEP_ONE: manor house
+-- STRUCT_KEEP_TWO: stone keep
+-- STRUCT_KEEP_THREE: stronghold
+-- STRUCT_KEEP_FOUR: ?
+-- STRUCT_KEEP_FIVE: ?
 BUILDING_COST_ID.large_gatehouse  = 45
 BUILDING_COST_ID.small_gatehouse  = 46
 -- -- STRUCT_MAIN_WOOD

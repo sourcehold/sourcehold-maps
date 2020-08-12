@@ -17,7 +17,7 @@ def draw_diamond_systematically(start=SerializedTilePoint(100, 8),width=64*3, he
     for i, index in enumerate(indices):
         x = i % width
         y = i // width
-        process.write_section("section1001", offset=(int(index) * fmt_size), data=struct.pack(fmt, ((((y+y_value_offset) << 8) | (x + x_value_offset))) % (2**(8*fmt_size))))
+        process.write_section("1001", offset=(int(index) * fmt_size), data=struct.pack(fmt, ((((y+y_value_offset) << 8) | (x + x_value_offset))) % (2**(8*fmt_size))))
         # pymem.memory.write_bytes(process.process_handle, address_list['section1001'] + (int(index) * fmt_size),
         #                          struct.pack(fmt, ((((y+y_value_offset) << 8) | (x + x_value_offset))) % (2**(8*fmt_size))), fmt_size)
 
@@ -47,3 +47,7 @@ def draw_system_of_diamonds(rows, cols, point = SerializedTilePoint(100, 8), dia
         i_point = i_point.move_south()
 
     return i_point
+
+draw_system_of_diamonds(rows=16, cols=16, x_offset=8*16*2)
+
+draw_system_of_diamonds(rows=1, cols=40, y_offset=11*8, x_offset=1, point=SerializedTilePoint(200, 8))

@@ -38,6 +38,13 @@ def load_address_list_from_cheat_table(path=(pathlib.Path() / "cheatengine" / "s
 
     return address_list
 
+from debugtools.memory.common import MemorySection
+from debugtools.memory.common import section_lengths
+
+
+def convert_address_list_to_memory_sections(address_list):
+    return [MemorySection(key, addr, section_lengths[key]) for key, addr in address_list.items() if len(key) == 4 and key.isnumeric()]
+
 
 class AccessContext(object):
 

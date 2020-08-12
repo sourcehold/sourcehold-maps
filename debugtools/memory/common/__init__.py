@@ -147,6 +147,18 @@ section_lengths = {
     "1136": 1
 }
 
+from dataclasses import dataclass
+
+@dataclass
+class MemorySection(object):
+    name: str
+    address: int
+    size: int
+
+    def __repr__(self):
+        return f"MemorySection<{self.name}@{self.address}>"
+
+
 # memory_complete = process.read_bytes(process.process_base.lpBaseOfDll, 34148352)
 
 # test
