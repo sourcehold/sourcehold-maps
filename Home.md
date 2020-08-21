@@ -11,7 +11,7 @@ Welcome to the sourcehold-maps wiki!
  - [X] Manipulate unit location
  - [X] Manipulate unit path
  - [ ] Manipulate unit checkpoints
- - [ ] Manipulate unit health
+ - [X] Manipulate unit health
  - [ ] Manipulate unit owner
  - [ ] Manipulate unit task
  - [ ] Manipulate unit destination
