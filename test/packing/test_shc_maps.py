@@ -13,7 +13,7 @@ class TestMapStructure(unittest.TestCase):
         # compression.COMPRESSION = compression.BlastDecompression()
 
         for file in files:
-            print("reading file: {}".format(file))
+
             with open(file, 'rb') as f:
                 data = f.read()
 

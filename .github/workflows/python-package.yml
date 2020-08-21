@@ -37,17 +37,15 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.1
     - name: Enable Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1.3.0
-    - name: compile compression lib
+    - name: Compile compression library
       shell: cmd
       run: |
         cd bin\\src
         compile.bat
         mv compressionlib-nocb.dll ..\\.
-    - name: Test with pytest
+    - name: Run tests
       shell: bash
       run: |
         python -m unittest discover .
