@@ -17,7 +17,6 @@ Welcome to the sourcehold-maps wiki!
  - [ ] Manipulate unit destination
  - [ ] Manipulate unit grouping
  - [ ] Manipulate items carried by worker
- - [ ] Manipulate unit health
   
 ## Buildings
  - [x] Manipulate building type
