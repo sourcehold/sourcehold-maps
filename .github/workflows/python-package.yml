@@ -40,11 +40,12 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.1
     - name: compile compression lib
-      shell: bash
+      shell: cmd
       run: |
-        cd bin/src
+        set PATH=%PATH%;"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/../BuildTools/VC/"
+        cd bin\\src
         ./compile.bat
-        mv compressionlib-nocb.dll ../.
+        mv compressionlib-nocb.dll ..\\.
     - name: Test with pytest
       shell: bash
       run: |
