@@ -41,8 +41,8 @@ jobs:
       shell: bash
       run: |
         cd bin/src
-        compile.bat
-        move compressionlib-nocb.dll ../.
+        ./compile.bat
+        mv compressionlib-nocb.dll ../.
     - name: Test with pytest
       shell: bash
       run: |
