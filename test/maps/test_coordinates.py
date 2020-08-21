@@ -10,7 +10,8 @@ import random
 class TestCoordinates(unittest.TestCase):
 
     def test_tile_index_translator(self):
-        m = load_map(expand_var_path("shcusermap~/xlcr.map"))
+
+        m = load_map(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "resources", "xlcr.map"))
 
         ts = m.directory.sections[0].get_system()
 
