@@ -39,12 +39,13 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.1
+    - name: Enable Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1.3.0
     - name: compile compression lib
       shell: cmd
       run: |
-        set PATH=%PATH%;"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/../BuildTools/VC/"
         cd bin\\src
-        ./compile.bat
+        compile.bat
         mv compressionlib-nocb.dll ..\\.
     - name: Test with pytest
       shell: bash
