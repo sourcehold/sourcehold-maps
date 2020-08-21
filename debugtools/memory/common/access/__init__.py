@@ -53,6 +53,7 @@ class AccessContext(object):
         self.process = pymem.Pymem(process_name)
         self.base = self.process.process_base.lpBaseOfDll
         self.address_list = load_address_list_from_cheat_table(self.cheat_table, offset=self.base)
+        self.memory_sections = {m.name: m for m in convert_address_list_to_memory_sections(self.address_list)}
         self.memory_cache = None
 
     def read_all_memory(self):
@@ -60,23 +61,23 @@ class AccessContext(object):
 
         return read_all_mem(self.process)
 
-    def read_section(self, section, size=None):
-        if size is None:
-            if section in section_lengths:
-                size = section_lengths[section]
-            else:
-                raise Exception(f"Don't know how many bytes to read for section: {section}")
+    def read_section(self, section, offset=0):
 
-        if section not in self.address_list:
-            raise Exception(f"Don't know where to start reading for section: {section}")
+        if section not in self.memory_sections:
+            raise Exception(f"Don't know how to read section: {section}")
 
-        return self.read_bytes(self.address_list[section], size)
+        return self.read_bytes(self.memory_sections[section].address + offset, self.memory_sections[section].size - offset)
 
-    def write_section(self, section, offset, data):
-        if section not in self.address_list:
-            raise Exception(f"Don't know where to start writing for section: {section}")
+    def write_section(self, section, data, offset=0, recycle=False):
+        if section not in self.memory_sections:
+            raise Exception(f"Don't know how to write to section: {section}")
 
-        return self.write_bytes(self.address_list[section] + offset, data)
+        if recycle:
+            while len(data) < self.memory_sections[section].size:
+                data += data
+            data = data[:self.memory_sections[section].size]
+
+        return self.write_bytes(self.memory_sections[section].address + offset, data)
 
     def read_bytes(self, addr, size):
         return pymem.memory.read_bytes(self.process.process_handle, addr, size)

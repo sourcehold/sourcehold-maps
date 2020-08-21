@@ -164,18 +164,68 @@ class TileSystem(object):
         return data.getvalue()
 
 
+from sourcehold.world import TileLocationTranslator
+world = TileLocationTranslator()
+
+
 class TileStructure(object):
     _TYPE_ = 'B'
     _CLASS_ = int
 
-    def _get_data(self):
+    def __getitem__(self, item):
+        if type(item) == tuple:
+            return self.__getitem__(world.SerializedTilePoint(i=item[0], j=item[1]))
+
+        if type(item) == world.SerializedTilePoint:
+            return self.__getitem__(item.to_serialized_tile_index().index)
+
+        if type(item) == int:
+            size = struct.calcsize(self._TYPE_)
+            return struct.unpack(self._TYPE_, self.get_data()[(item * size):(
+                        (item + 1) * size)])[0]
+
+        if type(item) == slice:
+            size = struct.calcsize(self._TYPE_)
+            indices = list(range(*item.indices()))
+            return [struct.unpack(self._TYPE_, self.get_data()[(index * size):(
+                    (index + 1) * size)])[0] for index in indices]
+
+        raise NotImplementedError(f"getitem not implemented for type: {type(item)}")
+
+    def __setitem__(self, key, value):
+        if type(key) == tuple:
+            return self.__setitem__(world.SerializedTilePoint(i=key[0], j=key[1]), value)
+
+        if type(key) == world.SerializedTilePoint:
+            return self.__setitem__(key.to_serialized_tile_index().index, value)
+
+        if type(key) == int:
+            size = struct.calcsize(self._TYPE_)
+            obj = struct.pack(self._TYPE_, value)
+            data = self.get_data()
+            data[(key * size):((key + 1) * size)] = obj
+            return self.set_data(data)
+
+        if type(key) == slice:
+            size = struct.calcsize(self._TYPE_)
+            indices = list(range(*key.indices()))
+            objs = [struct.pack(self._TYPE_, v) for v in value]
+            assert len(objs) == len(indices)
+            data = self.get_data()
+            for i, index in enumerate(indices):
+                data[(index * size):((index + 1) * size)] = objs[i]
+            return self.set_data(data)
+
+        raise NotImplementedError(f"getitem not implemented for type: {type(key)}")
+
+    def get_data(self):
         raise NotImplementedError()
 
-    def _set_data(self, data):
+    def set_data(self, data):
         raise NotImplementedError()
 
     def get_tiles(self):
-        return TileSystem().from_bytes(self._get_data(), self._TYPE_)
+        return TileSystem().from_bytes(self.get_data(), self._TYPE_)
 
         ## TODO: validate the above to be the same as this:
         # d = self._get_data()
@@ -192,7 +242,7 @@ class TileStructure(object):
         return self.get_system().create_image()
 
     def get_system(self):
-        return TileSystem().from_bytes(self._get_data(), self._TYPE_)
+        return TileSystem().from_bytes(self.get_data(), self._TYPE_)
 
     def compare_tiles(self, other):
         t0 = self.get_tiles()
@@ -217,22 +267,12 @@ class TileStructure(object):
                 yield t0[i][j] - t1[i][j]
 
 
-class TileMapSection(TileStructure, MapSection):
-
-    def _get_data(self):
-        return self.get_data()
-
-    def _set_data(self, data):
-        return self.set_data(data)
+class TileMapSection(MapSection, TileStructure):
+    pass
 
 
-class TileCompressedMapSection(TileStructure, CompressedMapSection):
-
-    def _get_data(self):
-        return self.get_data()
-
-    def _set_data(self, data):
-        return self.set_data(data)
+class TileCompressedMapSection(CompressedMapSection, TileStructure):
+    pass
 
 
 class KeyValueStructure(object):
@@ -431,7 +471,9 @@ class Section1073(KeyValueMapSection):
         'hops_farm': 50, 'dairy_farm': 51, 'granary': 52, 'mill': 53, 'bakery': 54,
         'brewery': 55, 'inn': 56, 'woodcutter': 57, 'hovel': 58, 'apothecary': 59,
         'chapel': 60, 'church': 61, 'cathedral': 62, 'good_things': 63, 'bad_things': 64,
-        'fire_ballista': 65, '': -1, '': -1, '': -1, '': -1,
+        'fire_ballista': 65,
+        # These just seem empty and unused!
+        '': -1, '': -1, '': -1, '': -1,
         '': -1, '': -1, '': -1, '': -1, '': -1,
         '': -1, '': -1, '': -1, '': -1, '': -1,
         '': -1, '': -1, '': -1, '': -1, '': -1,

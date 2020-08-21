@@ -272,12 +272,14 @@ class Structure(object):
         fields = {}
         queue = [cls]
         tree = [cls]
-        while len(queue) > 0:
-            cls = queue.pop()
-            tree.insert(0, cls)
-            # Note: system does not really support multiple inheritance
-            for base in cls.__bases__:
-                queue.append(base)
+        # while len(queue) > 0:
+        #     cls = queue.pop()
+        #     tree.insert(0, cls)
+        #     # TODO: test multiple inheritance
+        #     for base in cls.__mro__:
+        #         queue.append(base)
+
+        tree = list(cls.__mro__)
 
         for cls in tree:
             if not hasattr(cls, "__dict__"):
