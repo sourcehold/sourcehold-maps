@@ -40,9 +40,9 @@ jobs:
     - name: compile compression lib
       shell: bash
       run: |
-        cd bin\src
+        cd bin/src
         compile.bat
-        move compressionlib-nocb.dll ..\.
+        move compressionlib-nocb.dll ../.
     - name: Test with pytest
       shell: bash
       run: |
