@@ -628,10 +628,11 @@ class DataProperty(object):
                         r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
                         return r
                     elif self.array_size.__class__.__name__ == 'function':
-                        si = self.array_size(obj)
-                        s = struct.calcsize(self.type)
-                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
-                        return r
+                        raise NotImplementedError()
+                        # si = self.array_size(obj)
+                        # s = struct.calcsize(self.type)
+                        # r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        # return r
                     else:
                         raise Exception("Invalid size specification {}".format(self.array_size))
             elif self.type.__class__ == type:
@@ -649,14 +650,15 @@ class DataProperty(object):
                         r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
                         return r
                     elif self.array_size.__class__.__name__ == 'function':
-                        si = self.array_size(obj)
-                        s = struct.calcsize(self.type)
-                        r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
-                        return r
+                        raise NotImplementedError()
+                        # si = self.array_size(obj)
+                        # s = struct.calcsize(self.type)
+                        # r = [struct.unpack(self.type, buf.read(s))[0] for i in range(si)]
+                        # return r
                     else:
                         raise Exception("Invalid size specification {}".format(self.array_size))
 
             else:
                 raise Exception("Invalid type specification {}".format(self.type))
         except UnderflowException as e:
-            raise Exception("An exception occurred during the processing of {}:\n\n".format(obj, e))
+            raise Exception("An exception occurred during the processing:\n\n".format(e))
