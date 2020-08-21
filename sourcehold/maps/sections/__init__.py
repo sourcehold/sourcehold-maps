@@ -39,9 +39,6 @@ def bytes_to_tiles(x: Buffer, rows = 401, fmt = "B"):
     return data
 
 
-from bitstring import BitArray
-
-
 class TileSystem(object):
 
     def __init__(self):
