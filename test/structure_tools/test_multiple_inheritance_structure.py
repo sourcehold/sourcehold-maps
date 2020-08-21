@@ -22,7 +22,7 @@ class B(object):
 class C(A, B):
 
     def test(self):
-        super(C).test(self)
+        super().test()
         print("I am C")
 
 

@@ -443,15 +443,16 @@ class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
 
 from sourcehold.maps.sections.objects import Building, Unit
 
-#
-# class Section1013(ArrayMapCompressedSection):
-#     _TYPE_ = Building
-#     _LENGTH_ = 2000
-#
-#
-# class Section1015(ArrayMapCompressedSection):
-#     _TYPE_ = Unit
-#     _LENGTH_ = 2500
+
+# TODO: does not work for SH, only for SHC
+class Section1013(ArrayMapCompressedSection):
+    _TYPE_ = Building
+    _LENGTH_ = 2000
+
+# TODO: does not work for SH, only for SHC
+class Section1015(ArrayMapCompressedSection):
+    _TYPE_ = Unit
+    _LENGTH_ = 2500
 
 
 class Section1073(KeyValueMapSection):
