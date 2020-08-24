@@ -1,6 +1,6 @@
 
 # Variation between maps
-The only difference is Love Thy Neighbour really...
+The only difference is Love Thy Neighbour and Sleeping with the Enemy...
 
 |index|values|
 |---|---|

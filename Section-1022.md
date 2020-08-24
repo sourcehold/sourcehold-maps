@@ -1,15 +1,10 @@
-# Player data
+# Player Data
 
-Gold owned by every player can be found by looking for a little endian integer at index 16128 for player 1
-at 16128+14836 for player 2, etcetera 
+Lots of the player data can be found in this section. There are basically 14.932 bytes of yet unknown data (probably including a player0) and an 8 x 14.836 (8 x 0x39F4) byte array with player data (in the disassembly, the players are enumerated 1-8, not 0-7).
 
-This means that player data is 14836 bytes long, and oddly enough, there is space for 9 players.
-Maybe the 0th player isn't real data, just like for buildings and units.
+This data includes hard data (which is editable with CE) like popularity and gold, some live statistics (which gets periodically updated) like total wood or housing, settings like taxes and potentially more.
 
-If true, than gold of player 1 can be found at offset 1292 of player 1 slot (1292 + 14836*1)
-
-In other words, the data of player 1 (usually human), can be found at 14836*1 until 14836*2
-
+Some settings only get updated if another action takes place. For example if one changes the taxes in this section (0 corresponds to +7 popularity, 1 to +5 and so on), it only gets updated if one opens the keep.
 
 When wiped, everything is 0, but amount of peasants and capacity is restored, but popularity and gold remain 0.
 Popularity also does not seem to increase, despite +3 situation.
