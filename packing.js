@@ -111,26 +111,42 @@ async function store_map_zip(map) {
     return await map.export_to_zip().generateAsync({type: "blob"}).then((blob) => localforage.setItem('zipfile', blob));
 }
 
+function showPackloaderSpinner() {
+    document.getElementById('packloader').style.display = 'block';
+}
+  
+function hidePackloaderSpinner() {
+    document.getElementById('packloader').style.display = 'none';
+}
+
 async function convert_map_to_zip() {
-    var file = document.querySelector('#mapfileselect').files[0];
-    var buffer = await file.arrayBuffer().then((buffer) => new InterpretationBuffer(buffer));
-    var map = new Map().deserialize_from(buffer);
-    map.unpack();
-    var zip = await map.export_to_zip().generateAsync({type: "blob"});
-    download_blob(zip, file.name + ".zip");
+    var files = document.querySelector('#mapfileselect').files;
+    showSpinner();
+    for(var file of files) {
+        var buffer = await file.arrayBuffer().then((buffer) => new InterpretationBuffer(buffer));
+        var map = new Map().deserialize_from(buffer);
+        map.unpack();
+        var zip = await map.export_to_zip().generateAsync({type: "blob"});
+        download_blob(zip, file.name + ".zip");
+    }
+    hideSpinner();
 }
 
 async function convert_zip_to_map() {
-    var file = document.querySelector('#zipfileselect').files[0];
-    var buffer = await file.arrayBuffer();
-    var zip = new JSZip();
-    zip = await zip.loadAsync(buffer);
-
-    var map = await new Map().import_from_zip(zip);
-    map.pack();
+    var files = document.querySelector('#zipfileselect').files;
+    showSpinner();
+    for(var file of files) {
+        var buffer = await file.arrayBuffer();
+        var zip = new JSZip();
+        zip = await zip.loadAsync(buffer);
     
-    var buffer = new InterpretationBuffer();
-    map.serialize_to(buffer);
-    buffer.truncate();
-    download_blob(new Blob([new Uint8Array(buffer.getValue())], {type: "application/octet-stream"}), file.name + ".map");
+        var map = await new Map().import_from_zip(zip);
+        map.pack();
+        
+        var buffer = new InterpretationBuffer();
+        map.serialize_to(buffer);
+        buffer.truncate();
+        download_blob(new Blob([new Uint8Array(buffer.getValue())], {type: "application/octet-stream"}), file.name + ".map");
+    }
+    hideSpinner();
 }

@@ -1,7 +1,16 @@
 
+function showTileExplorerSpinner() {
+    document.getElementById('tileexplorerloader').style.display = 'block';
+}
+  
+function hideTileExplorerSpinner() {
+    document.getElementById('tileexplorerloader').style.display = 'none';
+}
+
 tile_explorer_data = {};
 
 async function cache_tile_section_explorer_map() {
+    showTileExplorerSpinner();
     var file = document.querySelector('#tilesectionexplorerfileselect').files[0];
     var buffer = await file.arrayBuffer().then((buffer) => new InterpretationBuffer(buffer));
     var map = new Map().deserialize_from(buffer);
@@ -10,6 +19,8 @@ async function cache_tile_section_explorer_map() {
     tile_explorer_data.map = map;
 
     populate_section_selection();
+
+    hideTileExplorerSpinner();
 
     return map;
 }
@@ -37,6 +48,8 @@ function populate_section_selection() {
 }
 
 async function load_tilesection(section_index) {
+
+    showTileExplorerSpinner();
 
     var section_index = section_index || document.getElementById("tile_explorer_section_selection").value;
 
@@ -103,7 +116,7 @@ async function load_tilesection(section_index) {
         });
     }
 
-    
+    hideTileExplorerSpinner();
 
 }
 
