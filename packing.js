@@ -121,7 +121,7 @@ function hidePackloaderSpinner() {
 
 async function convert_map_to_zip() {
     var files = document.querySelector('#mapfileselect').files;
-    showSpinner();
+    showPackloaderSpinner();
     for(var file of files) {
         var buffer = await file.arrayBuffer().then((buffer) => new InterpretationBuffer(buffer));
         var map = new Map().deserialize_from(buffer);
@@ -129,12 +129,12 @@ async function convert_map_to_zip() {
         var zip = await map.export_to_zip().generateAsync({type: "blob"});
         download_blob(zip, file.name + ".zip");
     }
-    hideSpinner();
+    hidePackloaderSpinner();
 }
 
 async function convert_zip_to_map() {
     var files = document.querySelector('#zipfileselect').files;
-    showSpinner();
+    showPackloaderSpinner();
     for(var file of files) {
         var buffer = await file.arrayBuffer();
         var zip = new JSZip();
@@ -148,5 +148,5 @@ async function convert_zip_to_map() {
         buffer.truncate();
         download_blob(new Blob([new Uint8Array(buffer.getValue())], {type: "application/octet-stream"}), file.name + ".map");
     }
-    hideSpinner();
+    hidePackloaderSpinner();
 }
