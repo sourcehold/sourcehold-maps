@@ -43,6 +43,7 @@ Welcome to the sourcehold-maps wiki!
  - [ ] Manipulate rotation
 
 # Getting started with debugging
+You are very much invited to file an issue or a pull request to the sourcehold-maps repository explaining what you found.
 
 ## The general layout of a .map file (and .sav file)
 A map file is a zip file with a header and data sections.
@@ -54,14 +55,15 @@ The header consists of:
 
 The data sections are often compressed, and contain, for example:
 - tile data (terrain, terrain height, buildings)
-- unit data (unit locations, health)
+- unit data (unit locations, unit health)
+- current year
 
-However, there are roughly 30 sections (depends on map type), and it is currently unclear what some sections represent.
+However, it is currently unclear what some sections represent.
 
-Click on one of the pages on the right to know more about the .map file format.
+Click on one of the sections in the [overview](Map-sections-overview) to learn about each section.
 
 ## Unpacking a map file
-Due to compression, you should probably unzip a map file first. To "unzip" (and uncompress) a map file, you can use [this](https://sourcehold.github.io/sourcehold-maps) converter.
+Due to compression, you should probably unzip a map file first. To "unzip" (and uncompress) a map file, you can use [this](https://sourcehold.github.io/sourcehold-maps) online converter.
 
 ## How to use the specs
 We use [kaitai](https://kaitai.io) to communicate the file format specification for two reasons:
@@ -76,9 +78,6 @@ To view a kaitai specification and its mapping to data, follow these steps:
 3. drag and drop the .ksy file in the IDE
 4. drag and drop a data file in the IDE
 5. inspect the data file
-
-## Contributing
-You are very much invited to file an issue or a pull request to the sourcehold-maps repository explaining what you found.
 
 ### Debugging tips
 * Zero out (wipe) sections to see what disappears. Re-save the map file and see what data is reintroduced.
