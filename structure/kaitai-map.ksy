@@ -19,6 +19,7 @@ seq:
     type: simple_section
   - id: ud
     type: u4
+    if: u4.size != 0
   - id: directory
     type: directory
   - id: sections
