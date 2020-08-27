@@ -15,10 +15,10 @@ For illustration purposes, the map size below is set to 6 instead of 400.
 ## Serialized representation of tiles
 Given that every tile is a byte, and an array of 24 bytes, then the byte at index 4 (array[4]) will point to the tile (i = 1, j = 2).
 
- ![this](../tree/master/resources/tiles-illustration-serialized-1.png)
+ ![this](../raw/master/resources/tiles-illustration-serialized-1.png)
 
 ## Representation of tiles in the game
 Basically, j is adjusted by the distance of i to the middle of the diamond (i=2 and i=3 in this case).
 Given that every tile is a byte, and an array of 24 bytes, then the byte at index 4 (array[4]) will point to the tile (i = 1, j = 2) and the game tile (i = 1, j = 3).
 
- ![this](../tree/master/resources/tiles-illustration-game-1.png)
+ ![this](../raw/master/resources/tiles-illustration-game-1.png)
