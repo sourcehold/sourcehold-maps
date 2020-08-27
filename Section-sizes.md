@@ -1,6 +1,6 @@
 # Section Sizes
 
-This is a comparison of section sizes of .map files on my PC. This is not an exhausive list!
+This is a comparison of section sizes of a collection of .map files. This is not an exhausive list!
 
  Some observations:
 - some Crusader Extreme sections have two sizes, the smaller one identical to the Crusader size; probably some leftovers from Crusader; similar for Stronghold and Crusader

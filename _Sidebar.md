@@ -6,3 +6,4 @@
   * [Scenario description](Scenario-description)
   * [Unknown header data](Unknown-header-data)
 * [Map sections overview](Map-sections-overview)
+  * [Map sections size overview](Section-sizes)
