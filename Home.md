@@ -14,7 +14,7 @@ Welcome to the sourcehold-maps wiki!
  - [X] Manipulate unit health
  - [ ] Manipulate unit owner
  - [ ] Manipulate unit task
- - [ ] Manipulate unit destination
+ - [X] Manipulate unit destination
  - [ ] Manipulate unit grouping
  - [ ] Manipulate items carried by worker
   
@@ -34,13 +34,12 @@ Welcome to the sourcehold-maps wiki!
 
 ## General map info
  - [ ] Manipulate balanced/unbalanced
- - [ ] Manipulate type (deathmatch, ...)
+ - [ ] Manipulate advantage (deathmatch, ...)
+ - [X] Manipulate locked state (unlock maps for editor)
  
 ## General game experience
- - [ ] Manipulate view box
- - [ ] Manipulate game speed
- - [ ] Manipulate zoom level
- - [ ] Manipulate rotation
+ - [X] [Manipulate view box](Section-1018-1019)
+ - [X] [Manipulate view rotation](Section-1044)
 
 # Getting started with debugging
 You are very much invited to file an issue or a pull request to the sourcehold-maps repository explaining what you found.
