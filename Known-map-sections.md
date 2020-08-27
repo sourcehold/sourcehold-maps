@@ -2,7 +2,7 @@
 Every section has a four digit key identifier in the 1000-1136 range. Not every number in this range is used.
 Numbers >= 1100 seem applicable to Crusader only.
 
-Every section is fixed in size, even for different map sizes. Keep in mind, most data in this wiki currently only reflects Stronghold Crusader maps, there could be differences (for example, in Crusader Extreme, Section 1015 should be larger).
+Every section is fixed in size, even for different map sizes. Keep in mind, most data in this wiki currently only reflects Stronghold Crusader maps, there could be differences (for example, in Crusader Extreme, Section 1015 should be larger). This is not fully true and needs to be updated: there are different sizes, and for .sav files, some sections seem to grow.
 
 So far, there are three general structures for sections:
 - Tile data.
