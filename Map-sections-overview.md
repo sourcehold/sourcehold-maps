@@ -106,7 +106,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | [1102](Section-1102) | Info data (short) | Mercenary unit availability (bool). |
 | [1103](Section-1103) | Tile data (byte)  ||
 | [1104](Section-1104) | Tile data (byte)  ||
-| [1105](Section-1105) | Tile data ???     ||
+| [1105](Section-1105) | Tile data (9*byte)     | Distance to the keep for every player |
 | [1106](Section-1106) |||
 | [1107](Section-1107) |||
 | [1108](Section-1108) |||
