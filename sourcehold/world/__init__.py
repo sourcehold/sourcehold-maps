@@ -50,7 +50,7 @@ class TileLocationTranslator(object):
                 return ScreenTilePoint(x, y)
 
             def to_adjusted_serialized_tile_point(self):
-                return AdjustedSerializedTilePoint(i=self.i, j=self.j + (abs((199 if self.i < 200 else 200)-self.i)))
+                return AdjustedSerializedTilePoint(i=self.i, j=self.j + (abs(((size//2)-1 if self.i < size//2 else size//2)-self.i)))
 
 
             # TODO: test these
