@@ -3,24 +3,16 @@ import subprocess
 import sys
 
 
-def _int_array_to_bytes(array):
-    return b''.join(struct.pack("B", v) for v in array)
-
-
 class AbstractCompressor(object):
 
     def __init__(self):
         pass
 
     def _sanitize(self, data):
-        if data.__class__ == list:
-            if len(data) > 0:
-                if data[0].__class__ == int:
-                    return _int_array_to_bytes(data)
-        elif data.__class__ == bytes:
-            return data
-
-        raise Exception("Unable to sanitize input")
+        try:
+            return bytes(bytearray(data))
+        except Exception as e:
+            raise Exception("Unable to sanitize input of type: " + str(type(data)))
 
     def compress(self, data, level):
         raise NotImplementedError()
@@ -83,5 +75,3 @@ if sys.platform == "win32":
     COMPRESSION = DirectCompression()
 else:
     raise NotImplementedError()
-
-# COMPRESSION = DirectCompression()
