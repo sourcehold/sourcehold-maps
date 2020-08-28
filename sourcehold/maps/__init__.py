@@ -29,21 +29,6 @@ class U1(SimpleSection):
 
     int0 = DataProperty("I", start=0)
     int1 = DataProperty("I", start=4)
-    # @property
-    # def int0(self):
-    #     return struct.unpack("<I", self.data[:4])[0]
-    #
-    # @int0.setter
-    # def int0(self, value):
-    #     self.data = struct.pack("<I", value) + self.data[4:]
-    #
-    # @property
-    # def int1(self):
-    #     return struct.unpack("<I", self.data[4:])[0]
-    #
-    # @int1.setter
-    # def int1(self, value):
-    #     self.data = self.data[:4] + struct.pack("<I", value)
 
 
 class U2(SimpleSection):
@@ -57,20 +42,9 @@ class U3(SimpleSection):
 
     int0 = DataProperty("I", start=0)
     int1 = DataProperty("I", start=4)
-    map_original = DataProperty("I", start=8)
+    # TODO: value is in {0, 1, 2}. What does 2 mean?
     map_locked = DataProperty("I", start=8)
     rest = DataProperty("B", start=12, array_size=lambda obj: obj.size - 12)
-
-    def is_map_original(self):
-        return self.map_original == 1
-
-    def set_map_original(self, value):
-        # TODO: Does not work for missions
-        # Unlocks a map!
-        self.map_original = 1 if value else 0
-
-    def get_rest(self):
-        return self.data[12:]
 
 
 class U4(SimpleSection):
@@ -86,12 +60,6 @@ class U4(SimpleSection):
 
     def set_unbalanced_flag(self, value: bool):
         self.unbalanced = 1 if value else 0
-
-    def pack(self, force=False):
-        self.size = len(self.data)
-
-    def unpack(self, force=False):
-        assert self.size == len(self.data)
 
 
 class CompressedSection(Structure):
