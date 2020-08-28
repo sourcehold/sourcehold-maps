@@ -358,8 +358,8 @@ class Directory(Structure):
             section.unpack(force)
 
     def get_data(self):
-        # TODO: stub
-        raise NotImplementedError()
+        # TODO: more appropriate stub for yield_inequalities
+        return None
 
     def pack(self, force = False):
         for section in self.sections:
@@ -555,7 +555,7 @@ class Map(Structure):
         write_to_file(os.path.join(path, "u2"), self.u2.get_data_as_bytearray())
         write_to_file(os.path.join(path, "u3"), self.u3.get_data_as_bytearray())
         write_to_file(os.path.join(path, "u4"), self.u4.get_data_as_bytearray())
-        write_to_file(os.path.join(path, "ud"), ints_to_byte_array([self.ud]))
+        write_to_file(os.path.join(path, "ud"), bytes(bytearray(self.ud)))
         self.directory.dump_to_folder(os.path.join(path, "sections"))
 
     def load_from_folder(self, path):
