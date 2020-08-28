@@ -359,7 +359,7 @@ class Directory(Structure):
 
     def get_data(self):
         # TODO: stub
-        return self.section_indices
+        raise NotImplementedError()
 
     def pack(self, force = False):
         for section in self.sections:
