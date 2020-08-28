@@ -8,7 +8,7 @@ The goal is to understand the .map file format of Stronghold & Stronghold Crusad
 ## Online map unpacking and exploring
 Visit the [github page](https://sourcehold.github.io/sourcehold-maps/) for this repository to unpack .map and .sav files.
 
-We understand the layout of a map file (e.g., see this header [file](https://github.com/sourcehold/sourcehold-maps/blob/master/sourcehold/maps/map_structure.h)).
+We understand the layout of a map file (e.g., see this C-style header [file](https://github.com/sourcehold/sourcehold-maps/blob/master/structure/map_structure.h)).
 Further details and explanation can be found in the wiki of this repository.
 
 ## Contribute
@@ -21,6 +21,12 @@ Unpack map/sav files to a folder:
 ```console
 python examples/map_file_packing.py --dest out/ "Close Encounters.map"
 ```
+
+### Generate images of map sections
+```console
+python examples/map_section_imaging.py "Close Encounters.map" "CloseEncountersImages"
+```
+
 ### Map preview image
 Extract an image like so:
 ```console
@@ -33,17 +39,19 @@ python examples/map_preview_image.py replace "Close Encounters.map" --replacemen
 ### Modify map properties
 #### Disable buildings
 ```python
-from sourcehold import *
-map = load_map(SHC_FILES.get_path_from_maps('Close Encounters'))
+from sourcehold import load_map, expand_var_path, save_map
+# You can configure your installation folder (where shcmap points to) in /config.json
+map = load_map(expand_var_path('shcmap~/Close Encounters.map'))
 map.directory["building_availability"].granary = False
-save_map(map, SHC_FILES_USER.get_path_from_maps('Close Encounters mod'))
+save_map(map, expand_var_path('shcusermap~/Close Encounters mod.map'))
 ```
 #### Set starting popularity and goods
 ```python
-from sourcehold import *
-map = load_map(SHC_FILES.get_path_from_maps('Close Encounters'))
+from sourcehold import load_map, expand_var_path, save_map
+# You can configure your installation folder (where shcmap points to) in /config.json
+map = load_map(expand_var_path('shcmap~/Close Encounters.map'))
 map.directory['STARTING_GOODS'].wood = 0
-save_map(map, SHC_FILES_USER.get_path_from_maps('Close Encounters mod'))
+save_map(map, expand_var_path('shcusermap~/Close Encounters mod.map'))
 ```
 
 ## Dependencies
