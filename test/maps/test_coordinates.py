@@ -1,5 +1,5 @@
 
-import unittest, os
+import unittest, pathlib
 
 from sourcehold.maps.sections.tools import TileIndexTranslator
 from sourcehold.maps.sections import TileSystem
@@ -11,7 +11,7 @@ class TestCoordinates(unittest.TestCase):
 
     def test_tile_index_translator(self):
 
-        m = load_map(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "resources", "xlcr.map"))
+        m = load_map(pathlib.Path("resources") / "map" / "crusader" / "xlcr.map")
 
         ts = m.directory.sections[0].get_system()
 

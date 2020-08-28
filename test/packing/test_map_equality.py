@@ -7,7 +7,7 @@ class TestEqual(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        with open("resources/MxM_unseen_1.map", 'rb') as f:
+        with open("resources/map/crusader/MxM_unseen_1.map", 'rb') as f:
             cls.raw1 = f.read()
             buf = structure_tools.Buffer(cls.raw1)
 

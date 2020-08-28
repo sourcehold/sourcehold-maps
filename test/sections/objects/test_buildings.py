@@ -1,15 +1,15 @@
 import unittest
+import pathlib
 
 from sourcehold import *
 from sourcehold import structure_tools
 from sourcehold.maps.sections.objects import Building
-import os
 
 
 class TestBuildings(unittest.TestCase):
 
     def test_persistence(self):
-        map_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "resources", "MxM_unseen_1.map")
+        map_file = str(pathlib.Path("resources/map/crusader/MxM_unseen_1.map"))
         with open(map_file, 'rb') as f:
             buf = structure_tools.Buffer(f.read())
 
