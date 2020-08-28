@@ -1,11 +1,10 @@
 from .iotools import Buffer
-from .iotools import read_file
-from .iotools import write_to_file
 from .maps import Map
+import pathlib
 
 
 def load_map(path, strict=True, unpack=True, force=False):
-    buf = Buffer(read_file(path))
+    buf = Buffer(pathlib.Path(path).read_bytes())
     map = Map().from_buffer(buf)
     if strict:
         if buf.remaining() != 0:
@@ -20,7 +19,7 @@ def save_map(map, path, pack=True, force=False):
     if pack:
         map.pack(force)
     map.serialize_to_buffer(buf)
-    write_to_file(path, buf.getvalue())
+    pathlib.Path(path).write_bytes(buf.getvalue())
 
 
 import json
