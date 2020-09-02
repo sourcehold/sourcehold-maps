@@ -1,1 +1,1 @@
-g++ -fPIC *.c* -shared -o compression-nocb.so
+g++ -fPIC *.c* -shared -o compressionlib-nocb.so
