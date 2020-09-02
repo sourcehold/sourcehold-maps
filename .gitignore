@@ -101,6 +101,7 @@ venv.bak/
 /site
 
 # mypy
+.idea/
 .mypy_cache/
 /pkware/StormLib/
 /temp_files/
