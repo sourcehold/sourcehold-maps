@@ -1,7 +1,6 @@
 #include "pklib.h"
 #include <cstddef>
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 #include <cassert>
 
