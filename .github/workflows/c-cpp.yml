@@ -26,7 +26,8 @@ jobs:
     - name: Compile compression library
       run: |
         cd bin/src
-        sudo ./compile.sh
+        chmod +x compile.sh
+        ./compile.sh
         mv compressionlib-nocb.so ../compressionlib-nocb.so
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
