@@ -101,8 +101,11 @@ venv.bak/
 /site
 
 # mypy
-.idea/
+/.idea/
 .mypy_cache/
 /pkware/StormLib/
 /temp_files/
 /file_inspection/maps/
+
+# sourcehold-specific
+config.json
