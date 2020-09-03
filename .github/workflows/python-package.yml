@@ -53,10 +53,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        platform: [x32, x64]
+        platform: [x86, x64]
         python-version: [3.8]
     steps:
     - uses: actions/checkout@v2
+    - name: Download binary artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: compressionlib-nocb-binaries
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
