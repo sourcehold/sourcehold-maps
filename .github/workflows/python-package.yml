@@ -125,6 +125,7 @@ jobs:
 
   test_package:
     needs: build
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
