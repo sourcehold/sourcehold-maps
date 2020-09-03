@@ -123,3 +123,39 @@ jobs:
         path: |
           dist/*
 
+  test_package:
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        platform: [x86, x64]
+        python-version: [3.8]
+        python-platform: [x86, x64]
+        exclude:
+          - platform: x86
+            python-platform: x64
+          - os: ubuntu-latest
+            python-platform: x86
+          - os: ubuntu-latest
+            platform: x86
+          - os: macOS-latest
+            python-platform: x86
+          - os: macOS-latest
+            platform: x86
+    - name: Download package
+      uses: actions/download-artifact@v2
+      with:
+        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-${{ matrix.python-platform }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: ${{ matrix.python-platform }}
+    - name: Pip install module
+      run: |
+        python -m pip install $(ls *.whl)
+      shell: bash
+    - name: Pip test module
+      run: |
+        python -c "import sourcehold"
+      shell: bash
