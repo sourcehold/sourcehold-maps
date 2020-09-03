@@ -19,30 +19,30 @@ jobs:
     - name: Compile compression library
       shell: cmd
       run: |
-        cd bin\\src
+        cd compression
         compile.bat
-        mv compressionlib-nocb.dll ..\\.
+        mv compressionlib-nocb.dll ..\\compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
       if: matrix.os == 'windows-latest'
     - name: Compile compression library
       run: |
-        cd bin/src
+        cd compression
         chmod +x compile.sh
         ./compile.sh
-        mv compressionlib-nocb.so ../compressionlib-nocb.so
+        mv compressionlib-nocb.so ../compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       if: matrix.os == 'windows-latest'
       with:
-        name: compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
+        name: compressionlib-nocb-binaries
         path: |
-          bin/compressionlib-nocb.dll
+          compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       with:
-        name: compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
+        name: compressionlib-nocb-binaries
         path: |
-          bin/compressionlib-nocb.so
+          compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
                     

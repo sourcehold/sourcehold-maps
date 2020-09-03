@@ -71,7 +71,4 @@ class BlastDecompression(AbstractCompressor):
         raise NotImplementedError()
 
 
-if sys.platform == "win32":
-    COMPRESSION = DirectCompression()
-else:
-    raise NotImplementedError()
+COMPRESSION = DirectCompression()

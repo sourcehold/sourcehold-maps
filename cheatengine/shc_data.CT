@@ -563,6 +563,12 @@
           <Address>"Stronghold Crusader.exe"+1ae2998</Address>
         </CheatEntry>
         <CheatEntry>
+          <ID>175</ID>
+          <Description>"1107"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>01866AB4</Address>
+        </CheatEntry>
+        <CheatEntry>
           <ID>102</ID>
           <Description>"1114"</Description>
           <VariableType>Byte</VariableType>
@@ -978,6 +984,13 @@
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
+    <CheatEntry>
+      <ID>174</ID>
+      <Description>"1107_player_1"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>Byte</VariableType>
+      <Address>"Stronghold Crusader.exe"+146D84C</Address>
+    </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
   <Structures StructVersion="2">
@@ -1078,11 +1091,10 @@
         <Element Offset="180" Vartype="2 Bytes" Bytesize="2" Description="unit_attack_stance?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="182" Vartype="2 Bytes" Bytesize="2" RLECount="2" Description="some_kind_of_location_where_to_aim" DisplayMethod="Unsigned Integer"/>
         <Element Offset="186" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="190" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
         <Element Offset="190" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_1?" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="191" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="190" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="192" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_2?" DisplayMethod="Unsigned Integer"/>
-        <Element Offset="193" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+        <Element Offset="192" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
         <Element Offset="194" Vartype="2 Bytes" Bytesize="2" Description="arrow_shoot_param_3?" DisplayMethod="Unsigned Integer"/>
         <Element Offset="196" Vartype="2 Bytes" Bytesize="2" Description="location_j" DisplayMethod="Unsigned Integer"/>
         <Element Offset="198" Vartype="2 Bytes" Bytesize="2" Description="location_i" DisplayMethod="Unsigned Integer"/>

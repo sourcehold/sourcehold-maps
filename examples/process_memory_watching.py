@@ -1,7 +1,7 @@
 
 
-from debugtools.memory.common.access import AccessContext, load_address_list_from_cheat_table, convert_address_list_to_memory_sections
-from debugtools.memory.common.watching import SectionsWatcher
+from sourcehold.debugtools.memory.common.access import AccessContext, load_address_list_from_cheat_table, convert_address_list_to_memory_sections
+from sourcehold.debugtools.memory.common.watching import SectionsWatcher
 
 process = AccessContext()
 memory_sections = convert_address_list_to_memory_sections(process.address_list)

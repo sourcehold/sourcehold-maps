@@ -1,5 +1,5 @@
-from debugtools.memory.common.access import AccessContext
-from debugtools.memory.common import memory_find, memory_findall
+from sourcehold.debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory.common import memory_find, memory_findall
 
 process = AccessContext()
 

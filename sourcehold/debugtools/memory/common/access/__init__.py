@@ -2,7 +2,7 @@ import pymem, pathlib
 import xml.etree.ElementTree as ET
 
 
-from debugtools.memory.common import section_lengths
+from sourcehold.debugtools.memory.common import section_lengths
 
 
 def read_all_mem(p):
@@ -38,8 +38,8 @@ def load_address_list_from_cheat_table(path=(pathlib.Path() / "cheatengine" / "s
 
     return address_list
 
-from debugtools.memory.common import MemorySection
-from debugtools.memory.common import section_lengths
+from sourcehold.debugtools.memory.common import MemorySection
+from sourcehold.debugtools.memory.common import section_lengths
 
 
 def convert_address_list_to_memory_sections(address_list):

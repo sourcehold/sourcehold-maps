@@ -1,5 +1,5 @@
 
-from debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory.common.access import AccessContext
 import pathlib
 
 

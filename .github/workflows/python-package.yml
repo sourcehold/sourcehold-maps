@@ -4,20 +4,57 @@
 name: Python package
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
+  build_binaries:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        platform: [x32, x64]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1.3.0
+        if: matrix.os == 'windows-latest'
+      - name: Compile compression library
+        shell: cmd
+        run: |
+          cd compression
+          compile.bat
+          mv compressionlib-nocb.dll ..\\compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
+        if: matrix.os == 'windows-latest'
+      - name: Compile compression library
+        run: |
+          cd compression
+          chmod +x compile.sh
+          ./compile.sh
+          mv compressionlib-nocb.so ../compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
+        shell: bash
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        if: matrix.os == 'windows-latest'
+        with:
+          name: compressionlib-nocb-binaries
+          path: |
+            compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
+        with:
+          name: compressionlib-nocb-binaries
+          path: |
+            compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
   build:
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        platform: [x32, x64]
         python-version: [3.8]
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -37,16 +74,20 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Enable Developer Command Prompt
-      uses: ilammy/msvc-dev-cmd@v1.3.0
-    - name: Compile compression library
-      shell: cmd
-      run: |
-        cd bin\\src
-        compile.bat
-        mv compressionlib-nocb.dll ..\\.
     - name: Run tests
       shell: bash
       run: |
-        python -m unittest discover .
-        # pytest
+        python setup.py test
+
+    - name: Build package
+      shell: bash
+      run: |
+        python setup.py sdist bdist_wheel
+
+    - name: Archive packages
+      uses: actions/upload-artifact@v2
+      with:
+        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}
+        path: |
+          dist/*
+

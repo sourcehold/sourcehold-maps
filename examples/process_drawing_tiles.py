@@ -1,4 +1,4 @@
-from debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory.common.access import AccessContext
 
 process = AccessContext()
 import struct

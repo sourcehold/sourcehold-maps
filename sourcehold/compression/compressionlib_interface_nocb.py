@@ -1,11 +1,42 @@
 import ctypes
 import platform
 import sys
+import pathlib
 
-if 'windows' in platform.platform().lower():
-    dll = ctypes.CDLL("bin/compressionlib-nocb.dll")
-elif 'linux' in platform.platform().lower():
-    dll = ctypes.CDLL("bin/compressionlib-nocb.so")
+
+def generate_library_name():
+    os = None
+    ext = None
+    if 'windows' in platform.platform().lower():
+        os = 'windows-latest'
+        ext = ".dll"
+    if 'linux' in platform.platform().lower():
+        os = 'ubuntu-latest'
+        ext = '.so'
+    if 'macos' in platform.platform().lower():
+        os = 'macOS-latest'
+        ext = '.so'
+
+    arch = None
+    if '64' in platform.architecture()[0]:
+        arch = 'x64'
+    if '32' in platform.architecture()[0]:
+        arch = 'x32'
+
+    return f"compressionlib-nocb-{os}-{arch}{ext}"
+
+
+def load_library(lib_name):
+    potential_locations = [pathlib.Path(lib_name), pathlib.Path(sys.prefix) / "sourcehold" / lib_name]
+
+    for location in potential_locations:
+        if location.exists():
+            return ctypes.CDLL(str(location.absolute()))
+
+    raise Exception(f"Could not find libarry: {lib_name}")
+
+
+dll = load_library(generate_library_name())
 
 dll.explode_nocb.restype = ctypes.c_uint
 dll.explode_nocb.argtypes = [ctypes.POINTER(ctypes.c_ubyte), ctypes.POINTER(ctypes.c_int),
