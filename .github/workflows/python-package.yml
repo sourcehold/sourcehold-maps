@@ -29,8 +29,6 @@ jobs:
         run: |
           cd compression
           compile.bat
-          mv compressionlib-nocb.dll ..\\compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
-          dir
         shell: cmd
         if: matrix.os == 'windows-latest'
       - name: Compile compression library
@@ -44,7 +42,6 @@ jobs:
       - name: Rename library
         run: |
           mv compression\\compressionlib-nocb.dll compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
-          dir
         shell: cmd
         if: matrix.os == 'windows-latest'
       - name: Archive production artifacts
