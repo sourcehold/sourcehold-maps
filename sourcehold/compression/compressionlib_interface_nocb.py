@@ -21,7 +21,7 @@ def generate_library_name():
     if '64' in platform.architecture()[0]:
         arch = 'x64'
     if '32' in platform.architecture()[0]:
-        arch = 'x32'
+        arch = 'x86'
 
     return f"compressionlib-nocb-{os}-{arch}{ext}"
 
@@ -33,7 +33,7 @@ def load_library(lib_name):
         if location.exists():
             return ctypes.CDLL(str(location.absolute()))
 
-    raise Exception(f"Could not find libarry: {lib_name}")
+    raise Exception(f"Could not find library: {lib_name}")
 
 
 dll = load_library(generate_library_name())
