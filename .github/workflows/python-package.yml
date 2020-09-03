@@ -16,6 +16,8 @@ jobs:
         exclude:
           - os: ubuntu-latest
             platform: x86
+          - os: macOS-latest
+            platform: x86
     steps:
       - uses: actions/checkout@v2
       - name: Enable Developer Command Prompt
@@ -28,6 +30,7 @@ jobs:
           cd compression
           compile.bat
           mv compressionlib-nocb.dll ..\\compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
+          cd ..
         shell: cmd
         if: matrix.os == 'windows-latest'
       - name: Compile compression library
@@ -36,6 +39,7 @@ jobs:
           chmod +x compile.sh
           ./compile.sh
           mv compressionlib-nocb.so ../compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
+          cd ..
         shell: bash
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       - name: Archive production artifacts
@@ -62,11 +66,16 @@ jobs:
         python-version: [3.8]
         python-platform: [x86, x64]
         exclude:
-          - os: ubuntu-latest
-            platform: x86
           - platform: x86
             python-platform: x64
-
+          - os: ubuntu-latest
+            python-platform: x86
+          - os: ubuntu-latest
+            platform: x86
+          - os: macOS-latest
+            python-platform: x86
+          - os: macOS-latest
+            platform: x86
     steps:
     - uses: actions/checkout@v2
     - name: Download binary artifacts
