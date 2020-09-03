@@ -30,7 +30,7 @@ jobs:
           cd compression
           compile.bat
           mv compressionlib-nocb.dll ..\\compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
-          cd ..
+          dir
         shell: cmd
         if: matrix.os == 'windows-latest'
       - name: Compile compression library
@@ -39,7 +39,6 @@ jobs:
           chmod +x compile.sh
           ./compile.sh
           mv compressionlib-nocb.so ../compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
-          dir
         shell: bash
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       - name: Rename library
