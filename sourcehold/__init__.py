@@ -1,6 +1,13 @@
 from .iotools import Buffer
 from .maps import Map
 import pathlib
+import unittest
+import sys
+
+
+def test():
+    test_suite = unittest.TestLoader().discover(str(pathlib.Path(sys.prefix) / "sourcehold" / "tests" / '.'))
+    unittest.TextTestRunner(descriptions=True, verbosity=2).run(test_suite)
 
 
 def load_map(path, strict=True, unpack=True, force=False):

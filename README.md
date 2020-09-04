@@ -19,8 +19,14 @@ If you want to contribute, unpack a map [online](https://sourcehold.github.io/so
 ### Unpacking
 Unpack map/sav files to a folder:
 ```console
-python examples/map_file_packing.py --dest out/ "Close Encounters.map"
+python -m sourcehold --in "mymap.map" "mymap2.map" --unpack
 ```
+### (Re)packing
+Repack map/sav folder to a file:
+```console
+python -m sourcehold --in "mymap/" "mymap2/" --pack
+```
+
 
 ### Generate images of map sections
 ```console
@@ -54,9 +60,10 @@ map.directory['STARTING_GOODS'].wood = 0
 save_map(map, expand_var_path('shcusermap~/Close Encounters mod.map'))
 ```
 
-## Dependencies
-* Python 3.8
-* Python Pillow
-* Compile blast.c to blast .exe, which can be found here https://github.com/madler/zlib/blob/master/contrib/blast/blast.c
+## Installation
+Find the right wheel file for your OS and (python) architecture [here](https://github.com/sourcehold/sourcehold-maps/actions?query=workflow%3A%22Python+package%22) (download the artifacts of the latest succesful build).
+Then install using pip:
+```console
+python -m pip install sourcehold.whl
+```
 
-See the Wiki for further detailed information

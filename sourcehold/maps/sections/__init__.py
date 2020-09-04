@@ -392,6 +392,10 @@ class ArrayMapStructure(object):
         if self._dirty or force:
             buf = Buffer()
 
+            # TODO: what do we do when this section is never unpacked? for now, let's leave things unchanged.
+            if self.items is None:
+                return
+
             for i in range(self._LENGTH_):
                 if i in self.items:
                     self.items[i].serialize_to_buffer(buf)

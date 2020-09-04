@@ -566,18 +566,18 @@ class Map(Structure):
         self.description.set_data(read_file(os.path.join(path, "description")))
 
         self.u1 = U1()
-        self.u1.set_data(bytes_to_int_array(read_file(os.path.join(path, "u1"))))
+        self.u1.set_data([v for v in read_file(os.path.join(path, "u1"))])
 
         self.u2 = U2()
-        self.u2.set_data(bytes_to_int_array(read_file(os.path.join(path, "u2"))))
+        self.u2.set_data([v for v in read_file(os.path.join(path, "u2"))])
 
         self.u3 = U3()
-        self.u3.set_data(bytes_to_int_array(read_file(os.path.join(path, "u3"))))
+        self.u3.set_data([v for v in read_file(os.path.join(path, "u3"))])
 
         self.u4 = U4()
-        self.u4.set_data(bytes_to_int_array(read_file(os.path.join(path, "u4"))))
+        self.u4.set_data([v for v in read_file(os.path.join(path, "u4"))])
 
-        self.ud = bytes_to_int_array(read_file(os.path.join(path, "ud")))
+        self.ud = [v for v in read_file(os.path.join(path, "ud"))]
 
         self.directory = Directory()
         self.directory.load_from_folder(os.path.join(path, "sections"))

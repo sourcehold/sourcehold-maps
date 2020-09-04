@@ -103,7 +103,7 @@ class Field(object):
         # if not self.fget is None:
         #    return self.fget(obj, self.name)
         if "_" + self.name not in obj.__dict__:
-            raise AttributeError("object has no attribute {}".format(self.name))
+            raise AttributeError("object {} has no attribute {}".format(obj, self.name))
         return obj.__dict__["_" + self.name]
 
     def __set__(self, obj, value):

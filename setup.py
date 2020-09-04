@@ -7,8 +7,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sourcehold",
-    version="0.0.1",
-    author="gynt",
+    version="0.0.2",
+    author="The developers",
     author_email="gynt@users.noreply.github.com",
     description="A package to interact with stronghold (crusader) files and the process",
     long_description=long_description,
