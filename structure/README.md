@@ -1,4 +1,4 @@
-# sourchold-maps/structure
+# sourcehold-maps/structure
 
 This folder contains different files and subfolders describing the structure of the map file format in a machine-readable way. For a more human readable version see the [wiki](https://github.com/sourcehold/sourcehold-maps/wiki).  
 Note: None of these structure definitions are used directly; synchronization between different files need to be done by hand.
