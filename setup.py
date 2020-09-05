@@ -22,12 +22,12 @@ setuptools.setup(
     ],
     python_requires='>=3.8',
     data_files={
-        "sourcehold": [str(p) for p in (list(pathlib.Path().glob("*.dll")) + list(pathlib.Path().glob("*.so")))],
-        "sourcehold/cheatengine": [str(p) for p in (list(pathlib.Path("cheatengine").rglob("*.CT")))],
-        "sourcehold/resources": [str(p) for p in (list(pathlib.Path("resources").rglob("*.map")) + list(pathlib.Path("resources").rglob("*.sav")) + list(pathlib.Path("resources").rglob("*.msv")))],
-        "sourcehold/structure": [str(p) for p in (list(pathlib.Path("structure").rglob("*")))],
-        "sourcehold/examples": [str(p) for p in (list(pathlib.Path("examples").rglob("*.py")))],
-        "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py")))]
+        "sourcehold": [str(p) for p in (list(pathlib.Path().glob("*.dll")) + list(pathlib.Path().glob("*.so"))) if p.is_file()],
+        "sourcehold/cheatengine": [str(p) for p in (list(pathlib.Path("cheatengine").rglob("*.CT"))) if p.is_file()],
+        "sourcehold/resources": [str(p) for p in (list(pathlib.Path("resources").rglob("*.map")) + list(pathlib.Path("resources").rglob("*.sav")) + list(pathlib.Path("resources").rglob("*.msv"))) if p.is_file()],
+        "sourcehold/structure": [str(p) for p in (list(pathlib.Path("structure").rglob("*"))) if p.is_file()],
+        "sourcehold/examples": [str(p) for p in (list(pathlib.Path("examples").rglob("*.py"))) if p.is_file()],
+        "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py"))) if p.is_file()]
     }.items(),
     install_requires=["pymem", "Pillow"],
     test_suite="tests"
