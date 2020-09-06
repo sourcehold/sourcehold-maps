@@ -31,7 +31,6 @@ def load_library(lib_name):
                            pathlib.Path(__file__).parent.parent.parent / lib_name, pathlib.Path(sys.prefix) / "sourcehold" / lib_name]
 
     for location in potential_locations:
-        print(f"looking for dll in {location}")
         if location.exists():
             return ctypes.CDLL(str(location.absolute()))
 
