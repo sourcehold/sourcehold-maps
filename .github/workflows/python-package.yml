@@ -120,13 +120,13 @@ jobs:
       shell: bash
       if: matrix.os == 'windows-latest'
       run: |
-        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll;." sourcehold/__main__.py --noconfirm
+        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.dll;." sourcehold/__main__.py --noconfirm
 
     - name: Build pyinstaller package
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       run: |
-        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so:." sourcehold/__main__.py --noconfirm
+        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.so:." sourcehold/__main__.py --noconfirm
 
     - name: Archive packages
       uses: actions/upload-artifact@v2
