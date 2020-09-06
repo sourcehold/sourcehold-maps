@@ -1,4 +1,3 @@
-
 typedef struct SimpleSection {
     unsigned int section_size;
     // The data array is of size section_size
@@ -104,7 +103,7 @@ typedef struct MapPreview {
 
 typedef struct ByteTilesSection {
 
-    // There are 80400 tiles on a map, that is why.
+    // There are 80400 tiles on a map.
     unsigned char tiles[80400];
 }
 

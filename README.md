@@ -1,69 +1,90 @@
-# sourcehold-maps
-Reverse engineering the map file format of Stronghold & Stronghold Crusader.
+# sourcehold-maps [![Discord](https://img.shields.io/discord/566293677329219595.svg?color=7389D8&label=%20&logo=discord&logoColor=ffffff)](https://discord.gg/dzdBuNy) <!-- omit in toc -->
+Reverse engineering the map file format of the 2D Stronghold Games.
 
-### Project goal
-The goal is to understand the .map file format of Stronghold & Stronghold Crusader and to be able to manipulate it.
+### Project Goal <!-- omit in toc -->
+The goal is to understand the [map file format](#map-file-format) of Stronghold, Stronghold Crusader and Stronghold Crusader Extreme and to be able to [manipulate](#tools) it.
 
-# Current progress
-## Online map unpacking and exploring
-Visit the [github page](https://sourcehold.github.io/sourcehold-maps/) for this repository to unpack .map and .sav files.
+# Table of Contents <!-- omit in toc -->
 
-We understand the layout of a map file (e.g., see this C-style header [file](https://github.com/sourcehold/sourcehold-maps/blob/master/structure/map_structure.h)).
-Further details and explanation can be found in the wiki of this repository.
+- [Map File Format](#map-file-format)
+- [Tools](#tools)
+  - [Python Library](#python-library)
+    - [Unpacking (CL)](#unpacking-cl)
+    - [(Re-) Packing (CL)](#re--packing-cl)
+    - [Generate Images of Map Sections (CL)](#generate-images-of-map-sections-cl)
+    - [Map Preview Image (CL)](#map-preview-image-cl)
+    - [Modify Map Properties](#modify-map-properties)
+    - [Installation](#installation)
+  - [Online Map Unpacking, Repacking and Exploring](#online-map-unpacking-repacking-and-exploring)
+- [Contribute](#contribute)
 
-## Contribute
-If you want to contribute, unpack a map [online](https://sourcehold.github.io/sourcehold-maps/) and have a look [here](https://github.com/sourcehold/sourcehold-maps/wiki/Map-sections), and in the wiki, to help us understand all the sections! 
+# Map File Format
+The current knowledge of the map file format (`*.map`, `*.sav` and `*.msv`) is documented in a human-readable form in the [wiki](https://github.com/sourcehold/sourcehold-maps/wiki) and in a machine-readable form in [here](/structure).
 
+# Tools
 
-## Current functionalities of the Python library
-### Unpacking
-Unpack map/sav files to a folder:
+## Python Library
+The python library contains multiple useful tools to interact with map files. The most important tools are directly accessible using the command line (CL), but most of the stuff is access
+
+### Unpacking (CL)
+Unpack map files to a folder:
 ```console
-python -m sourcehold --in "mymap.map" "mymap2.map" --unpack
+python -m sourcehold --in "mymap.map" "mymap2.map" "mysav.sav" --unpack
 ```
-### (Re)packing
-Repack map/sav folder to a file:
+Unpack single sections:
 ```console
-python -m sourcehold --in "mymap/" "mymap2/" --pack
+python -m sourcehold --in "mymap.map" "mysave.sav" --unpack --what 1107
 ```
 
-
-### Generate images of map sections
+### (Re-) Packing (CL)
+Repack map folder to a file:
 ```console
-python examples/map_section_imaging.py "Close Encounters.map" "CloseEncountersImages"
+python -m sourcehold --in "mymap/" "mymap2/" "mysav/" --pack
 ```
 
-### Map preview image
-Extract an image like so:
+### Generate Images of Map Sections (CL)
 ```console
-python examples/map_preview_image.py extract "Close Encounters.map" close_encounters.png
+python examples/map_section_imaging.py "mymap.map" "mymap_images"
 ```
-Substitute an image like so:
+
+### Map Preview Image (CL)
+Extract an image:
 ```console
-python examples/map_preview_image.py replace "Close Encounters.map" --replacement close_encounters.png "Close Encounters mod.map"
+python examples/map_preview_image.py extract "mymap.map" "mymap.png"
 ```
-### Modify map properties
-#### Disable buildings
+
+Substitute an image:
+```console
+python examples/map_preview_image.py replace "mymap.map" --replacement "mymap.png" "mymap_modified.map"
+```
+
+### Modify Map Properties
+Disable buildings:
 ```python
 from sourcehold import load_map, expand_var_path, save_map
 # You can configure your installation folder (where shcmap points to) in /config.json
-map = load_map(expand_var_path('shcmap~/Close Encounters.map'))
+map = load_map(expand_var_path('shcmap~/mymap.map'))
 map.directory["building_availability"].granary = False
-save_map(map, expand_var_path('shcusermap~/Close Encounters mod.map'))
-```
-#### Set starting popularity and goods
-```python
-from sourcehold import load_map, expand_var_path, save_map
-# You can configure your installation folder (where shcmap points to) in /config.json
-map = load_map(expand_var_path('shcmap~/Close Encounters.map'))
-map.directory['STARTING_GOODS'].wood = 0
-save_map(map, expand_var_path('shcusermap~/Close Encounters mod.map'))
+save_map(map, expand_var_path('shcusermap~/mymap_modified.map'))
 ```
 
-## Installation
-Find the right wheel file for your OS and (python) architecture [here](https://github.com/sourcehold/sourcehold-maps/actions?query=workflow%3A%22Python+package%22) (download the artifacts of the latest succesful build).
+Set starting popularity and goods:
+```python
+from sourcehold import load_map, expand_var_path, save_map
+map = load_map(expand_var_path('shcmap~/mymap.map'))
+map.directory['STARTING_GOODS'].wood = 0
+save_map(map, expand_var_path('shcusermap~/mymap_modified.map'))
+```
+
+### Installation
+Find the right wheel file for your OS and (python) architecture [here](https://github.com/sourcehold/sourcehold-maps/actions?query=workflow%3A%22Python+package%22) (download the artifacts of the latest successful build).
 Then install using pip:
 ```console
 python -m pip install sourcehold.whl
 ```
 
+## Online Map Unpacking, Repacking and Exploring
+If you don't want to install the python library and jump directly into action, there is an [online tool](https://sourcehold.github.io/sourcehold-maps/) to unpack, repack and visualize map sections.
+
+# Contribute
+There are multiple ways to contribute to this project, see [Contributing.md](/CONTRIBUTING.md) for more information.

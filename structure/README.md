@@ -14,4 +14,4 @@ Cheat engine is the swiss knife of game hacking and reversing. Some structures a
 The python-package [construct](https://construct.readthedocs.io/en/latest/) is basically a python-only version of kaitai. The main advantage of this package is that it can not only parse, but also write files.
 
 ## map_structure.h
-C description of the map file format.
+C-like description of the map file format. Due to different map versions, which is hard specify concise in C, we refere to [structure/kaitai](#structure/kaitai).
