@@ -160,7 +160,7 @@ jobs:
     - name: Download package
       uses: actions/download-artifact@v2
       with:
-        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-${{ matrix.python-platform }}
+        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-py-${{ matrix.python-platform }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
