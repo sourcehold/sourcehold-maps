@@ -11,6 +11,7 @@ file_manipulation_parser.add_argument("--pack", action='store_const', const=True
 file_manipulation_parser.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
 file_manipulation_parser.add_argument("--out", help="a folder to (un)pack files to")
 file_manipulation_parser.add_argument("--ext", help="when packing, which extension to give the file", default=".map")
+file_manipulation_parser.add_argument("--what", help="what to unpack from the map file", default="all")
 
 args = main_parser.parse_args()
 
@@ -61,7 +62,14 @@ if args.subparser_name == "file":
             if args.debug:
                 print(f"unpacking file {name} to folder {dst.name}")
 
-            map.dump_to_folder(str(dst))
+            if args.what == "all":
+                map.dump_to_folder(str(dst))
+            else:
+                if args.what.isnumeric():
+                    section = args.what
+                    (dst / section).write_bytes(map.directory[int(section)].get_data())
+                elif args.what == "preview":
+                    (dst / "preview").write_bytes(map.preview.get_data())
 
     if args.pack:
         for file in input_files:
