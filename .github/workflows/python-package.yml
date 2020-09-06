@@ -86,7 +86,7 @@ jobs:
     - name: Download binary artifacts
       uses: actions/download-artifact@v2
       with:
-        name: compression-${{ matrix.os }}-${{ python.platform }}
+        name: compression-${{ matrix.os }}-${{ matrix.python-platform }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
