@@ -51,14 +51,14 @@ jobs:
         uses: actions/upload-artifact@v2
         if: matrix.os == 'windows-latest'
         with:
-          name: compression-binaries
+          name: compression-${{ matrix.os }}-${{ matrix.platform }}
           path: |
             compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
         with:
-          name: compression-binaries
+          name: compression-${{ matrix.os }}-${{ matrix.platform }}
           path: |
             compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
   build:
@@ -86,7 +86,7 @@ jobs:
     - name: Download binary artifacts
       uses: actions/download-artifact@v2
       with:
-        name: compression-binaries
+        name: compression-${{ matrix.os }}-${{ matrix.platform }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -120,18 +120,18 @@ jobs:
       shell: bash
       if: matrix.os == 'windows-latest'
       run: |
-        pyinstaller --name "sourcehold-${{ matrix.os }}-${{ matrix.platform }}" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll;." sourcehold/__main__.py --noconfirm
+        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll;." sourcehold/__main__.py --noconfirm
 
     - name: Build pyinstaller package
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       run: |
-        pyinstaller --name "sourcehold-${{ matrix.os }}-${{ matrix.platform }}" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so:." sourcehold/__main__.py --noconfirm
+        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so:." sourcehold/__main__.py --noconfirm
 
     - name: Archive packages
       uses: actions/upload-artifact@v2
       with:
-        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-${{ matrix.python-platform }}
+        name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-py-${{ matrix.python-platform }}
         path: |
           dist/*
 
