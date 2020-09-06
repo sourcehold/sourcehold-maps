@@ -1,6 +1,10 @@
 import pathlib
 import argparse
 
+from sourcehold import Map
+from sourcehold import save_map
+from sourcehold import load_map
+
 main_parser = argparse.ArgumentParser(prog="sourcehold")
 main_parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
 subparsers = main_parser.add_subparsers(dest="subparser_name")
@@ -44,7 +48,6 @@ if args.debug:
     print(args)
 
 if args.subparser_name == "file":
-    from . import load_map
     input_files = getattr(args, "in")
     if args.unpack:
         for file in input_files:
@@ -74,9 +77,8 @@ if args.subparser_name == "file":
     if args.pack:
         for file in input_files:
             path = pathlib.Path(file)
-            from . import maps
-            from . import save_map
-            map = maps.Map().load_from_folder(str(path))
+
+            map = Map().load_from_folder(str(path))
             map.pack(True)
 
             name = path.name

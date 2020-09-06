@@ -96,7 +96,7 @@ jobs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        python -m pip install --upgrade wheel setuptools
+        python -m pip install --upgrade wheel setuptools pyinstaller
         pip install flake8 pytest
         pip install -r requirements.txt
     - name: Lint with flake8
@@ -116,12 +116,25 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
 
+    - name: Build pyinstaller package
+      shell: bash
+      if: matrix.os == 'windows-latest'
+      run: |
+        pyinstaller --name "sourcehold-${{ matrix.os }}-${{ matrix.platform }}" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll;." sourcehold/__main__.py --noconfirm
+
+    - name: Build pyinstaller package
+      shell: bash
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
+      run: |
+        pyinstaller --name "sourcehold-${{ matrix.os }}-${{ matrix.platform }}" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so:." sourcehold/__main__.py --noconfirm
+
     - name: Archive packages
       uses: actions/upload-artifact@v2
       with:
         name: sourcehold-${{ matrix.os }}-${{ matrix.platform }}-py${{ matrix.python-version }}-${{ matrix.python-platform }}
         path: |
           dist/*
+
 
   test_package:
     needs: build
