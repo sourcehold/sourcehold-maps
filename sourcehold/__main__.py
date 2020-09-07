@@ -113,12 +113,13 @@ if args.subparser_name == "file":
                     dst_handle = sys.stdout.buffer
                     dst_handle.write(what)
                 else:
-                    if args.debug:
-                        print(f"unpacking {what_name} to folder {dst.name}")
 
                     dst = pathlib.Path(args.out) / name
                     if not dst.exists():
                         dst.mkdir(parents=True)
+
+                    if args.debug:
+                        print(f"unpacking {what_name} to folder {dst.name}")
 
                     (dst / what_name).write_bytes(what)
             else:
