@@ -30,5 +30,8 @@ setuptools.setup(
         "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py"))) if p.is_file()]
     }.items(),
     install_requires=["pymem", "Pillow"],
-    test_suite="tests"
+    test_suite="tests",
+    entry_points={
+        'console_scripts': ['sourcehold=sourcehold:entry_point']
+    }
 )

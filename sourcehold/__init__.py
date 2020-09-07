@@ -5,6 +5,11 @@ import unittest
 import sys
 
 
+def entry_point():
+    import runpy
+    runpy.run_module(__name__)
+
+
 def test():
     test_suite = unittest.TestLoader().discover(str(pathlib.Path(sys.prefix) / "sourcehold" / "tests" / '.'))
     unittest.TextTestRunner(descriptions=True, verbosity=2).run(test_suite)
