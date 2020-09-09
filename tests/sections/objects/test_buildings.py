@@ -17,7 +17,7 @@ class TestBuildings(unittest.TestCase):
         m.directory[1013].unpack(True)
 
         m.directory[1013][0] = Building().from_buffer(Buffer(b'\x00' * Building.size_of()))
-        m.directory[1013][0].building_id = 9000
+        m.directory[1013][0].building_uid = 9000
         m.directory[1013].pack(True)
 
         m.directory.pack()
@@ -29,4 +29,4 @@ class TestBuildings(unittest.TestCase):
 
         m2 = maps.Map().from_buffer(buf2)
         m2.directory[1013].unpack(True)
-        self.assertEqual(m2.directory[1013][0].building_id, m.directory[1013][0].building_id)
+        self.assertEqual(m2.directory[1013][0].building_uid, m.directory[1013][0].building_uid)

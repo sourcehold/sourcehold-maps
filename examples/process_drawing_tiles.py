@@ -48,6 +48,6 @@ def draw_system_of_diamonds(rows, cols, point = SerializedTilePoint(100, 8), dia
 
     return i_point
 
-draw_system_of_diamonds(rows=16, cols=16, x_offset=8*16*2)
+draw_system_of_diamonds(rows=16, cols=32, x_offset=0)
 
 draw_system_of_diamonds(rows=1, cols=40, y_offset=11*8, x_offset=1, point=SerializedTilePoint(200, 8))
