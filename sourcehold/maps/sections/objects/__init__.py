@@ -1,4 +1,4 @@
-from .. import KeyValueStructure
+from ..types import KeyValueStructure
 from struct import unpack, pack
 
 from sourcehold.structure_tools import Structure, Field, DataProperty
@@ -24,13 +24,19 @@ class Unit(Structure):
 class Building(Structure):
     data = Field("data", "B", array_size=812)
 
-    building_type = DataProperty("H", start=0)
-    building_type_or_cost = DataProperty("I", start=144)
-    building_type_2 = DataProperty("B", start=210) # Succesfully changes type when clicked, but skin is not changed well.
+    # building_type = DataProperty("H", start=0)
+    # building_type_or_cost = DataProperty("I", start=144)
+    building_type_id = DataProperty("H", start=210)  # Succesfully changes type when clicked, but skin is not changed well.
     owner = DataProperty("H", start=214)
-    building_id = DataProperty("H", start=216)
-    building_type_sub = DataProperty("H", start=644)
-    locations = DataProperty("I", start=456, array_size=6*6)
+    building_uid = DataProperty("H", start=216)
+    location_j_adjusted = DataProperty("H", start=238)
+    location_i = DataProperty("H", start=240)
+    location_serialized_tile_index = DataProperty("I", start=244)  # Most north-west tile
+    width = DataProperty("H", start=248)  # Also the height.
+    health = DataProperty("H", start=268)
+    hitpoints = DataProperty("H", start=270)
+    time_in_existence = DataProperty("H", start=636)
+    locations = DataProperty("I", start=456, array_size=6*6)  # Even if cathedral (13x13), thi is still
 
     @classmethod
     def size_of(cls):
