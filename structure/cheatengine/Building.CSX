@@ -14,16 +14,16 @@
       <Element Offset="44" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="48" Vartype="4 Bytes" Bytesize="4" Description="starts_blinking_when_building_selected" DisplayMethod="Unsigned Integer"/>
       <Element Offset="52" Vartype="4 Bytes" Bytesize="4" RLECount="22" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="140" Vartype="4 Bytes" Bytesize="4" Description="last_location_tile_index" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="140" Vartype="4 Bytes" Bytesize="4" Description="last_location_tile_index?" DisplayMethod="Unsigned Integer"/>
       <Element Offset="144" Vartype="4 Bytes" Bytesize="4" Description="some_kind_of_counter_tied_to_timer_resets" DisplayMethod="Unsigned Integer"/>
       <Element Offset="148" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="152" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="156" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="164" Vartype="4 Bytes" Bytesize="4" Description="changes_back_to_nonzero_on_selection" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="168" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="156" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
       <Element Offset="192" Vartype="4 Bytes" Bytesize="4" Description="timer_gamespeed_relative_resets_after_0x100" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="196" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="204" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="196" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="200" Vartype="4 Bytes" Bytesize="4" Description="some_kind_of_tile_index?" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="204" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="206" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="208" Vartype="2 Bytes" Bytesize="2" Description="can_be_0_unknown" DisplayMethod="Unsigned Integer"/>
       <Element Offset="210" Vartype="4 Bytes" Bytesize="4" Description="building_type_id" DisplayMethod="Unsigned Integer"/>
       <Element Offset="214" Vartype="2 Bytes" Bytesize="2" Description="owner" DisplayMethod="Unsigned Integer"/>
