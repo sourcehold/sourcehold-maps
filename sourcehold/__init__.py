@@ -43,19 +43,18 @@ CONFIG = {'shc': 'C:/Program Files (x86)/FireFly Studios/Stronghold Crusader',
           'sh_user': '~/Documents/Stronghold'}
 
 
-def load_config(path='config.json'):
+def load_config(path=pathlib.Path("~").expanduser() / ".sourcehold" / 'config.json'):
     global CONFIG
 
-    if not os.path.exists(path):
-        with open(path, 'w') as f:
-            json.dump(CONFIG, f)
+    if not path.exists():
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps(CONFIG))
 
-    with open(path, 'r') as f:
-        CONFIG = json.load(f)
+    CONFIG = json.loads(path.read_text())
 
-    CONFIG = {key: os.path.expanduser(value) for key, value in CONFIG.items()}
+    CONFIG = {key: str(pathlib.Path(value).expanduser()) for key, value in CONFIG.items()}
 
 
 load_config()
 
-from sourcehold.maps.library import SHC_FILES, SHC_FILES_USER, SH_FILES, SH_FILES_USER, expand_var_path
+from sourcehold.maps.library import expand_var_path

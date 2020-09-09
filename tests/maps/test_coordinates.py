@@ -1,8 +1,9 @@
 
-import unittest, pathlib
+import unittest
+import pathlib
 
 from sourcehold.maps.sections.tools import TileIndexTranslator
-from sourcehold.maps.sections import TileSystem
+from sourcehold.maps.sections.types import TileSystem
 from sourcehold import load_map, expand_var_path
 import random
 
