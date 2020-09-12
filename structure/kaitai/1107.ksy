@@ -1,5 +1,5 @@
 meta:
-  id: section1107
+  id: "s1107"
   endian: le
   
 seq:
@@ -198,6 +198,6 @@ enums:
     12: wazir
     13: emir
     14: nizar
-    15: marshal
+    15: sheriff
     16: marshal
     17: abbot
