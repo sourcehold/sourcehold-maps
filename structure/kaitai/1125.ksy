@@ -33,42 +33,14 @@ seq:
     type: s4
     repeat: expr
     repeat-expr: 9
-  - id: something1
+  - id: kill_matrix
     type: s4
     repeat: expr
-    repeat-expr: 9
-  - id: something2
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something3
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something4
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something5
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something6
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something7
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something8
-    type: s4
-    repeat: expr
-    repeat-expr: 9
-  - id: something9
-    type: s4
-    repeat: expr
-    repeat-expr: 9
+    repeat-expr: 81
+    doc: |
+      kill_matrix is a 9x9 matrix containing the kills of each player:
+      for example, kill_matrix[1,2] are the number of losses player1 inflicted
+      to player2
   - id: buildings_burned
     type: s4
     repeat: expr
@@ -89,7 +61,7 @@ seq:
     type: s4
     repeat: expr
     repeat-expr: 9
-  - id: pitch_produced #?
+  - id: pitch_produced
     type: s4
     repeat: expr
     repeat-expr: 9
@@ -97,7 +69,7 @@ seq:
     type: s1
     repeat: expr
     repeat-expr: 9
-  - id: stars #?
+  - id: killed_lords
     type: s1
     repeat: expr
     repeat-expr: 9
@@ -131,11 +103,12 @@ seq:
     type: s4
     repeat: expr
     repeat-expr: 9
-  - id: something12
-    type: s4
+  - id: padding2 # I have no entry where this is not 0
+    # type: s4
+    contents: [0x00, 0x00, 0x00, 0x00]
     repeat: expr
     repeat-expr: 9
-  - id: something13 # seems to encode death somehow
+  - id: date_of_death # year, month = divmod(death_date)
     type: s4
     repeat: expr
     repeat-expr: 9
