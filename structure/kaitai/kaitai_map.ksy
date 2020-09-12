@@ -1,7 +1,8 @@
 meta:
   id: map
-  file-extension: map
+  file-extension: map, sav, msv
   endian: le
+
 seq:
   - id: magic
     contents: [0xff, 0xff, 0xff, 0xff]
@@ -18,7 +19,7 @@ seq:
   - id: u4
     type: simple_section
   - id: ud
-    type: u4
+    contents: [0xff, 0xff, 0xff, 0xff]
     if: u4.size != 0
   - id: directory
     type: directory
@@ -30,6 +31,7 @@ seq:
       cases:
         0: defined_section(_index)  # <= pass `_index` into file_entry
         1: compressed_section
+
 types:
   preview:
     seq:
@@ -37,6 +39,7 @@ types:
         type: u4
       - id: section
         type: compressed_section
+
   description:
     seq:
       - id: size
@@ -47,6 +50,7 @@ types:
         type: u4
       - id: section
         type: compressed_section
+
   directory:
     seq:
       - id: directory_size
@@ -81,6 +85,7 @@ types:
         repeat-expr: 'directory_u1[0] >= 161 ? 150 : 100'
       - id: u7
         type: u4
+
   compressed_section:
     seq:
       - id: uncompressed_size
@@ -91,6 +96,7 @@ types:
         type: u4
       - id: data
         size: compressed_size
+
   defined_section:
     params:
       - id: i  # => receive `_index` as `i` here
@@ -98,12 +104,14 @@ types:
     seq:
       - id: data
         size: _root.directory.section_lengths[i]
+
   simple_section:
     seq:
       - id: size
         type: u4
       - id: data
         size: size
+
 instances:
   max_sections_count:
     value: '_root.directory.directory_u1[0] >= 161 ? 150 : 100'
