@@ -112,7 +112,7 @@ async function load_tilesection(section_index) {
             }
           ];
     } else {
-        var unique_values = Array.from(new Set(data)).sort();
+        var unique_values = Array.from(new Set(data)).sort((a, b) => a - b);
 
         var d_value = Array(400).fill().map(()=>Array(400).fill(0));
         var d_value_indexed = Array(400).fill().map(()=>Array(400).fill());
