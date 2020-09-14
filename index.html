@@ -7,6 +7,8 @@
         <script src="jszip.js"></script>
         <script src="mapexplorer.js"></script>
         <script src="raphael.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="numjs.js"></script>
     </head>
     <body>
         <div style="display: flex">
@@ -93,10 +95,14 @@
                 
                 <button onclick="load_tilesection();" type="button" id="loadtilesectionexplorersection" disabled>Load/draw/render selected section</button>
             </div>
+            <div style="flex: 0 0 15%">
+                <input type="checkbox" id="explorer_color_mode" name="color_mode" value="Categorical">
+                <label for="explorer_color_mode">Categorical color mode</label><br>
+            </div>
         </div>
 
-        <h3>Rendering options</h3>
-        <div style="display: flex">
+        <h3 style="display:none;">Rendering options</h3>
+        <div style="display: flex; display: none">
             <div style="flex: 0 0 15%">
                 Render from row: <input type="number" id="load_tiles_from_row" name="load_tiles_from_row_element" step="1" min=1 max=400 value=0>
             </div>
@@ -112,7 +118,7 @@
         </div>
 
         <div id="tilesectiondisplay">
-            <div id="paper">
+            <div style="height:100vh;width:100vw;" id="paper">
 
             </div>
         </div>

@@ -1,3 +1,4 @@
+"use strict"
 
 function showTileExplorerSpinner() {
     document.getElementById('tileexplorerloader').style.display = 'block';
@@ -7,7 +8,7 @@ function hideTileExplorerSpinner() {
     document.getElementById('tileexplorerloader').style.display = 'none';
 }
 
-tile_explorer_data = {};
+var tile_explorer_data = {};
 
 async function cache_tile_section_explorer_map() {
     showTileExplorerSpinner();
@@ -76,97 +77,82 @@ async function load_tilesection(section_index) {
         throw `invalid datasize, are you sure it is a proper tilesection? ${datasize}`
     }
 
-    var unique_values = Array.from(new Set(data)).sort()
-    var n = unique_values.length + 1
+    var d_value = Array(400).fill().map(()=>Array(400).fill());
+    var d_serialized_i = Array(400).fill().map(()=>Array(400).fill(0));
+    var d_serialized_j = Array(400).fill().map(()=>Array(400).fill(0));
+    var d_serialized_tile_index = Array(400).fill().map(()=>Array(400).fill(0));
+    var d_adjusted_tile_number = Array(400).fill().map(()=>Array(400).fill(0));
 
-    var palette = create_palette(n);
+    if(!document.getElementById("explorer_color_mode").checked) {
 
-    paper.clear()
+        data.forEach(function(value, index) {
+            var p = new TileIndex(index).to_serialized_point().to_adjusted_point();
+            d_value[p.i][p.j] = value;
+            d_serialized_i[p.i][p.j] = new TileIndex(index).to_serialized_point().i
+            d_serialized_j[p.i][p.j] = new TileIndex(index).to_serialized_point().j
+            d_serialized_tile_index[p.i][p.j] = index;
+            d_adjusted_tile_number[p.i][p.j] = Math.floor((p.i * 400) + p.j);
+        })
     
-    top_left_text = paper.text(1, 10, "x: , y: , index: , value: ").attr({'text-anchor': 'start', 'font-size': 14});
+        var dp = [
+            {
+              z: d_value,
+              type: 'heatmap',
+              colorscale: "Rainbow",
+              zmin: 0,
+              zmax: (2**(datasize*8))-1,
+              name: "",
+              customdata: nj.stack([d_serialized_i, d_serialized_j, d_serialized_tile_index, d_adjusted_tile_number], 2).tolist(),
+              hovertemplate: ([ "i (serialized):%{customdata[0]:0f}",
+                                "j (serialized):%{customdata[1]:0f}",
+                                "j (game):%{x:0f}",
+                                "tile index (serialized):%{customdata[2]:0f}",
+                                "tile index (game):%{customdata[3]:0f}",
+                                "value:%{z:0f}",]).join("<br>"),
+            }
+          ];
+    } else {
+        var unique_values = Array.from(new Set(data)).sort();
 
+        var d_value = Array(400).fill().map(()=>Array(400).fill(0));
+        var d_value_indexed = Array(400).fill().map(()=>Array(400).fill());
 
-    var first_row = Math.min(document.getElementById("load_tiles_from_row").value)
-    var last_row = Math.min(400, first_row + parseInt(document.getElementById("load_tiles_n_rows").value))
+        data.forEach(function(value, index) {
+            var p = new TileIndex(index).to_serialized_point().to_adjusted_point();
+            d_value[p.i][p.j] = value
+            d_value_indexed[p.i][p.j] = unique_values.indexOf(value);
+            d_serialized_i[p.i][p.j] = new TileIndex(index).to_serialized_point().i
+            d_serialized_j[p.i][p.j] = new TileIndex(index).to_serialized_point().j
+            d_serialized_tile_index[p.i][p.j] = index;
+            d_adjusted_tile_number[p.i][p.j] = Math.floor((p.i * 400) + p.j);
+        })
 
-    var tile_width = parseInt(document.getElementById("load_tiles_tile_width").value)
-    var tile_height = parseInt(document.getElementById("load_tiles_tile_height").value)
-
-    for(var index = 0; index < 80400; index++) {
-        var ti = new TileIndex(index)
-        var value = data[index];
-        var colour = palette[unique_values.indexOf(value)]
-
-        var sp = ti.to_serialized_point()
-        if(sp.i < first_row) {
-            continue
+        var dp = [
+            {
+            z: d_value_indexed,
+            type: 'heatmap',
+            colorscale: "Rainbow",
+            zmin: 0,
+            zmax: unique_values.length,
+            name: "",
+            customdata: nj.stack([d_serialized_i, d_serialized_j, d_serialized_tile_index, d_adjusted_tile_number, d_value], 2).tolist(),
+            hovertemplate: ([ "i (serialized):%{customdata[0]:0f}",
+                                "j (serialized):%{customdata[1]:0f}",
+                                "j (game):%{x:0f}",
+                                "tile index (serialized):%{customdata[2]:0f}",
+                                "tile index (game):%{customdata[3]:0f}",
+                                "value:%{customdata[4]:0f}",]).join("<br>"),
+            }
+        ];
         }
-        if(sp.i >= last_row) {
-            break
-        }
-        var screenpoint= sp.to_screen_point()
-        var diamond = screenpoint.get_diamond(tile_width = tile_width, tile_height = tile_height).map((pair) => [paper.width - pair[0], pair[1]]);
-        var coords = "M" + diamond.map((value) => value.join(",")).join("L") + "Z";
-
-        var el = paper.path(coords).attr({fill: colour, stroke: colour}).data('serialized_point', sp).data('value', value).data('index', index);
-        el.hover(function onEnter(ctx) {
-            top_left_text.attr({text: `section: ${section_index}, x: ${this.data('serialized_point').i}, y: ${this.data('serialized_point').j}, serialized index: ${this.data('index')}, value: ${this.data('value')}`})
-        }, function onLeave(ctx) {
-
-        });
-    }
-
+        
+        
+        var layout = {yaxis: {autorange: "reversed", scaleanchor:"x", scaleratio:1}};
+        Plotly.newPlot('paper', dp, layout);
+ 
     hideTileExplorerSpinner();
 
 }
-
-function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  }
-  
-
-
-/* accepts parameters
- * h  Object = {h:x, s:y, v:z}
- * OR 
- * h, s, v
-*/
-function HSVtoRGB(h, s, v) {
-    var r, g, b, i, f, p, q, t;
-    if (arguments.length === 1) {
-        s = h.s, v = h.v, h = h.h;
-    }
-    i = Math.floor(h * 6);
-    f = h * 6 - i;
-    p = v * (1 - s);
-    q = v * (1 - f * s);
-    t = v * (1 - (1 - f) * s);
-    switch (i % 6) {
-        case 0: r = v, g = t, b = p; break;
-        case 1: r = q, g = v, b = p; break;
-        case 2: r = p, g = v, b = t; break;
-        case 3: r = p, g = q, b = v; break;
-        case 4: r = t, g = p, b = v; break;
-        case 5: r = v, g = p, b = q; break;
-    }
-    return {
-        r: Math.round(r * 255),
-        g: Math.round(g * 255),
-        b: Math.round(b * 255)
-    };
-}
-
-function create_palette(n) {
-    var s = 0.9 / n
-    var pal = [];
-    for(var i = 0; i < n; i++) {
-        var col = HSVtoRGB(i * s, 1, 1)
-        pal.push(col);
-    }
-    return pal.map((el) => rgbToHex(Math.round(el.r), Math.round(el.g), Math.round(el.b)));
-}
-
-
 
 
 class SerializedPoint {
@@ -182,6 +168,14 @@ class SerializedPoint {
             return new TileIndex((this.i*(this.i+1)) + this.j)
         } else {
             return new TileIndex((this.n_serialized_tiles - ((this.size - this.i)*(this.size-this.i+1))) + this.j)
+        }
+    }
+
+    to_adjusted_point() {
+        if(this.i < this.size/2) {
+            return new AdjustedPoint(this.i, this.j + Math.abs(((this.size/2)-1) - this.i));
+        } else {
+            return new AdjustedPoint(this.i, this.j + Math.abs((this.size/2) - this.i));
         }
     }
 
@@ -201,6 +195,18 @@ class SerializedPoint {
 
         return new ScreenPoint(tx, ty)
     }
+
+}
+
+class AdjustedPoint {
+    constructor(i, j, size=400) {
+        this.i = i;
+        this.j = j;
+        this.size = size;
+        this.n_serialized_tiles = (2*((this.size/2)*((this.size/2)+1)));
+    }
+
+
 
 }
 
