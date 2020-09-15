@@ -29,7 +29,7 @@ setuptools.setup(
         "sourcehold/examples": [str(p) for p in (list(pathlib.Path("examples").rglob("*.py"))) if p.is_file()],
         "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py"))) if p.is_file()]
     }.items(),
-    install_requires=["pymem", "Pillow"],
+    install_requires=["pymem", "Pillow", "plotly"],
     test_suite="tests",
     entry_points={
         'console_scripts': ['sourcehold=sourcehold:entry_point']
