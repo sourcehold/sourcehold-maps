@@ -1,3 +1,5 @@
+Tree and Rock UIDs in tile map format
+
 Trees (and rocks)
 
 When wiped, all trees (rocks remain!?) disappear, they do not reappear.
