@@ -1,12 +1,18 @@
 
-from sourcehold.world import TileLocationTranslator
+
 from sourcehold import *
 import struct
 import plotly.graph_objects as go
 
-
+from sourcehold.world import TileLocationTranslator
 tlt = TileLocationTranslator(square_width=400)
 
+def populate_value_matrix(matrix, values):
+    for index, value in enumerate(values):
+        p = tlt.SerializedTileIndex(index).to_serialized_tile_point().to_adjusted_serialized_tile_point()
+        matrix[p.i][int(p.j)] = value
+
+    return matrix
 
 def yield_values(section_object):
     buffer = Buffer(section_object.get_data())
@@ -15,8 +21,8 @@ def yield_values(section_object):
         yield struct.unpack(section_object._TYPE_, buffer.read(size))[0]
 
 
-def init_matrix(shape=(400,400)):
-    return [[None for j in range(shape[1])] for i in range(shape[0])]
+def init_matrix(shape=(400,400), value=None):
+    return [[value for j in range(shape[1])] for i in range(shape[0])]
 
 
 def dstack(matrices, shape=(400,400)):
@@ -25,6 +31,8 @@ def dstack(matrices, shape=(400,400)):
         for j in range(shape[1]):
             result[i][j] = [matrix[i][j] for matrix in matrices]
     return result
+
+
 
 
 def show_section(section_object, categorical_color_mode=False):
@@ -83,4 +91,4 @@ def show_section(section_object, categorical_color_mode=False):
                                                                    "tile index (game):%{customdata[3]:0f}",
                                                                    "value:%{customdata[4]:0f}", ])),
                         layout=go.Layout(yaxis=dict(autorange="reversed", scaleanchor="x", scaleratio=1)))
-    fig.show()
+    return fig
