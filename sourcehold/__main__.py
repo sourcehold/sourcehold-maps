@@ -34,6 +34,16 @@ image_parser = subparsers.add_parser("image")
 image_parser.add_argument("--in", help="tile image", required=True)
 image_parser.add_argument("--out", help="destination image file", required=True)
 
+memory_parser = subparsers.add_parser("memory")
+memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
+memory_parser_group.add_argument("--write", help="write to memory section", type=int)
+memory_parser_group.add_argument("--read", help="read from memory section", type=int)
+memory_parser.add_argument("--in", help="input data location")
+memory_parser.add_argument("--out", help="output data location", default="-")
+memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(sys.prefix) / "sourcehold" / "cheatengine" / "shc_data.CT"))
+memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
+memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
+memory_parser.add_argument("--process-name", help="name of the SHC process", default="Stronghold Crusader")
 
 args = main_parser.parse_args()
 
@@ -168,8 +178,9 @@ if args.subparser_name == "compression":
     else:
         pathlib.Path(output_file).write_bytes(output_data)
 
+from sourcehold.maps.sections.types import TileSystem
 if args.subparser_name == "image":
-    from sourcehold.maps.sections import TileSystem
+
     input_file = getattr(args, "in")
     output_file = args.out
     if input_file == "-":
@@ -194,6 +205,29 @@ if args.subparser_name == "image":
     img = ts.create_image()
 
     img.save(output_file)
+
+import binascii
+from sourcehold.debugtools.memory.common.access import AccessContext
+if args.subparser_name == "memory":
+    process = AccessContext(cheat_table=args.config, process_name=args.process_name)
+
+    if args.read:
+        dump = process.read_section(str(args.read))
+        if args.out == "-":
+            sys.stdout.buffer.write(dump)
+        elif args.out:
+            pathlib.Path(args.out).write_bytes(dump)
+
+    elif args.write:
+        infile = getattr(args, "in")
+        if infile is None and args.data:
+            input_data = binascii.a2b_hex(args.data)
+        elif infile == "-":
+            input_data = sys.stdin.buffer.read()
+        else:
+            input_data = pathlib.Path(infile).read_bytes()
+
+        process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
 
 
 # if __name__ == "__main__":
