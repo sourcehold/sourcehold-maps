@@ -1,4 +1,5 @@
-No idea what changed when wiped.
+Visual effects, such as the destruction of buildings and flags.
+Does not contain effects such as maypole dancing.
 
 ## Example image of this section
 See [this](https://github.com/sourcehold/sourcehold-maps/tree/master/resources/example_section_images/1026.png)

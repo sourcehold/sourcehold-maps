@@ -18,7 +18,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | [1001](Section-1001) | Tile data (short) | Contains many objects, but not units. Seems to be a cache for drawing the screen |
 | [1002](Section-1002) | Tile data (short) | Contains terrain data: keeps, stockpile, boulders, iron  |
 | [1003](Section-1003) | Tile data (int)   | Contains information about buildings, non-buildable terrain types (water, rocks, hills) |
-| [1004](Section-1004) | Tile data (short) | Trees and rocks |
+| [1004](Section-1004) | Tile data (short) | Tree and Rock UIDs in tile map format |
 | [1005](Section-1005) | Tile data (byte)  | Contains height data, including stairs |
 | [1006](Section-1006) | Tile data (byte)  | Whether a unit can move from a tile to another tile (stored as direction flags) |
 | [1007](Section-1007) | Tile data (short) ||
@@ -34,12 +34,12 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | [1018](Section-1018-1019) | Int               | `x_view`: specifies `x`-position of the map. |
 | [1019](Section-1018-1019) | Int               | `y_view`: specifies `y`-position of the map. |
 | [1020](Section-1020) | Tile data (byte)  ||
-| [1021](Section-1021) | Tile data (short) ||
+| [1021](Section-1021) | Tile data (short) |This section contains markers for areas that cannot be walked to from another area.|
 | [1022](Section-1022) | Info data (mixed) | Contains player data. |
 | [1023](Section-1023) |||
 | [1024](Section-1024) |||
 | [1025](Section-1025) |||
-| [1026](Section-1026) | Tile data (short) ||
+| [1026](Section-1026) | Tile data (short) |Visual effects, such as the destruction of buildings and flags.|
 | [1028](Section-1028) | Tile data (byte)  ||
 | [1029](Section-1029) | Tile data (byte)  ||
 | [1030](Section-1030) | Tile data (byte)  ||
