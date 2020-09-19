@@ -32,7 +32,7 @@ compression_parser.add_argument("--level", help="compression level", type=int, d
 
 image_parser = subparsers.add_parser("image")
 image_parser.add_argument("--in", help="tile image", required=True)
-image_parser.add_argument("--out", help="destination image file", required=True)
+image_parser.add_argument("--out", help="destination image file", default="-")
 
 memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
@@ -204,7 +204,10 @@ if args.subparser_name == "image":
     ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
     img = ts.create_image()
 
-    img.save(output_file)
+    if output_file == "-":
+        img.show()
+    else:
+        img.save(output_file)
 
 import binascii
 from sourcehold.debugtools.memory.common.access import AccessContext

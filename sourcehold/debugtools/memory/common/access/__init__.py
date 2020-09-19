@@ -45,13 +45,22 @@ from sourcehold.debugtools.memory.common import section_lengths
 def convert_address_list_to_memory_sections(address_list):
     return [MemorySection(key, addr, section_lengths[key]) for key, addr in address_list.items() if len(key) == 4 and key.isnumeric()]
 
+import sys
+import os
+
 
 class AccessContext(object):
 
     def __init__(self, cheat_table=(pathlib.Path() / "cheatengine" / "shc_data.CT"), process_name="Stronghold Crusader"):
         self.cheat_table = cheat_table
+        sys.stdout = open(os.devnull, "w")
+        sys.stderr = open(os.devnull, "w")
         self.process = pymem.Pymem(process_name)
         self.base = self.process.process_base.lpBaseOfDll
+        sys.stdout.close()
+        sys.stderr.close()
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
         self.address_list = load_address_list_from_cheat_table(self.cheat_table, offset=self.base)
         self.memory_sections = {m.name: m for m in convert_address_list_to_memory_sections(self.address_list)}
         self.memory_cache = None
