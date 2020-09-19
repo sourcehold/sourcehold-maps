@@ -47,10 +47,40 @@
       <Element Offset="260" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="268" Vartype="2 Bytes" Bytesize="2" Description="health" DisplayMethod="Unsigned Integer"/>
       <Element Offset="270" Vartype="2 Bytes" Bytesize="2" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="272" Vartype="4 Bytes" Bytesize="4" RLECount="33" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="404" Vartype="2 Bytes" Bytesize="2" RLECount="5" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="272" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="296" Vartype="4 Bytes" Bytesize="4" Description="stockpile_wood" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="300" Vartype="4 Bytes" Bytesize="4" Description="stockpile_hops" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="304" Vartype="4 Bytes" Bytesize="4" Description="stockpile_stone" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="308" Vartype="4 Bytes" Bytesize="4" Description="stockpile_partialstone" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="312" Vartype="4 Bytes" Bytesize="4" Description="stockpile_iron" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="316" Vartype="4 Bytes" Bytesize="4" Description="stockpile_pitch" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="320" Vartype="4 Bytes" Bytesize="4" Description="stockpile_partialpitch" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="324" Vartype="4 Bytes" Bytesize="4" Description="stockpile_wheat" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="328" Vartype="4 Bytes" Bytesize="4" Description="stockpile_bread" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="332" Vartype="4 Bytes" Bytesize="4" Description="stockpile_cheese" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="336" Vartype="4 Bytes" Bytesize="4" Description="stockpile_meat" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="340" Vartype="4 Bytes" Bytesize="4" Description="stockpile_apple" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="344" Vartype="4 Bytes" Bytesize="4" Description="stockpile_ale" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="348" Vartype="4 Bytes" Bytesize="4" Description="stockpile_gold" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="352" Vartype="4 Bytes" Bytesize="4" Description="stockpile_flour" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="356" Vartype="4 Bytes" Bytesize="4" Description="stockpile_bow" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="360" Vartype="4 Bytes" Bytesize="4" Description="stockpile_crossbow" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="364" Vartype="4 Bytes" Bytesize="4" Description="stockpile_spear" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="368" Vartype="4 Bytes" Bytesize="4" Description="stockpile_pike" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="372" Vartype="4 Bytes" Bytesize="4" Description="stockpile_mace" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="376" Vartype="4 Bytes" Bytesize="4" Description="stockpile_sword" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="380" Vartype="4 Bytes" Bytesize="4" Description="stockpile_leather_armor" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="384" Vartype="4 Bytes" Bytesize="4" Description="stockpile_iron_armor" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="388" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="400" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="402" Vartype="2 Bytes" Bytesize="2" Description="building_id_stone_quarry_stockpile" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="404" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="410" Vartype="2 Bytes" Bytesize="2" Description="current_employees_count" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="412" Vartype="2 Bytes" Bytesize="2" Description="employees_still_needed" DisplayMethod="Unsigned Integer"/>
       <Element Offset="414" Vartype="2 Bytes" Bytesize="2" Description="worker_id" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="416" Vartype="4 Bytes" Bytesize="4" RLECount="10" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="416" Vartype="2 Bytes" Bytesize="2" Description="peasant_recruitment_timer?" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="418" Vartype="2 Bytes" Bytesize="2" Description="peasant_recruitment_timer_2?" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="420" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
       <Element Offset="456" Vartype="4 Bytes" Bytesize="4" Description="location0_serialized_tile_index_only_if_non_passible" DisplayMethod="Unsigned Integer"/>
       <Element Offset="460" Vartype="4 Bytes" Bytesize="4" Description="location1" DisplayMethod="Signed Integer"/>
       <Element Offset="464" Vartype="4 Bytes" Bytesize="4" Description="location2" DisplayMethod="Signed Integer"/>
@@ -62,11 +92,17 @@
       <Element Offset="640" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="644" Vartype="4 Bytes" Bytesize="4" Description="building_subtype_ie_house" DisplayMethod="Unsigned Integer"/>
       <Element Offset="648" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="656" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="662" Vartype="2 Bytes" Bytesize="2" Description="sleeping" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="656" Vartype="2 Bytes" Bytesize="2" Description="produced_item_id" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="658" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="662" Vartype="Byte" Bytesize="1" Description="sleeping" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="663" Vartype="Byte" Bytesize="1" Description="n_horses" DisplayMethod="Unsigned Integer"/>
       <Element Offset="664" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="668" Vartype="4 Bytes" Bytesize="4" Description="subtype_or_skin?" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="672" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="672" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="676" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="678" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="679" Vartype="Byte" Bytesize="1" Description="n_horses_in_use" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="680" Vartype="4 Bytes" Bytesize="4" RLECount="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="696" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="702" Vartype="2 Bytes" Bytesize="2" Description="fire_duration_count_up_until_0" DisplayMethod="Unsigned Integer"/>
       <Element Offset="704" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>

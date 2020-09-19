@@ -41,8 +41,7 @@
       <Element Offset="232" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="236" Vartype="2 Bytes" Bytesize="2" Description="destination_location_j_2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="238" Vartype="2 Bytes" Bytesize="2" Description="destination_location_i_2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="240" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="244" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="240" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="246" Vartype="2 Bytes" Bytesize="2" Description="if_moving_is_2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="248" Vartype="2 Bytes" Bytesize="2" Description="changes_when_moving_0_7_tile_tracker?" DisplayMethod="Unsigned Integer"/>
       <Element Offset="250" Vartype="2 Bytes" Bytesize="2" Description="current_point_in_path_plan" DisplayMethod="Unsigned Integer"/>
@@ -74,7 +73,11 @@
       <Element Offset="888" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="890" Vartype="2 Bytes" Bytesize="2" Description="animation_timer_2?" DisplayMethod="Unsigned Integer"/>
       <Element Offset="892" Vartype="2 Bytes" Bytesize="2" RLECount="4" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="900" Vartype="4 Bytes" Bytesize="4" RLECount="16" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="900" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="904" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="908" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="940" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="944" Vartype="4 Bytes" Bytesize="4" RLECount="5" DisplayMethod="Unsigned Integer"/>
       <Element Offset="964" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="968" Vartype="4 Bytes" Bytesize="4" Description="health" DisplayMethod="Unsigned Integer"/>
       <Element Offset="972" Vartype="4 Bytes" Bytesize="4" Description="hitpoints" DisplayMethod="Unsigned Integer"/>
