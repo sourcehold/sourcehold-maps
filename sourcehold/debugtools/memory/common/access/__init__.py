@@ -53,14 +53,25 @@ class AccessContext(object):
 
     def __init__(self, cheat_table=(pathlib.Path() / "cheatengine" / "shc_data.CT"), process_name="Stronghold Crusader"):
         self.cheat_table = cheat_table
-        sys.stdout = open(os.devnull, "w")
-        sys.stderr = open(os.devnull, "w")
-        self.process = pymem.Pymem(process_name)
-        self.base = self.process.process_base.lpBaseOfDll
-        sys.stdout.close()
-        sys.stderr.close()
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
+
+        error = None
+        try:
+            sys.stdout = open(os.devnull, "w")
+            sys.stderr = open(os.devnull, "w")
+            self.process = pymem.Pymem(process_name)
+            self.base = self.process.process_base.lpBaseOfDll
+        except pymem.exception.ProcessNotFound as pnf:
+            error = pnf
+        except TypeError as te:
+            error = te
+        finally:
+            sys.stdout.close()
+            sys.stderr.close()
+            sys.stdout = sys.__stdout__
+            sys.stderr = sys.__stderr__
+            if error is not None:
+                raise error
+
         self.address_list = load_address_list_from_cheat_table(self.cheat_table, offset=self.base)
         self.memory_sections = {m.name: m for m in convert_address_list_to_memory_sections(self.address_list)}
         self.memory_cache = None
@@ -73,7 +84,7 @@ class AccessContext(object):
     def read_section(self, section, offset=0):
 
         if section not in self.memory_sections:
-            raise Exception(f"Don't know how to read section: {section}")
+            raise Exception(f"Don't know how to read section: {section}. Available sections: {self.memory_sections.keys()}")
 
         return self.read_bytes(self.memory_sections[section].address + offset, self.memory_sections[section].size - offset)
 
