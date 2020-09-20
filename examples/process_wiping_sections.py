@@ -1,6 +1,21 @@
+
+import os, sys
+
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
+PACKAGE_PARENT = '..'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+
 from sourcehold.debugtools.memory.common.access import AccessContext
-from sourcehold.debugtools.memory.common import memory_find, memory_findall
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--section", required=True, type=int)
+parser.add_argument("--value", required=True, type=int, help="hexadecimal representation", default="00")
+args = parser.parse_args()
 
 process = AccessContext()
 
-process.write_section("section1001", 0, b'\x00' * 160800)
+process.write_section(str(args.section), offset=0, data=b'\x00', recycle=True)

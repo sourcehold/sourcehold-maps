@@ -56,9 +56,12 @@ process = AccessContext()
 dump = process.read_section(str(section))
 cls = find_section_for_index(int(section))
 
+if cls is None:
+    raise Exception(f"Section {section} has not been implemented yet.")
+
 s = cls()
 s.uncompressed = dump
-
+s.data = dump
 
 if categorical_color_mode:
     vmax = (2**(struct.calcsize(s._TYPE_)*8))
