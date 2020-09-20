@@ -120,13 +120,13 @@ jobs:
       shell: bash
       if: matrix.os == 'windows-latest'
       run: |
-        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.dll;sourcehold/." sourcehold/__main__.py --noconfirm --add-data "cheatengine/SHC_data.CT;sourcehold/cheatengine/." sourcehold/__main__.py --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
+        pyinstaller sourcehold/__main__.py --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.dll;sourcehold/." --noconfirm --add-data "cheatengine/SHC_data.CT;sourcehold/cheatengine/." --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
 
     - name: Build pyinstaller package
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       run: |
-        pyinstaller --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.so:sourcehold/." sourcehold/__main__.py --noconfirm --add-data "cheatengine/SHC_data.CT:sourcehold/cheatengine/." sourcehold/__main__.py --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
+        pyinstaller sourcehold/__main__.py --name "sourcehold" --add-binary "compressionlib-nocb-${{ matrix.os }}-${{ matrix.python-platform }}.so:sourcehold/." --noconfirm --add-data "cheatengine/SHC_data.CT:sourcehold/cheatengine/." --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
 
     - name: Archive packages
       uses: actions/upload-artifact@v2
