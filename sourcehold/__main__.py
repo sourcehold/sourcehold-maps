@@ -11,7 +11,7 @@ from sourcehold.compression import COMPRESSION
 
 main_parser = argparse.ArgumentParser(prog="sourcehold")
 main_parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
-subparsers = main_parser.add_subparsers(dest="subparser_name")
+subparsers = main_parser.add_subparsers(dest="subparser_name", required=True)
 
 file_manipulation_parser = subparsers.add_parser('file')
 file_manipulation_parser_group = file_manipulation_parser.add_mutually_exclusive_group(required=True)

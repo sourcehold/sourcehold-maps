@@ -1,12 +1,28 @@
 import setuptools
 import pathlib
 
+from Cython.Build import cythonize
+from distutils.extension import Extension
+from setuptools import setup
+
+from Cython.Distutils import build_ext
+
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+ext_modules = cythonize([
+    Extension(
+        'sourcehold.compressionlib',
+        ['compression/cppklib.pyx', 'compression/buffers.cpp', 'compression/explode.c', 'compression/implode.c',
+         'compression/crc32.c'],
+        language='c++'
+    )
+])
 
-setuptools.setup(
+setup(
     name="sourcehold",
+    cmdclass={"build_ext": build_ext},
     version="0.0.2",
     author="The developers",
     author_email="gynt@users.noreply.github.com",
@@ -29,9 +45,10 @@ setuptools.setup(
         "sourcehold/examples": [str(p) for p in (list(pathlib.Path("examples").rglob("*.py"))) if p.is_file()],
         "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py"))) if p.is_file()]
     }.items(),
-    install_requires=["pymem", "Pillow", "plotly"],
+    install_requires=["pymem", "Pillow"],
     test_suite="tests",
     entry_points={
         'console_scripts': ['sourcehold=sourcehold:entry_point']
-    }
+    },
+    ext_modules=ext_modules
 )

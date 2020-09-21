@@ -21,6 +21,26 @@ class AbstractCompressor(object):
         raise NotImplementedError()
 
 
+class DirectCompression2(AbstractCompressor):
+
+    def __init__(self):
+        super().__init__()
+
+        import importlib
+        handle = importlib.import_module("sourcehold.compressionlib")
+        #import sourcehold.compressionlib as handle
+        self.handle = handle
+        self.buffer = bytearray(b'\x00' * 1000 * 1000 * 32)
+
+    def compress(self, data, level=6):
+        n = self.handle.implode(bytearray(data), self.buffer, level)
+        return bytes(self.buffer[:n])
+
+    def decompress(self, data):
+        n = self.handle.explode(bytearray(data), self.buffer)
+        return bytes(self.buffer[:n])
+
+
 class DirectCompression(AbstractCompressor):
 
     def __init__(self):
@@ -71,4 +91,4 @@ class BlastDecompression(AbstractCompressor):
         raise NotImplementedError()
 
 
-COMPRESSION = DirectCompression()
+COMPRESSION = DirectCompression2()

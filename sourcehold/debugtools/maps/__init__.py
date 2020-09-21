@@ -1,11 +1,10 @@
 
-
 from sourcehold import *
 import struct
-import plotly.graph_objects as go
 
 from sourcehold.world import TileLocationTranslator
 tlt = TileLocationTranslator(square_width=400)
+
 
 def populate_value_matrix(matrix, values):
     for index, value in enumerate(values):
@@ -13,6 +12,7 @@ def populate_value_matrix(matrix, values):
         matrix[p.i][int(p.j)] = value
 
     return matrix
+
 
 def yield_values(section_object):
     buffer = Buffer(section_object.get_data())
@@ -33,9 +33,9 @@ def dstack(matrices, shape=(400,400)):
     return result
 
 
-
-
 def show_section(section_object, categorical_color_mode=False):
+    import plotly.graph_objects as go
+
     dv = list(yield_values(section_object))
     # Square array of data where north-west is 0,0
     d_value = init_matrix()

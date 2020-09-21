@@ -71,7 +71,9 @@
       <Element Offset="376" Vartype="4 Bytes" Bytesize="4" Description="stockpile_sword" DisplayMethod="Unsigned Integer"/>
       <Element Offset="380" Vartype="4 Bytes" Bytesize="4" Description="stockpile_leather_armor" DisplayMethod="Unsigned Integer"/>
       <Element Offset="384" Vartype="4 Bytes" Bytesize="4" Description="stockpile_iron_armor" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="388" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="388" Vartype="4 Bytes" Bytesize="4" Description="stock_number_of_items" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="392" Vartype="4 Bytes" Bytesize="4" Description="stock_limit" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="396" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="400" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="402" Vartype="2 Bytes" Bytesize="2" Description="building_id_stone_quarry_stockpile" DisplayMethod="Unsigned Integer"/>
       <Element Offset="404" Vartype="2 Bytes" Bytesize="2" RLECount="3" DisplayMethod="Unsigned Integer"/>
