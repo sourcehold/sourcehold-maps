@@ -553,9 +553,7 @@ class TiledDiamondSystem(DiamondSystem):
                 (xoff - width // 2, yoff + height // 2)]
 
 
-
-def build_palette(data):
-    uniq = set(x for y in data for x in y)
+def build_palette(uniq):
 
     mapping = sorted(list(uniq))
     pal = palette.create_palette(len(mapping))
@@ -568,7 +566,7 @@ def make_image_of_data(dt, system: TiledDiamondSystem = TiledDiamondSystem()) ->
     height = int(system.rows * system.tileheight * 0.5) + 32
     im = Image.new('RGBA', (width, height))
     draw = ImageDraw.Draw(im)
-    mapping, pal = build_palette(dt)
+    mapping, pal = build_palette(set(x for y in dt for x in y))
 
     for i in range(len(dt)):
         for j in range(len(dt[i])):

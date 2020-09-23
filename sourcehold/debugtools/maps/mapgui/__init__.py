@@ -158,7 +158,7 @@ class MyCanvas(tk.Canvas):
         height = int(system.rows * system.tileheight * 0.5)
         # im = Image.new('RGBA', (width, height))
         # draw = ImageDraw.Draw(im)
-        mapping, pal = build_palette(dt)
+        mapping, pal = build_palette(set(x for y in dt for x in y))
 
         self.tooltips = []
 
