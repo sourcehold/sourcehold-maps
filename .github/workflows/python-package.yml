@@ -129,17 +129,23 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
 
+    - name: build extension inplace
+      shell: bash
+      run: |
+        python setup.py build_ext --inplace
+
     - name: Build pyinstaller package
       shell: bash
       if: matrix.os == 'windows-latest'
       run: |
-        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
+        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter --add-binary "$(ls sourcehold/compression/compressionlib.*);." --add-data "sourcehold/debugtools/memory/common/access/shc_data.CT;debugtools/memory/common/access/."
+
 
     - name: Build pyinstaller package
       shell: bash
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
       run: |
-        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter
+        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter --add-binary "$(ls sourcehold/compression/compressionlib.*):." --add-data "sourcehold/debugtools/memory/common/access/shc_data.CT:debugtools/memory/common/access/."
 
     - name: Archive packages
       uses: actions/upload-artifact@v2
@@ -187,3 +193,7 @@ jobs:
       run: |
         python -c "import sourcehold"
       shell: bash
+    - name: Test PyInstaller
+      shell: bash
+      run: |
+        echo "hello world!" | dist/sourcehold/srchold compression --in - --compress --out -

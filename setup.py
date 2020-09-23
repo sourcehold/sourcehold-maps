@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 
 ext_modules = cythonize([
     Extension(
-        'sourcehold.compressionlib',
+        'sourcehold.compression.compressionlib',
         ['compression/cppklib.pyx', 'compression/buffers.cpp', 'compression/explode.c', 'compression/implode.c',
          'compression/crc32.c'],
         language='c++'
@@ -37,18 +37,14 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.8',
-    data_files={
-        "sourcehold": [str(p) for p in (list(pathlib.Path().glob("*.dll")) + list(pathlib.Path().glob("*.so"))) if p.is_file()],
-        "sourcehold/cheatengine": [str(p) for p in (list(pathlib.Path("cheatengine").rglob("*.CT"))) if p.is_file()],
-        "sourcehold/resources": [str(p) for p in (list(pathlib.Path("resources").rglob("*.map")) + list(pathlib.Path("resources").rglob("*.sav")) + list(pathlib.Path("resources").rglob("*.msv"))) if p.is_file()],
-        "sourcehold/structure": [str(p) for p in (list(pathlib.Path("structure").rglob("*"))) if p.is_file()],
-        "sourcehold/examples": [str(p) for p in (list(pathlib.Path("examples").rglob("*.py"))) if p.is_file()],
-        "sourcehold/tests": [str(p) for p in (list(pathlib.Path("tests").rglob("*.py"))) if p.is_file()]
-    }.items(),
+    include_package_data=True,
+    package_data={
+        "sourcehold": ["debugtools/memory/common/access/*.ct"],
+    },
     install_requires=["pymem", "Pillow"],
     test_suite="tests",
     entry_points={
-        'console_scripts': ['sourcehold=sourcehold:entry_point']
+        'console_scripts': ['sourcehold=sourcehold:entry_point', 'srchold=sourcehold:entry_point']
     },
     ext_modules=ext_modules
 )

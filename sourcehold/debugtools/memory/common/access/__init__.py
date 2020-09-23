@@ -1,6 +1,7 @@
-import pymem, pathlib
+import pymem
+import pathlib
 import xml.etree.ElementTree as ET
-
+import pkg_resources
 
 from sourcehold.debugtools.memory.common import section_lengths
 
@@ -13,7 +14,7 @@ def load_cheat_table(path=(pathlib.Path() / "cheatengine" / "shc_data.CT")):
     return ET.parse(str(path))
 
 
-def load_address_list_from_cheat_table(path=(pathlib.Path() / "cheatengine" / "shc_data.CT"), offset=0):
+def load_address_list_from_cheat_table(path=pathlib.Path(pkg_resources.resource_filename(__name__, "shc_data.CT")), offset=0):
     #data = path.read_bytes()
 
     address_list = {}

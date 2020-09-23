@@ -1,5 +1,6 @@
 import pathlib
 import argparse
+import pkg_resources
 import sys
 
 from sourcehold import Map
@@ -7,6 +8,8 @@ from sourcehold import save_map
 from sourcehold import load_map
 from sourcehold import Buffer
 from sourcehold.compression import COMPRESSION
+from sourcehold.debugtools.memory.common.access import AccessContext
+import sourcehold.debugtools.memory.common.access
 
 
 main_parser = argparse.ArgumentParser(prog="sourcehold")
@@ -33,6 +36,7 @@ compression_parser.add_argument("--level", help="compression level", type=int, d
 image_parser = subparsers.add_parser("image")
 image_parser.add_argument("--in", help="tile image", required=True)
 image_parser.add_argument("--out", help="destination image file", default="-")
+image_parser.add_argument("--perspective", help="create perspective image", default=False, action="store_const", const=True)
 
 memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
@@ -40,7 +44,12 @@ memory_parser_group.add_argument("--write", help="write to memory section", type
 memory_parser_group.add_argument("--read", help="read from memory section", type=int)
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
-memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(sys.prefix) / "sourcehold" / "cheatengine" / "shc_data.CT"))
+if getattr(sys, "frozen", False):
+    memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(getattr(sys, "_MEIPASS", None)) /
+        "debugtools" / "memory" / "common" / "access" / "shc_data.CT"))
+else:
+    memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(
+        pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT"))))
 memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
 memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
 memory_parser.add_argument("--process-name", help="name of the SHC process", default="Stronghold Crusader")
@@ -80,6 +89,10 @@ if args.subparser_name == "file":
 
 if args.debug:
     print(args)
+    _t = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
+    print(f"looking for shc_data.CT in: {_t}")
+    print(pkg_resources.resource_filename(__name__, "."))
+    del _t
 
 if args.subparser_name == "file":
     input_files = getattr(args, "in")
@@ -178,6 +191,8 @@ if args.subparser_name == "compression":
     else:
         pathlib.Path(output_file).write_bytes(output_data)
 
+import PIL.Image
+import struct
 from sourcehold.maps.sections.types import TileSystem
 if args.subparser_name == "image":
 
@@ -201,8 +216,27 @@ if args.subparser_name == "image":
     else:
         raise Exception(f"unsupported tile size: {tile_size}")
 
-    ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
-    img = ts.create_image()
+    if args.perspective:
+        ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
+        img = ts.create_image()
+    else:
+        size = struct.calcsize(fmt)
+        values = struct.unpack(f"<{80400}" + fmt, input_data)
+
+        from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
+        from sourcehold.maps.sections.tools import build_palette
+        matrix = init_matrix(shape=(400, 400), value=None)
+        populate_value_matrix(matrix, values)
+
+        mapping, palette = build_palette(set(values))
+
+        img = PIL.Image.new('RGB', (400,400), color=0)
+        pixelmap = img.load()
+        for i, row in enumerate(matrix):
+            for j, value in enumerate(row):
+                if value is None:
+                    continue
+                pixelmap[i, j] = palette[mapping.index(value)]
 
     if output_file == "-":
         img.show()
