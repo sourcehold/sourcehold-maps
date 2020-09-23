@@ -10,59 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build_binaries:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-        platform: [x86, x64]
-        exclude:
-          - os: ubuntu-latest
-            platform: x86
-          - os: macOS-latest
-            platform: x86
-    steps:
-      - uses: actions/checkout@v2
-      - name: Enable Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1.3.0
-        with:
-          arch: ${{ matrix.platform }}
-        if: matrix.os == 'windows-latest'
-      - name: Compile compression library
-        run: |
-          cd compression
-          compile.bat
-        shell: cmd
-        if: matrix.os == 'windows-latest'
-      - name: Compile compression library
-        run: |
-          cd compression
-          chmod +x compile.sh
-          ./compile.sh
-          mv compressionlib-nocb.so ../compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
-        shell: bash
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
-      - name: Rename library
-        run: |
-          mv compression\\compressionlib-nocb.dll compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
-        shell: cmd
-        if: matrix.os == 'windows-latest'
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        if: matrix.os == 'windows-latest'
-        with:
-          name: compression-${{ matrix.os }}-${{ matrix.platform }}
-          path: |
-            compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.dll
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
-        with:
-          name: compression-${{ matrix.os }}-${{ matrix.platform }}
-          path: |
-            compressionlib-nocb-${{ matrix.os }}-${{ matrix.platform }}.so
   build:
-    needs: build_binaries
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -83,22 +31,11 @@ jobs:
             platform: x86
     steps:
     - uses: actions/checkout@v2
-    - name: Download binary artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: compression-${{ matrix.os }}-${{ matrix.python-platform }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
         architecture: ${{ matrix.python-platform }}
-    - name: Install dependencies
-      shell: bash
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade wheel setuptools pyinstaller Cython
-        pip install flake8 pytest
-        pip install -r requirements.txt
     - name: Enable Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1.3.0
       with:
@@ -108,7 +45,7 @@ jobs:
       shell: bash
       run: |
         python -m pip install --upgrade pip
-        python -m pip install --upgrade wheel setuptools pyinstaller Cython
+        python -m pip install --upgrade wheel setuptools Cython
         pip install flake8 pytest
         pip install -r requirements.txt
     - name: Lint with flake8
@@ -128,24 +65,6 @@ jobs:
       shell: bash
       run: |
         python setup.py sdist bdist_wheel
-
-    - name: build extension inplace
-      shell: bash
-      run: |
-        python setup.py build_ext --inplace
-
-    - name: Build pyinstaller package
-      shell: bash
-      if: matrix.os == 'windows-latest'
-      run: |
-        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter --add-binary "$(ls sourcehold/compression/compressionlib.*);." --add-data "sourcehold/debugtools/memory/common/access/shc_data.CT;debugtools/memory/common/access/."
-
-
-    - name: Build pyinstaller package
-      shell: bash
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
-      run: |
-        pyinstaller sourcehold/__main__.py --name "sourcehold" --noconfirm --exclude-module matplotlib --exclude-module numpy --exclude-module scipy --exclude-module tkinter --add-binary "$(ls sourcehold/compression/compressionlib.*):." --add-data "sourcehold/debugtools/memory/common/access/shc_data.CT:debugtools/memory/common/access/."
 
     - name: Archive packages
       uses: actions/upload-artifact@v2
@@ -193,7 +112,7 @@ jobs:
       run: |
         python -c "import sourcehold"
       shell: bash
-    - name: Test PyInstaller
-      shell: bash
+    - name: Pip test cli
       run: |
-        echo "hello world!" | dist/sourcehold/srchold compression --in - --compress --out -
+        echo "hello world!" | sourcehold compression --compress --in - --out - | sourcehold compression --decompress --in - --out -
+      shell: bash

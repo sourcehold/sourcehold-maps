@@ -10,7 +10,7 @@ def read_all_mem(p):
     return p.read_bytes(p.process_base.lpBaseOfDll, 34148352)
 
 
-def load_cheat_table(path=(pathlib.Path() / "cheatengine" / "shc_data.CT")):
+def load_cheat_table(path):
     return ET.parse(str(path))
 
 

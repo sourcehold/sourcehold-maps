@@ -21,13 +21,7 @@ class AbstractCompressor(object):
         raise NotImplementedError()
 
 
-try:
-    from . import compressionlib
-except ImportError as e:
-    try:
-        import compressionlib
-    except ImportError as f:
-        raise Exception([e, f])
+from . import compressionlib
 
 
 class DirectCompression2(AbstractCompressor):

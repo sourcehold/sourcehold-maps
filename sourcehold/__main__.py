@@ -44,11 +44,7 @@ memory_parser_group.add_argument("--write", help="write to memory section", type
 memory_parser_group.add_argument("--read", help="read from memory section", type=int)
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
-if getattr(sys, "frozen", False):
-    memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(getattr(sys, "_MEIPASS", None)) /
-        "debugtools" / "memory" / "common" / "access" / "shc_data.CT"))
-else:
-    memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(
+memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(
         pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT"))))
 memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
 memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
