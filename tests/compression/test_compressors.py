@@ -6,7 +6,7 @@ datac = b'\x00\x04\x82$%\x8f\x80\x7f'
 datac2 = b'\x00\x06\x82$%\x0f\x02\xfe\x01'
 datad = b'AIAIAIAIAIAIA'
 
-c1 = compression.DirectCompression()
+c1 = compression.DirectCompression2()
 # c2 = compression.BlastDecompression()
 # c3 = compression.SubprocessCompression()
 
@@ -25,7 +25,7 @@ class TestCompressors(unittest.TestCase):
     def test_direct_compress(self):
         self.assertEqual(c1.compress(datad, level=6), datac2)
 
-    def test_direct_compress(self):
+    def test_direct_compress_level_4(self):
         self.assertEqual(c1.compress(datad, level=4), datac)
 
     # def test_blast_compress(self):
