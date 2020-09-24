@@ -8,8 +8,7 @@ from sourcehold import save_map
 from sourcehold import load_map
 from sourcehold import Buffer
 from sourcehold.compression import COMPRESSION
-from sourcehold.debugtools.memory.common.access import AccessContext
-import sourcehold.debugtools.memory.common.access
+
 
 
 main_parser = argparse.ArgumentParser(prog="sourcehold")
@@ -44,8 +43,7 @@ memory_parser_group.add_argument("--write", help="write to memory section", type
 memory_parser_group.add_argument("--read", help="read from memory section", type=int)
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
-memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=str(pathlib.Path(
-        pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT"))))
+memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=None)
 memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
 memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
 memory_parser.add_argument("--process-name", help="name of the SHC process", default="Stronghold Crusader")
@@ -83,12 +81,6 @@ if args.subparser_name == "file":
         if not args.out:
             args.out = str(pathlib.Path().absolute())
 
-if args.debug:
-    print(args)
-    _t = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
-    print(f"looking for shc_data.CT in: {_t}")
-    print(pkg_resources.resource_filename(__name__, "."))
-    del _t
 
 if args.subparser_name == "file":
     input_files = getattr(args, "in")
@@ -240,8 +232,19 @@ if args.subparser_name == "image":
         img.save(output_file)
 
 import binascii
-from sourcehold.debugtools.memory.common.access import AccessContext
+import platform
+
 if args.subparser_name == "memory":
+
+    if platform.system().lower() != "windows":
+        raise Exception("memory debugging is currently only supported on Windows")
+
+    import sourcehold.debugtools.memory.common.access
+    from sourcehold.debugtools.memory.common.access import AccessContext
+
+    if args.config is None:
+        args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
+
     process = AccessContext(cheat_table=args.config, process_name=args.process_name)
 
     if args.read:

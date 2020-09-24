@@ -1,4 +1,9 @@
-import pymem
+try:
+    import pymem
+except ValueError:
+    import sys
+    print("memory debugging is only supported on windows currently", file=sys.stderr)
+
 import pathlib
 import xml.etree.ElementTree as ET
 import pkg_resources
