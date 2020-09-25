@@ -4,8 +4,7 @@
     <Elements>
       <Element Offset="0" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="4" Vartype="4 Bytes" Bytesize="4" Description="animation_frame" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="8" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="16" Vartype="4 Bytes" Bytesize="4" Description="owner" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="20" Vartype="2 Bytes" Bytesize="2" RLECount="12" DisplayMethod="Unsigned Integer"/>
       <Element Offset="44" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="52" Vartype="4 Bytes" Bytesize="4" Description="unit_selected" DisplayMethod="Unsigned Integer"/>
@@ -16,7 +15,8 @@
       <Element Offset="72" Vartype="4 Bytes" Bytesize="4" Description="animation_frame_standing_sitting_horse" DisplayMethod="Unsigned Integer"/>
       <Element Offset="76" Vartype="4 Bytes" Bytesize="4" RLECount="12" DisplayMethod="Unsigned Integer"/>
       <Element Offset="124" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="128" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="128" Vartype="4 Bytes" Bytesize="4" Description="owner" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="132" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="140" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="142" Vartype="2 Bytes" Bytesize="2" Description="unit_type" DisplayMethod="Unsigned Integer"/>
       <Element Offset="144" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
@@ -75,7 +75,9 @@
       <Element Offset="892" Vartype="2 Bytes" Bytesize="2" RLECount="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="900" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="904" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="908" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="908" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="912" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="916" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
       <Element Offset="940" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="944" Vartype="4 Bytes" Bytesize="4" RLECount="5" DisplayMethod="Unsigned Integer"/>
       <Element Offset="964" Vartype="2 Bytes" Bytesize="2" RLECount="2" DisplayMethod="Unsigned Integer"/>

@@ -80,9 +80,10 @@
       <Element Offset="410" Vartype="2 Bytes" Bytesize="2" Description="current_employees_count" DisplayMethod="Unsigned Integer"/>
       <Element Offset="412" Vartype="2 Bytes" Bytesize="2" Description="employees_still_needed" DisplayMethod="Unsigned Integer"/>
       <Element Offset="414" Vartype="2 Bytes" Bytesize="2" Description="worker_id" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="416" Vartype="2 Bytes" Bytesize="2" Description="peasant_recruitment_timer?" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="418" Vartype="2 Bytes" Bytesize="2" Description="peasant_recruitment_timer_2?" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="420" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="416" Vartype="2 Bytes" Bytesize="2" Description="worker_2_id" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="418" Vartype="2 Bytes" Bytesize="2" Description="worker_3_id" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="420" Vartype="4 Bytes" Bytesize="4" Description="worker_4_id" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="424" Vartype="4 Bytes" Bytesize="4" RLECount="8" DisplayMethod="Unsigned Integer"/>
       <Element Offset="456" Vartype="4 Bytes" Bytesize="4" Description="location0_serialized_tile_index_only_if_non_passible" DisplayMethod="Unsigned Integer"/>
       <Element Offset="460" Vartype="4 Bytes" Bytesize="4" Description="location1" DisplayMethod="Signed Integer"/>
       <Element Offset="464" Vartype="4 Bytes" Bytesize="4" Description="location2" DisplayMethod="Signed Integer"/>
