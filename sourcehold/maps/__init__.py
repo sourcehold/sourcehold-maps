@@ -76,7 +76,7 @@ class CompressedSection(Structure):
         if self._dirty or force:
             if not hasattr(self, "compression_level"):
                 self.compression_level = 6
-            self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
+            self.data = compression.COMPRESSION.compress(self.uncompressed, self.compression_level)
             self.hash = binascii.crc32(self.uncompressed)
             self.uncompressed_size = len(self.uncompressed)
             self.compressed_size = len(self.data)
@@ -166,7 +166,7 @@ class Description(Structure):
                 self.use_string_table = 0
             if not hasattr(self, "string_table_index"):
                 self.string_table_index = 0
-            self.data = [i for i in compression.COMPRESSION.compress(self.uncompressed, self.compression_level)]
+            self.data = compression.COMPRESSION.compress(self.uncompressed, self.compression_level)
             self.hash = binascii.crc32(self.uncompressed)
             self.uncompressed_size = len(self.uncompressed)
             self.compressed_size = len(self.data)
@@ -551,10 +551,10 @@ class Map(Structure):
 
         write_to_file(os.path.join(path, "preview"), self.preview.get_data())
         write_to_file(os.path.join(path, "description"), self.description.get_data())
-        write_to_file(os.path.join(path, "u1"), self.u1.get_data_as_bytearray())
-        write_to_file(os.path.join(path, "u2"), self.u2.get_data_as_bytearray())
-        write_to_file(os.path.join(path, "u3"), self.u3.get_data_as_bytearray())
-        write_to_file(os.path.join(path, "u4"), self.u4.get_data_as_bytearray())
+        write_to_file(os.path.join(path, "u1"), self.u1.get_data())
+        write_to_file(os.path.join(path, "u2"), self.u2.get_data())
+        write_to_file(os.path.join(path, "u3"), self.u3.get_data())
+        write_to_file(os.path.join(path, "u4"), self.u4.get_data())
         write_to_file(os.path.join(path, "ud"), bytes(bytearray(self.ud)))
         self.directory.dump_to_folder(os.path.join(path, "sections"))
 

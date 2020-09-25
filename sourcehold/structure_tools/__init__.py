@@ -203,6 +203,9 @@ class Field(object):
                         self.__set__(obj, r)
                     else:
                         raise Exception("Invalid size specification {}".format(self.array_size))
+                    if self.type == "B":
+                        #  Treat special case where we want a bytearray instead of an array of integers.
+                        self.__set__(obj, bytearray(r))
             elif self.type.__class__ == type:
                 if self.array_size == 0:
                     r = create_structure_from_buffer(self.type, buf, **kwargs)
@@ -270,41 +273,28 @@ class Structure(object):
     @classmethod
     def get_fields(cls) -> dict:
         fields = {}
-        queue = [cls]
-        tree = [cls]
-        # while len(queue) > 0:
-        #     cls = queue.pop()
-        #     tree.insert(0, cls)
-        #     # TODO: test multiple inheritance
-        #     for base in cls.__mro__:
-        #         queue.append(base)
 
         tree = list(cls.__mro__)
 
-        for cls in tree:
-            if not hasattr(cls, "__dict__"):
+        for c in tree:
+            if not hasattr(c, "__dict__"):
                 continue
-            props = {key: value for key, value in cls.__dict__.items() if cls.__dict__[key].__class__ == Field}
+            props = {key: value for key, value in c.__dict__.items() if c.__dict__[key].__class__ == Field}
             fields.update(props)
 
         return fields
 
     @classmethod
-    def get_fields_2(cls):
-        # TODO: I need a substitute for properties, because they do not work in a dict... I guess?
+    def get_data_properties(cls):
         fields = {}
-        tree = []
-        while cls is not None:
-            tree.insert(0, cls)
-            # Note: system does not support multiple inheritance
-            cls = cls.__base__
 
-        for cls in tree:
-            if not hasattr(cls, "__dict__"):
+        tree = list(cls.__mro__)
+
+        for c in tree:
+            if not hasattr(c, "__dict__"):
                 continue
-            if not 'fields' in cls.__dict__:
-                continue
-            fields.update(cls.__dict__["fields"])
+            props = {key: value for key, value in c.__dict__.items() if c.__dict__[key].__class__ == DataProperty}
+            fields.update(props)
 
         return fields
 
@@ -313,12 +303,6 @@ class Structure(object):
 
     def unpack(self, force=False):
         pass
-
-    def get_data_as_bytearray(self):
-        return bytearray(self.get_data())
-
-    def set_data_from_bytearray(self, data):
-        self.set_data(bytes(bytearray([v for v in data])))
 
     def get_data(self):
         return self.data
@@ -546,17 +530,21 @@ class DataProperty(object):
     def __get__(self, obj, objtype=None):
         if obj is None:
             return self
-        name = self._whats_my_name(obj)
-        data = obj.get_data_as_bytearray()[self.start:]
+        #name = self._whats_my_name(obj)
+        start = self.start
+        if hasattr(obj, "_offset"):
+            start += getattr(obj, "_offset")
+        data = obj.get_data()[start:]
         deserialized_value = self.deserialize(data)
         return deserialized_value
 
     def __set__(self, obj, value):
-        name = self._whats_my_name(obj)
-        data = obj.get_data_as_bytearray()
+        #name = self._whats_my_name(obj)
+        start = self.start
+        if hasattr(obj, "_offset"):
+            start += getattr(obj, "_offset")
         serialized_value = self.serialize(value)
-        obj.set_data_from_bytearray(data[:self.start] + serialized_value + data[self.start + len(serialized_value):])
-        assert len(obj.get_data_as_bytearray()) == len(data)
+        obj.get_data()[start:start + len(serialized_value)] = serialized_value
 
     def __delete__(self, obj):
         name = self._whats_my_name(obj)
@@ -617,16 +605,17 @@ class DataProperty(object):
                     r = struct.unpack(self.type, buf.read(s))[0]
                     return r
                 else:
+                    r = None
                     if self.array_size == "*":
                         s = struct.calcsize(self.type)
                         r = []
                         while not self.break_array(buf):
                             r.append(struct.unpack(self.type, buf.read(s))[0])
-                        return r
+                        #return r
                     elif self.array_size.__class__ == int:
                         s = struct.calcsize(self.type)
                         r = [struct.unpack(self.type, buf.read(s))[0] for i in range(self.array_size)]
-                        return r
+                        #return r
                     elif self.array_size.__class__.__name__ == 'function':
                         raise NotImplementedError()
                         # si = self.array_size(obj)
@@ -635,6 +624,10 @@ class DataProperty(object):
                         # return r
                     else:
                         raise Exception("Invalid size specification {}".format(self.array_size))
+                    if self.type == "B":
+                        #  Handle special case where we want a bytearray
+                        r = bytearray(r)
+                    return r
             elif self.type.__class__ == type:
                 if self.array_size == 0:
                     r = create_structure_from_buffer(self.type, buf, **kwargs)
@@ -661,4 +654,4 @@ class DataProperty(object):
             else:
                 raise Exception("Invalid type specification {}".format(self.type))
         except UnderflowException as e:
-            raise Exception("An exception occurred during the processing:\n\n".format(e))
+            raise Exception("An exception occurred during the processing of {}:\n\n".format(e))

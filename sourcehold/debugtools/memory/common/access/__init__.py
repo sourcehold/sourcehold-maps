@@ -57,7 +57,7 @@ import os
 
 class AccessContext(object):
 
-    def __init__(self, cheat_table=(pathlib.Path() / "cheatengine" / "shc_data.CT"), process_name="Stronghold Crusader"):
+    def __init__(self, cheat_table=pathlib.Path(pkg_resources.resource_filename(__name__, "shc_data.CT")), process_name="Stronghold Crusader"):
         self.cheat_table = cheat_table
 
         error = None
@@ -102,6 +102,9 @@ class AccessContext(object):
             while len(data) < self.memory_sections[section].size:
                 data += data
             data = data[:self.memory_sections[section].size]
+
+        if type(data) == bytearray:
+            data = bytes(data)
 
         return self.write_bytes(self.memory_sections[section].address + offset, data)
 

@@ -107,7 +107,7 @@ class TileSystem(object):
         self.fmt = fmt
         self.rows.clear()
 
-        if type(data) == bytes:
+        if type(data) == bytes or type(data) == bytearray:
             data = Buffer(data)
         size = struct.calcsize(fmt)
         #rows = 199
@@ -371,9 +371,13 @@ class ArrayMapStructure(object):
         return len(self.items.keys())
 
     def __getitem__(self, item):
+        if self.items is None:
+            self.unpack(True)
         return self.items[item]
 
     def __setitem__(self, key, value):
+        if self.items is None:
+            self.unpack(True)
         self.items[key] = value
         self._dirty = True
 
@@ -384,9 +388,10 @@ class ArrayMapStructure(object):
             for i in range(self._LENGTH_):
                 peek = buf.peek(self._TYPE_.size_of())
                 if set(peek) == {0}:
+                    #  Skip this entry, because it is empty
                     buf.read(self._TYPE_.size_of())
                 else:
-                    self.items[i] = self._TYPE_().from_buffer(buf)
+                    self.items[i] = self._TYPE_(parent=self, offset=self._TYPE_.size_of()*i)
 
     def pack(self, force=False):
         if self._dirty or force:
@@ -396,14 +401,15 @@ class ArrayMapStructure(object):
             if self.items is None:
                 return
 
-            for i in range(self._LENGTH_):
-                if i in self.items:
-                    self.items[i].serialize_to_buffer(buf)
-                else:
-                    buf.write(b'\x00'*self._TYPE_.size_of())
-
-            self._set_data(buf.getvalue())
-            self._dirty = True
+            # TODO: Are there still use cases for this?
+            # for i in range(self._LENGTH_):
+            #     if i in self.items:
+            #         self.items[i].serialize_to_buffer(buf)
+            #     else:
+            #         buf.write(b'\x00'*self._TYPE_.size_of())
+            #
+            # self._set_data(buf.getvalue())
+            self._dirty = False
 
 
 class ArrayMapSection(ArrayMapStructure, MapSection):

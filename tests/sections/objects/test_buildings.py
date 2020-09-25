@@ -16,7 +16,7 @@ class TestBuildings(unittest.TestCase):
         m = maps.Map().from_buffer(buf)
         m.directory[1013].unpack(True)
 
-        m.directory[1013][0] = Building().from_buffer(Buffer(b'\x00' * Building.size_of()))
+        m.directory[1013][0] = Building(m.directory[1013], 0)
         m.directory[1013][0].building_uid = 9000
         m.directory[1013].pack(True)
 
