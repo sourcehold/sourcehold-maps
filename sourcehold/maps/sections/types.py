@@ -359,7 +359,7 @@ class ArrayMapStructure(object):
 
     def __init__(self):
         self.items = None
-        self._dirty = False
+        self._dirty = True
 
     def _get_data(self):
         raise NotImplementedError()
@@ -382,34 +382,38 @@ class ArrayMapStructure(object):
         self._dirty = True
 
     def unpack(self, force=False):
-        if self._dirty or force:
-            self.items = {}
-            buf = Buffer(self._get_data())
-            for i in range(self._LENGTH_):
-                peek = buf.peek(self._TYPE_.size_of())
-                if set(peek) == {0}:
-                    #  Skip this entry, because it is empty
-                    buf.read(self._TYPE_.size_of())
-                else:
-                    self.items[i] = self._TYPE_(parent=self, offset=self._TYPE_.size_of()*i)
+        # if self._dirty or force:
+        #     self.items = {}
+        #     buf = Buffer(self._get_data())
+        #     for i in range(self._LENGTH_):
+        #         peek = buf.peek(self._TYPE_.size_of())
+        #         if set(peek) == {0}:
+        #             #  Skip this entry, because it is empty
+        #             buf.read(self._TYPE_.size_of())
+        #         else:
+        #             self.items[i] = self._TYPE_(parent=self, offset=self._TYPE_.size_of()*i)
+        self.items = {}
+        for i in range(self._LENGTH_):
+            self.items[i] = self._TYPE_(parent=self, offset=self._TYPE_.size_of() * i)
 
     def pack(self, force=False):
-        if self._dirty or force:
-            buf = Buffer()
-
-            # TODO: what do we do when this section is never unpacked? for now, let's leave things unchanged.
-            if self.items is None:
-                return
-
-            # TODO: Are there still use cases for this?
-            # for i in range(self._LENGTH_):
-            #     if i in self.items:
-            #         self.items[i].serialize_to_buffer(buf)
-            #     else:
-            #         buf.write(b'\x00'*self._TYPE_.size_of())
-            #
-            # self._set_data(buf.getvalue())
-            self._dirty = False
+        pass
+        # if self._dirty or force:
+        #     buf = Buffer()
+        #
+        #     # TODO: what do we do when this section is never unpacked? for now, let's leave things unchanged.
+        #     if self.items is None:
+        #         return
+        #
+        #     # TODO: Are there still use cases for this?
+        #     # for i in range(self._LENGTH_):
+        #     #     if i in self.items:
+        #     #         self.items[i].serialize_to_buffer(buf)
+        #     #     else:
+        #     #         buf.write(b'\x00'*self._TYPE_.size_of())
+        #     #
+        #     # self._set_data(buf.getvalue())
+        #     self._dirty = False
 
 
 class ArrayMapSection(ArrayMapStructure, MapSection):
@@ -440,9 +444,15 @@ class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
     def pack(self, force=False):
         if force or self._dirty:
             ArrayMapStructure.pack(self, force)
-            CompressedMapSection.pack(self, force)
+            self.pack_items()
 
     def unpack(self, force=False):
         if force or self._dirty:
             CompressedMapSection.unpack(self, force)
-            ArrayMapStructure.unpack(self, force)
+            self.unpack_items()
+
+    def unpack_items(self):
+        ArrayMapStructure.unpack(self, True)
+
+    def pack_items(self):
+        ArrayMapStructure.pack(self, True)

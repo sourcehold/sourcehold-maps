@@ -59,3 +59,63 @@ class Building(ChildStructure):
     def size_of(cls):
         return 812
 
+
+class UnitAivLocations(ChildStructure):
+
+    # TODO: this is a child of a childstructure, how to handle inheritance of parent and offset?
+
+    @classmethod
+    def size_of(cls):
+        return 4 * 10 * 21
+
+
+for i in range(21):
+    for j in range(10):
+        setattr(UnitAivLocations, f"type{i}_location{j}", DataProperty("I", start=(i*10*4) + (j*4)))
+
+
+class PlayerData(ChildStructure):
+
+    data = DataProperty("B", start=0, array_size=14836)
+
+    #unit_aiv_locations = DataProperty(UnitAivLocations, start=11588)
+
+    def __init__(self, parent, offset):
+        super().__init__(parent, offset)
+
+    @classmethod
+    def size_of(cls):
+        return 14836
+
+
+from enum import IntEnum
+
+
+class AivUnitType(IntEnum):
+    # Misc
+    OILMAN = 1
+    MANGONEL = 2
+    BALLISTA = 3
+    TREBUCHET = 4
+    FIRE_BALLISTA = 5
+    BOWMAN = 6
+    CROSSBOWMAN = 7
+    SPEARMAN = 8
+    PIKEMAN = 9
+    MACEMAN = 10
+    SWORDSMAN = 11
+    KNIGHT = 12
+    SLAVE = 13
+    SLINGER = 14
+    ASSASSIN = 15
+    ARABIAN_ARCHER = 16
+    HORSE_ARCHER = 17
+    ARABIAN_SWORDSMAN = 18
+    FIRE_THROWER = 19
+    BRAZIER = 20
+    FLAG = 21
+
+
+for i in range(21):
+    for j in range(10):
+        setattr(PlayerData, f"{AivUnitType(i+1).name}_location{j}", DataProperty("I", start=11588 + ((i*10*4) + (j*4))))

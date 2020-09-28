@@ -14,6 +14,7 @@ from .section1015 import Section1015
 from .section1017 import Section1017
 from .section1020 import Section1020
 from .section1021 import Section1021
+from .section1022 import Section1022
 from .section1023 import Section1023
 from .section1026 import Section1026
 from .section1028 import Section1028
