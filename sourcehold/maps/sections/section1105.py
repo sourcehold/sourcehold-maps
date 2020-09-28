@@ -1,10 +1,15 @@
 from .types import TileMapSection
 from .types import ArrayMapCompressedSection
+from .objects import ChildStructure
 
 
-class TileMap(TileMapSection):
+class TileMap(ChildStructure, TileMapSection):
     _TYPE_ = "B"
     _CLASS_ = int
+
+    def __init__(self, parent, offset):
+        super().__init__(parent, offset)
+        # TODO: stubbing! This is a read only section for now
 
     def from_buffer(self, buf, **kwargs):
         return super().from_buffer(buf, length=80400)

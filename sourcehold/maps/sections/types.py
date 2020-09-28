@@ -359,7 +359,7 @@ class ArrayMapStructure(object):
 
     def __init__(self):
         self.items = None
-        self._dirty = True
+        self._dirty = False
 
     def _get_data(self):
         raise NotImplementedError()
@@ -372,16 +372,16 @@ class ArrayMapStructure(object):
 
     def __getitem__(self, item):
         if self.items is None:
-            self.unpack(True)
+            self.unpack_items(True)
         return self.items[item]
 
     def __setitem__(self, key, value):
         if self.items is None:
-            self.unpack(True)
+            self.unpack_items(True)
         self.items[key] = value
         self._dirty = True
 
-    def unpack(self, force=False):
+    def unpack_items(self, force=False):
         # if self._dirty or force:
         #     self.items = {}
         #     buf = Buffer(self._get_data())
@@ -396,24 +396,29 @@ class ArrayMapStructure(object):
         for i in range(self._LENGTH_):
             self.items[i] = self._TYPE_(parent=self, offset=self._TYPE_.size_of() * i)
 
-    def pack(self, force=False):
+    def pack_items(self, force=False):
         pass
-        # if self._dirty or force:
-        #     buf = Buffer()
-        #
-        #     # TODO: what do we do when this section is never unpacked? for now, let's leave things unchanged.
-        #     if self.items is None:
-        #         return
-        #
-        #     # TODO: Are there still use cases for this?
-        #     # for i in range(self._LENGTH_):
-        #     #     if i in self.items:
-        #     #         self.items[i].serialize_to_buffer(buf)
-        #     #     else:
-        #     #         buf.write(b'\x00'*self._TYPE_.size_of())
-        #     #
-        #     # self._set_data(buf.getvalue())
-        #     self._dirty = False
+            # buf = Buffer()
+            #
+            # # TODO: what do we do when this section is never unpacked? for now, let's leave things unchanged.
+            # if self.items is None:
+            #     return
+            #
+            # # TODO: Are there still use cases for this?
+            # # for i in range(self._LENGTH_):
+            # #     if i in self.items:
+            # #         self.items[i].serialize_to_buffer(buf)
+            # #     else:
+            # #         buf.write(b'\x00'*self._TYPE_.size_of())
+            # #
+            # # self._set_data(buf.getvalue())
+            # self._dirty = False
+
+    # def unpack_items(self):
+    #     ArrayMapStructure.unpack(self, True)
+    #
+    # def pack_items(self):
+    #     ArrayMapStructure.pack(self, True)
 
 
 class ArrayMapSection(ArrayMapStructure, MapSection):
@@ -425,12 +430,12 @@ class ArrayMapSection(ArrayMapStructure, MapSection):
         return self.set_data(data)
 
     def pack(self, force=False):
-        ArrayMapStructure.pack(self, force)
+        self.pack_items()
         MapSection.pack(self, force)
 
     def unpack(self, force=False):
         MapSection.unpack(self, force)
-        ArrayMapStructure.unpack(self, force)
+        self.unpack_items()
 
 
 class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
@@ -442,17 +447,9 @@ class ArrayMapCompressedSection(ArrayMapStructure, CompressedMapSection):
         return self.set_data(data)
 
     def pack(self, force=False):
-        if force or self._dirty:
-            ArrayMapStructure.pack(self, force)
-            self.pack_items()
+        self.pack_items()
+        CompressedMapSection.pack(self, force)
 
     def unpack(self, force=False):
-        if force or self._dirty:
-            CompressedMapSection.unpack(self, force)
-            self.unpack_items()
-
-    def unpack_items(self):
-        ArrayMapStructure.unpack(self, True)
-
-    def pack_items(self):
-        ArrayMapStructure.pack(self, True)
+        CompressedMapSection.unpack(self, force)
+        self.unpack_items()
