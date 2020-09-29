@@ -7,7 +7,31 @@
       <Element Offset="948" Vartype="4 Bytes" Bytesize="4" Description="previous_popularity?" DisplayMethod="Unsigned Integer"/>
       <Element Offset="952" Vartype="4 Bytes" Bytesize="4" RLECount="36" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1096" Vartype="4 Bytes" Bytesize="4" Description="gold_previous_month?" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="1100" Vartype="4 Bytes" Bytesize="4" RLECount="35" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1100" Vartype="4 Bytes" Bytesize="4" RLECount="10" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1140" Vartype="4 Bytes" Bytesize="4" Description="starting_count_wood" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1144" Vartype="4 Bytes" Bytesize="4" Description="starting_count_hops" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1148" Vartype="4 Bytes" Bytesize="4" Description="starting_count_stone" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1152" Vartype="4 Bytes" Bytesize="4" Description="starting_count_good5" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1156" Vartype="4 Bytes" Bytesize="4" Description="starting_count_iron" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1160" Vartype="4 Bytes" Bytesize="4" Description="starting_count_pitch" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1164" Vartype="4 Bytes" Bytesize="4" Description="starting_count_good8" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1168" Vartype="4 Bytes" Bytesize="4" Description="starting_count_wheat" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1172" Vartype="4 Bytes" Bytesize="4" Description="starting_count_bread" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1176" Vartype="4 Bytes" Bytesize="4" Description="starting_count_cheese" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1180" Vartype="4 Bytes" Bytesize="4" Description="starting_count_meat" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1184" Vartype="4 Bytes" Bytesize="4" Description="starting_count_fruit" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1188" Vartype="4 Bytes" Bytesize="4" Description="starting_count_beer" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1192" Vartype="4 Bytes" Bytesize="4" Description="starting_gold" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1196" Vartype="4 Bytes" Bytesize="4" Description="starting_count_flour" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1200" Vartype="4 Bytes" Bytesize="4" Description="starting_count_bow" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1204" Vartype="4 Bytes" Bytesize="4" Description="starting_count_xbow" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1208" Vartype="4 Bytes" Bytesize="4" Description="starting_count_spear" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1212" Vartype="4 Bytes" Bytesize="4" Description="starting_count_pike" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1216" Vartype="4 Bytes" Bytesize="4" Description="starting_count_mace" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1220" Vartype="4 Bytes" Bytesize="4" Description="starting_count_sword" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1224" Vartype="4 Bytes" Bytesize="4" Description="starting_count_leather" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1228" Vartype="4 Bytes" Bytesize="4" Description="starting_count_armor" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="1232" Vartype="4 Bytes" Bytesize="4" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1240" Vartype="4 Bytes" Bytesize="4" Description="count_wood" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1244" Vartype="4 Bytes" Bytesize="4" Description="count_hops" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1248" Vartype="4 Bytes" Bytesize="4" Description="count_stone" DisplayMethod="Unsigned Integer"/>
@@ -41,7 +65,9 @@
       <Element Offset="8400" Vartype="4 Bytes" Bytesize="4" Description="count_e_knight" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8404" Vartype="4 Bytes" Bytesize="4" Description="count_e_ladder" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8408" Vartype="4 Bytes" Bytesize="4" Description="count_e_engineer" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="8412" Vartype="4 Bytes" Bytesize="4" RLECount="72" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8412" Vartype="4 Bytes" Bytesize="4" RLECount="43" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8584" Vartype="4 Bytes" Bytesize="4" Description="tax_setting" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8588" Vartype="4 Bytes" Bytesize="4" RLECount="28" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8700" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Hexadecimal"/>
       <Element Offset="8704" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8716" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Hexadecimal"/>

@@ -96,6 +96,8 @@ jobs:
             python-platform: x86
           - os: macOS-latest
             platform: x86
+          - platform: x64
+            python-platform: x86
     steps:
     - name: Download package
       uses: actions/download-artifact@v2
