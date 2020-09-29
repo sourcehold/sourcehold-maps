@@ -23,7 +23,7 @@ ext_modules = cythonize([
 setup(
     name="sourcehold",
     cmdclass={"build_ext": build_ext},
-    version="0.0.2",
+    version="0.0.3",
     author="The developers",
     author_email="gynt@users.noreply.github.com",
     description="A package to interact with stronghold (crusader) files and the process",

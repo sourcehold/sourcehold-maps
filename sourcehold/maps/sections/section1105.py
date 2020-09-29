@@ -1,6 +1,9 @@
 from .types import TileMapSection
 from .types import ArrayMapCompressedSection
 from .objects import ChildStructure
+import struct
+from sourcehold.world import TileLocationTranslator
+world = TileLocationTranslator()
 
 
 class TileMap(ChildStructure, TileMapSection):
@@ -9,7 +12,6 @@ class TileMap(ChildStructure, TileMapSection):
 
     def __init__(self, parent, offset):
         super().__init__(parent, offset)
-        # TODO: stubbing! This is a read only section for now
 
     def from_buffer(self, buf, **kwargs):
         return super().from_buffer(buf, length=80400)
@@ -17,6 +19,10 @@ class TileMap(ChildStructure, TileMapSection):
     @classmethod
     def size_of(cls):
         return 80400
+
+    def get_data(self):
+        # TODO: stubbing! This is a read only section for now
+        return super().get_data()[self._offset:self._offset + 80400]
 
 
 class Section1105(ArrayMapCompressedSection):
