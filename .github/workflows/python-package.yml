@@ -29,6 +29,8 @@ jobs:
             python-platform: x86
           - os: macOS-latest
             platform: x86
+          - platform: x64
+            python-platform: x86
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
