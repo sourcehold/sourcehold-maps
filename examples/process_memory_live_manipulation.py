@@ -8,7 +8,7 @@ units = LiveSection1015(process)
 units.unpack_items()
 
 with units.cache():
-    print(units[1].location_tile_index)
+    all_units = [unit for unit in units.items.values() if unit.unit_type != 0]
 
 buildings = LiveSection1013(process)
 buildings.unpack_items()

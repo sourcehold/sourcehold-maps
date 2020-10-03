@@ -2,10 +2,21 @@
 <Structures>
   <Structure Name="PlayerData" AutoFill="0" AutoCreate="1" DefaultHex="0" AutoDestroy="0" DoNotSaveLocal="0" RLECompression="1" AutoCreateStructsize="4096">
     <Elements>
+      <Element Offset="0" Vartype="4 Bytes" Bytesize="4" RLECount="6" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="24" Vartype="Byte" Bytesize="1" Description="rations_duplicate" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="25" Vartype="Byte" Bytesize="1" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="28" Vartype="4 Bytes" Bytesize="4" RLECount="17" DisplayMethod="Unsigned Integer"/>
       <Element Offset="96" Vartype="4 Bytes" Bytesize="4" Description="popularity" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="100" Vartype="4 Bytes" Bytesize="4" RLECount="212" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="100" Vartype="4 Bytes" Bytesize="4" RLECount="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="116" Vartype="4 Bytes" Bytesize="4" Description="population_cap" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="120" Vartype="4 Bytes" Bytesize="4" Description="current_population_duplicate" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="124" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="136" Vartype="4 Bytes" Bytesize="4" Description="available_peasants_at_fire" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="140" Vartype="4 Bytes" Bytesize="4" Description="available_peasants" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="144" Vartype="4 Bytes" Bytesize="4" RLECount="201" DisplayMethod="Unsigned Integer"/>
       <Element Offset="948" Vartype="4 Bytes" Bytesize="4" Description="previous_popularity?" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="952" Vartype="4 Bytes" Bytesize="4" RLECount="36" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="952" Vartype="4 Bytes" Bytesize="4" Description="army_size" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="956" Vartype="4 Bytes" Bytesize="4" RLECount="35" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1096" Vartype="4 Bytes" Bytesize="4" Description="gold_previous_month?" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1100" Vartype="4 Bytes" Bytesize="4" RLECount="10" DisplayMethod="Unsigned Integer"/>
       <Element Offset="1140" Vartype="4 Bytes" Bytesize="4" Description="starting_count_wood" DisplayMethod="Unsigned Integer"/>
@@ -65,13 +76,28 @@
       <Element Offset="8400" Vartype="4 Bytes" Bytesize="4" Description="count_e_knight" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8404" Vartype="4 Bytes" Bytesize="4" Description="count_e_ladder" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8408" Vartype="4 Bytes" Bytesize="4" Description="count_e_engineer" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="8412" Vartype="4 Bytes" Bytesize="4" RLECount="43" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8412" Vartype="4 Bytes" Bytesize="4" RLECount="41" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8576" Vartype="4 Bytes" Bytesize="4" Description="current_population" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8580" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8584" Vartype="4 Bytes" Bytesize="4" Description="tax_setting" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="8588" Vartype="4 Bytes" Bytesize="4" RLECount="28" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8588" Vartype="Byte" Bytesize="1" Description="rations" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8588" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8589" Vartype="Byte" Bytesize="1" RLECount="3" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8592" Vartype="4 Bytes" Bytesize="4" RLECount="26" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8696" Vartype="2 Bytes" Bytesize="2" Description="lord_uid" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8698" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8700" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Hexadecimal"/>
       <Element Offset="8704" Vartype="4 Bytes" Bytesize="4" RLECount="3" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8716" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Hexadecimal"/>
-      <Element Offset="8720" Vartype="4 Bytes" Bytesize="4" RLECount="37" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8720" Vartype="4 Bytes" Bytesize="4" RLECount="12" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8768" Vartype="Byte" Bytesize="1" Description="blessed_people" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8769" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8771" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8772" Vartype="4 Bytes" Bytesize="4" RLECount="14" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8828" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8830" Vartype="Byte" Bytesize="1" Description="blessed_people_duplicate_non_auth" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8831" Vartype="Byte" Bytesize="1" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="8832" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8868" Vartype="4 Bytes" Bytesize="4" Description="beer_percentage" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8872" Vartype="4 Bytes" Bytesize="4" RLECount="10" DisplayMethod="Unsigned Integer"/>
       <Element Offset="8912" Vartype="4 Bytes" Bytesize="4" Description="count_inn" DisplayMethod="Unsigned Integer"/>
@@ -81,7 +107,10 @@
       <Element Offset="10800" Vartype="4 Bytes" Bytesize="4" Description="count_a_slave" DisplayMethod="Unsigned Integer"/>
       <Element Offset="10804" Vartype="4 Bytes" Bytesize="4" DisplayMethod="Unsigned Integer"/>
       <Element Offset="10808" Vartype="4 Bytes" Bytesize="4" Description="count_a_slinger" DisplayMethod="Unsigned Integer"/>
-      <Element Offset="10812" Vartype="4 Bytes" Bytesize="4" RLECount="1029" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="10812" Vartype="4 Bytes" Bytesize="4" RLECount="1043" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="14984" Vartype="Byte" Bytesize="1" RLECount="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="14986" Vartype="2 Bytes" Bytesize="2" DisplayMethod="Unsigned Integer"/>
+      <Element Offset="14988" Vartype="4 Bytes" Bytesize="4" RLECount="9" DisplayMethod="Unsigned Integer"/>
       <Element Offset="15024" Vartype="4 Bytes" Bytesize="4" Description="last_element" DisplayMethod="Unsigned Integer"/>
     </Elements>
   </Structure>

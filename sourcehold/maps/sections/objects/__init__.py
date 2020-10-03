@@ -81,6 +81,9 @@ class PlayerData(ChildStructure):
     # Popularity level. Starting popularity is 10000.
     popularity = DataProperty("H", start=96)
 
+    # Possible values are 0 until 5. If set to 5, popularity bonus is +10, and a monk appears as the image.
+    rations = DataProperty("B", start=8588)
+
 
     # 0: floor(inhabitants/2)*2 (factor -1)
     # 1: inhabitants/72 * 57 (factor -0.8)
