@@ -1,16 +1,10 @@
 # Player Data
 
-Lots of the player data can be found in this section. There are basically 14.932 bytes of yet unknown data (probably including a player0) and an 8 x 14.836 (8 x 0x39F4) byte array with player data (in the disassembly, the players are enumerated 1-8, not 0-7).
+Lots of the player data can be found in this section. There is basically a 9 x 14.836 (9 x 0x39F4) byte array with player data (in the disassembly, the players are enumerated 1-8, not 0-7).
 
 This data includes hard data (which is editable with CE) like popularity and gold, some live statistics (which gets periodically updated) like total wood or housing, settings like taxes and potentially more.
 
 Some settings only get updated if another action takes place. For example if one changes the taxes in this section (0 corresponds to +7 popularity, 1 to +5 and so on), it only gets updated if one opens the keep.
 
-When wiped, everything is 0, but amount of peasants and capacity is restored, but popularity and gold remain 0.
-Popularity also does not seem to increase, despite +3 situation.
-
-Taxes are set to +7 popularity level. Rations are set to 0. There are no forbidden foods.
-
-Popularity seems broken, also because taxation is just +1 popularity for a while (a month until update?), and cannot be set higher.
-Changing rations also does not remove the -8 popularity penalty.
-The rations screen is absolutely broken, nobody eats anymore.
+The unique ID of the lord is stored in PlayerData, if you set this to 0, a new lord is spawned. If you set it to nonzero before the lord is spawned at the start of the game, the lord is never spawned, so you become invincible... if the nonzero value (unique ID) is a peasant, that peasant will never despawn from the campfire and will count as an extra citizen for some weird reason (causing overpopulation penalty). If that peasant is killed, the game does not end, it only ends if any lord type unit is killed.
+The AI also stops attacking if there is no lord, I guess because it cannot find any lord to attack.

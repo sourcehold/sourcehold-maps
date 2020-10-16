@@ -27,7 +27,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | [1010](Section-1010) | Tile data (short) | Unit Unique ID
 | [1012](Section-1012) | Tile data (short) | Building unique ID |
 | [1013](Section-1013) | Info data array   | Building data in array format. Max 2000 buildings, every building is 812 bytes.|
-| [1014](Section-1014) | Tile data (int)   ||
+| [1014](Section-1014) | Info data array   | Trees |
 | [1015](Section-1015) | Info data array   | Unit data in array format. Max 2500 units and every unit is 1168 bytes.|
 | [1016](Section-1016) |||
 | [1017](Section-1017) |||
@@ -38,7 +38,7 @@ A section can be in a compressed state. Most tile data sections are stored in a 
 | [1022](Section-1022) | Info data (mixed) | Contains player data. |
 | [1023](Section-1023) |||
 | [1024](Section-1024) |||
-| [1025](Section-1025) |||
+| [1025](Section-1025) | Info data array | no idea |
 | [1026](Section-1026) | Tile data (short) |Visual effects, such as the destruction of buildings and flags.|
 | [1028](Section-1028) | Tile data (byte)  ||
 | [1029](Section-1029) | Tile data (byte)  ||
