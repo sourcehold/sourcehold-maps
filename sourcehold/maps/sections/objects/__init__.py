@@ -16,6 +16,14 @@ class ChildStructure(Structure):
         raise Exception("you should not call this")
 
 
+class Tree(ChildStructure):
+    data = DataProperty("B", array_size=156)
+
+    @classmethod
+    def size_of(cls):
+        return 156
+
+
 class Unit(ChildStructure):
     #data = Field("data", "B", array_size=1168)
 
