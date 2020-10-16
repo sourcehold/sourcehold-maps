@@ -1,3 +1,7 @@
+
+
+TileMap with the unique IDs of entity's as defined in Section 1025. 
+
 Visual effects, such as the destruction of buildings and flags.
 Does not contain effects such as maypole dancing.
 
