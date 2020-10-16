@@ -39,8 +39,8 @@ image_parser.add_argument("--perspective", help="create perspective image", defa
 
 memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
-memory_parser_group.add_argument("--write", help="write to memory section", type=int)
-memory_parser_group.add_argument("--read", help="read from memory section", type=int)
+memory_parser_group.add_argument("--write", help="write to memory section")
+memory_parser_group.add_argument("--read", help="read from memory section")
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
 memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=None)
@@ -248,7 +248,10 @@ if args.subparser_name == "memory":
     process = AccessContext(cheat_table=args.config, process_name=args.process_name)
 
     if args.read:
-        dump = process.read_section(str(args.read))
+        if args.read == "all":
+            dump = process.read_all_memory()
+        else:
+            dump = process.read_section(str(args.read))
         if args.out == "-":
             sys.stdout.buffer.write(dump)
         elif args.out:
@@ -263,7 +266,10 @@ if args.subparser_name == "memory":
         else:
             input_data = pathlib.Path(infile).read_bytes()
 
-        process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
+        if args.write == "all":
+            process.write_bytes(0, input_data)
+        else:
+            process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
 
 
 # if __name__ == "__main__":
