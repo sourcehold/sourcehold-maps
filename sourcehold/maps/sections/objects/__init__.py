@@ -25,7 +25,7 @@ class Tree(ChildStructure):
 
 
 class Unit(ChildStructure):
-    #data = Field("data", "B", array_size=1168)
+    data = Field("data", "B", array_size=1168)
 
     owner = DataProperty("I", start=128)
     location_j = DataProperty("H", start=224)
