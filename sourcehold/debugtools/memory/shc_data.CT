@@ -261,7 +261,7 @@
     <CheatEntry>
       <ID>49</ID>
       <Description>"section1008? correct?"</Description>
-      <LastState Value="B1" RealAddress="01A2832A"/>
+      <LastState Value="8F" RealAddress="01A2832A"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+162832A</Address>
@@ -325,7 +325,7 @@
         <CheatEntry>
           <ID>56</ID>
           <Description>"1008"</Description>
-          <LastState Value="251" RealAddress="01BD0F48"/>
+          <LastState Value="88" RealAddress="01BD0F48"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+17d0f48</Address>
         </CheatEntry>
@@ -507,7 +507,7 @@
         <CheatEntry>
           <ID>80</ID>
           <Description>"1040"</Description>
-          <LastState Value="114" RealAddress="01A279C0"/>
+          <LastState Value="40" RealAddress="01A279C0"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+16279c0</Address>
         </CheatEntry>
@@ -577,7 +577,7 @@
         <CheatEntry>
           <ID>90</ID>
           <Description>"1079"</Description>
-          <LastState Value="0" RealAddress="00DF37FC"/>
+          <LastState Value="1" RealAddress="00DF37FC"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+9f37fc</Address>
         </CheatEntry>
@@ -731,7 +731,7 @@
         <CheatEntry>
           <ID>113</ID>
           <Description>"1048"</Description>
-          <LastState Value="3" RealAddress="01FE7D78"/>
+          <LastState Value="0" RealAddress="01FE7D78"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7d78</Address>
         </CheatEntry>
@@ -766,7 +766,7 @@
         <CheatEntry>
           <ID>118</ID>
           <Description>"1055"</Description>
-          <LastState Value="8" RealAddress="0112B044"/>
+          <LastState Value="3" RealAddress="0112B044"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+d2b044</Address>
         </CheatEntry>
@@ -1088,9 +1088,9 @@
         <CheatEntry>
           <ID>164</ID>
           <Description>"1134?"</Description>
-          <LastState Value="0" RealAddress="004002B0"/>
+          <LastState Value="0" RealAddress="024026CC"/>
           <VariableType>Byte</VariableType>
-          <Address>"Stronghold Crusader.exe"+2b0</Address>
+          <Address>"Stronghold Crusader.exe"+20026cc</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>165</ID>

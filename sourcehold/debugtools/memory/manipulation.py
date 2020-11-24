@@ -1,5 +1,5 @@
 
-from sourcehold.debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory.access import AccessContext
 
 
 class LiveByteArray(object):

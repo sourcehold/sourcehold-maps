@@ -38,7 +38,7 @@ setup(
     ],
     python_requires='>=3.8',
     package_data={
-        "sourcehold": ["debugtools/memory/common/access/*.ct"],
+        "sourcehold": ["debugtools/memory/*.ct"],
     },
     install_requires=["pymem", "Pillow"],
     test_suite="tests",

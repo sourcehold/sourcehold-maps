@@ -11,7 +11,7 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 import matplotlib.pyplot as plt
 
 from sourcehold.debugtools.maps import yield_values, populate_value_matrix, init_matrix
-from sourcehold.debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory import SHC as AccessContext
 from sourcehold.maps.sections import find_section_for_index
 import struct
 from sourcehold.world import TileLocationTranslator
@@ -32,7 +32,7 @@ if __name__ == "__main__" and __file__ != "<input>":
     interval = args.interval
 else:
     section = 1003
-    categorical_color_mode = False
+    categorical_color_mode = True
     interval = 1.0
 
 tlt = TileLocationTranslator()

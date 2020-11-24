@@ -1,5 +1,38 @@
 
 
+def create_matrix(dtype="uint32"):
+    import numpy
+
+    return numpy.zeros(shape=(400,400), dtype=dtype)
+
+def create_binary_matrix():
+    import numpy
+
+    matrix = numpy.zeros(shape=(400, 400), dtype="bool")
+
+    tlt = TileLocationTranslator()
+
+    for i in range(80400):
+        stp = tlt.SerializedTileIndex(i).to_serialized_tile_point().to_adjusted_serialized_tile_point()
+        matrix[int(stp.i), int(stp.j)] = True
+
+    return matrix
+
+
+def create_tile_index_matrix():
+    import numpy
+
+    matrix = numpy.zeros(shape=(400, 400), dtype="uint32")
+
+    tlt = TileLocationTranslator()
+
+    for i in range(80400):
+        stp = tlt.SerializedTileIndex(i).to_serialized_tile_point().to_adjusted_serialized_tile_point()
+        matrix[int(stp.i), int(stp.j)] = i
+
+    return matrix
+
+
 class TileLocationTranslator(object):
 
     def __init__(self, square_width=400):

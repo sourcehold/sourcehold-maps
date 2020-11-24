@@ -44,8 +44,48 @@ def load_address_list_from_cheat_table(path=pathlib.Path(pkg_resources.resource_
 
     return address_list
 
-from sourcehold.debugtools.memory.common import MemorySection
+from sourcehold.debugtools.memory import MemorySection
 from sourcehold.debugtools.memory.common import section_lengths
+import struct
+
+
+def read_address_list_shce(process):
+    addr = 0x00b92be8
+    end = 0x00b93398
+    size = 4+4+4+2+2
+    data = process.read_bytes(addr, end-addr)
+    for i in range(0, end-addr, size):
+        sub = data[i:i+size]
+        m = MemorySection(name=str(struct.unpack("<H", sub[14:16])[0]),
+                          size=struct.unpack("<I", sub[8:12])[0],
+                          address=struct.unpack("<I", sub[:4])[0])
+        yield m
+
+
+def read_address_list_shc(process):
+    addr = 0x00b92a58
+    end = 0x00b93208
+    size = 4+4+4+2+2
+    data = process.read_bytes(addr, end-addr)
+    for i in range(0, end-addr, size):
+        sub = data[i:i+size]
+        m = MemorySection(name=str(struct.unpack("<H", sub[14:16])[0]),
+                          size=struct.unpack("<I", sub[8:12])[0],
+                          address=struct.unpack("<I", sub[:4])[0])
+        yield m
+
+
+def read_address_list_sh(process):
+    addr = 0x0081e518
+    end = 0x0081eb48
+    size = 4+4+4+2+2
+    data = process.read_bytes(addr, end-addr)
+    for i in range(0, end-addr, size):
+        sub = data[i:i+size]
+        m = MemorySection(name=str(struct.unpack("<H", sub[14:16])[0]),
+                          size=struct.unpack("<I", sub[8:12])[0],
+                          address=struct.unpack("<I", sub[:4])[0])
+        yield m
 
 
 def convert_address_list_to_memory_sections(address_list):
@@ -57,8 +97,8 @@ import os
 
 class AccessContext(object):
 
-    def __init__(self, cheat_table=pathlib.Path(pkg_resources.resource_filename(__name__, "shc_data.CT")), process_name="Stronghold Crusader"):
-        self.cheat_table = cheat_table
+    def __init__(self, process_name):
+        #self.cheat_table = cheat_table
 
         error = None
         try:
@@ -78,9 +118,10 @@ class AccessContext(object):
             if error is not None:
                 raise error
 
-        self.address_list = load_address_list_from_cheat_table(self.cheat_table, offset=self.base)
-        self.memory_sections = {m.name: m for m in convert_address_list_to_memory_sections(self.address_list)}
+        #self.address_list = load_address_list_from_cheat_table(self.cheat_table, offset=self.base)
+
         self.memory_cache = None
+        self.memory_sections = None
 
     def read_all_memory(self):
         self.memory_cache = None
@@ -113,3 +154,29 @@ class AccessContext(object):
 
     def write_bytes(self, addr, data):
         return pymem.memory.write_bytes(self.process.process_handle, addr, data, len(data))
+
+
+class SH(AccessContext):
+
+    def __init__(self):
+        super().__init__(process_name="Stronghold")
+        self.memory_sections = {m.name: m for m in read_address_list_sh(self.process)}
+
+
+class SHC(AccessContext):
+    futureMapOrientation = 0x01fe7aa8
+    currentMapOrientation = 0x01fe7aa4
+
+    def __init__(self):
+        super().__init__(process_name="Stronghold Crusader")
+        self.memory_sections = {m.name: m for m in read_address_list_shc(self.process)}
+
+    def force_redraw(self):
+        self.write_bytes(self.futureMapOrientation, self.read_bytes(self.currentMapOrientation, 1))
+
+
+class SHCE(AccessContext):
+
+    def __init__(self):
+        super().__init__(process_name="Stronghold Crusader Extreme")
+        self.memory_sections = {m.name: m for m in read_address_list_shce(self.process)}
