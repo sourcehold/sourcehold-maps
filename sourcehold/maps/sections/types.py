@@ -174,7 +174,7 @@ class TileStructure(object):
             return self.__getitem__(world.SerializedTilePoint(i=item[0], j=item[1]))
 
         if type(item) == world.SerializedTilePoint:
-            return self.__getitem__(item.to_serialized_tile_index().index)
+            return self.__getitem__(int(item.to_serialized_tile_index().index))
 
         if type(item) == int:
             size = struct.calcsize(self._TYPE_)

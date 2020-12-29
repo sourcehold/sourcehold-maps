@@ -178,5 +178,5 @@ class SHC(AccessContext):
 class SHCE(AccessContext):
 
     def __init__(self):
-        super().__init__(process_name="Stronghold Crusader Extreme")
+        super().__init__(process_name="Stronghold_Crusader_Extreme")
         self.memory_sections = {m.name: m for m in read_address_list_shce(self.process)}

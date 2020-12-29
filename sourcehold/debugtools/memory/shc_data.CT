@@ -4,56 +4,48 @@
     <CheatEntry>
       <ID>8</ID>
       <Description>"buildingsectionstart?"</Description>
-      <LastState Value="0" RealAddress="00F98534"/>
       <VariableType>Byte</VariableType>
       <Address>00f98534</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>7</ID>
       <Description>"building1"</Description>
-      <LastState Value="0" RealAddress="00F98860"/>
       <VariableType>Byte</VariableType>
       <Address>00F98860</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>6</ID>
       <Description>"building2"</Description>
-      <LastState Value="0" RealAddress="00F98B8C"/>
       <VariableType>Byte</VariableType>
       <Address>00F98B8C</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>11</ID>
       <Description>"building3"</Description>
-      <LastState Value="0" RealAddress="00F98EB8"/>
       <VariableType>Byte</VariableType>
       <Address>00F98EB8</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>12</ID>
       <Description>"building4"</Description>
-      <LastState Value="0" RealAddress="00F991E4"/>
       <VariableType>Byte</VariableType>
       <Address>00F991E4</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>20</ID>
       <Description>"unit1"</Description>
-      <LastState Value="0" RealAddress="013889DC"/>
       <VariableType>Byte</VariableType>
       <Address>013889DC</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>18</ID>
       <Description>"unit2"</Description>
-      <LastState Value="0" RealAddress="01388E6C"/>
       <VariableType>Byte</VariableType>
       <Address>01388E6C</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>32</ID>
       <Description>"section1001"</Description>
-      <LastState Value="01" RealAddress="01AE5688"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+16E5688</Address>
@@ -61,7 +53,6 @@
     <CheatEntry>
       <ID>39</ID>
       <Description>"section1033"</Description>
-      <LastState Value="00" RealAddress="01B0CAA8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+170CAA8</Address>
@@ -69,7 +60,6 @@
     <CheatEntry>
       <ID>33</ID>
       <Description>"section1002"</Description>
-      <LastState Value="01" RealAddress="01B5B2E8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+175B2E8</Address>
@@ -77,7 +67,6 @@
     <CheatEntry>
       <ID>38</ID>
       <Description>"section1003"</Description>
-      <LastState Value="10" RealAddress="01BF8368"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+17F8368</Address>
@@ -85,14 +74,12 @@
     <CheatEntry>
       <ID>21</ID>
       <Description>"section1037"</Description>
-      <LastState Value="0" RealAddress="01C471E8"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+18471E8</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>25</ID>
       <Description>"section1043"</Description>
-      <LastState Value="00" RealAddress="01D5A058"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+195A058</Address>
@@ -100,14 +87,12 @@
     <CheatEntry>
       <ID>47</ID>
       <Description>"section1004"</Description>
-      <LastState Value="0" RealAddress="01C6E798"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+186e798</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>34</ID>
       <Description>"section1036"</Description>
-      <LastState Value="00" RealAddress="01DCFCB8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+19CFCB8</Address>
@@ -115,14 +100,12 @@
     <CheatEntry>
       <ID>48</ID>
       <Description>"section1005"</Description>
-      <LastState Value="8" RealAddress="01D32C38"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1932c38</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>24</ID>
       <Description>"section1045"</Description>
-      <LastState Value="08" RealAddress="01D46648"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1946648</Address>
@@ -130,7 +113,6 @@
     <CheatEntry>
       <ID>26</ID>
       <Description>"section1006"</Description>
-      <LastState Value="00" RealAddress="01D81478"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1981478</Address>
@@ -138,7 +120,6 @@
     <CheatEntry>
       <ID>35</ID>
       <Description>"section1007"</Description>
-      <LastState Value="00" RealAddress="01D94E88"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1994E88</Address>
@@ -146,7 +127,6 @@
     <CheatEntry>
       <ID>27</ID>
       <Description>"section1020"</Description>
-      <LastState Value="00" RealAddress="01DBC2A8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+19BC2A8</Address>
@@ -154,28 +134,24 @@
     <CheatEntry>
       <ID>19</ID>
       <Description>"section1008"</Description>
-      <LastState Value="0" RealAddress="01A1E6EA"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+161e6ea</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>45</ID>
       <Description>"section1009?"</Description>
-      <LastState Value="0" RealAddress="01B82708"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1782708</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>46</ID>
       <Description>"section1010?"</Description>
-      <LastState Value="0" RealAddress="01CD09E8"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+18d09e8</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>36</ID>
       <Description>"section1030"</Description>
-      <LastState Value="00" RealAddress="01E1E4F8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1A1E4F8</Address>
@@ -183,14 +159,12 @@
     <CheatEntry>
       <ID>44</ID>
       <Description>"section1026?"</Description>
-      <LastState Value="0" RealAddress="01CF7E08"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+18f7e08</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>23</ID>
       <Description>"section1118"</Description>
-      <LastState Value="00" RealAddress="01D1F228"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+191F228</Address>
@@ -198,7 +172,6 @@
     <CheatEntry>
       <ID>37</ID>
       <Description>"section1012"</Description>
-      <LastState Value="00" RealAddress="01C95BB8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1895BB8</Address>
@@ -206,7 +179,6 @@
     <CheatEntry>
       <ID>41</ID>
       <Description>"section1021"</Description>
-      <LastState Value="00" RealAddress="01DF70D8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+19F70D8</Address>
@@ -214,7 +186,6 @@
     <CheatEntry>
       <ID>22</ID>
       <Description>"section1049"</Description>
-      <LastState Value="00" RealAddress="01CBCFD8"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+18BCFD8</Address>
@@ -222,7 +193,6 @@
     <CheatEntry>
       <ID>28</ID>
       <Description>"section1028"</Description>
-      <LastState Value="00" RealAddress="01E94158"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1A94158</Address>
@@ -230,7 +200,6 @@
     <CheatEntry>
       <ID>29</ID>
       <Description>"section1029"</Description>
-      <LastState Value="00" RealAddress="01EA7B68"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1AA7B68</Address>
@@ -238,7 +207,6 @@
     <CheatEntry>
       <ID>30</ID>
       <Description>"section1103"</Description>
-      <LastState Value="00" RealAddress="01EBB578"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1ABB578</Address>
@@ -246,7 +214,6 @@
     <CheatEntry>
       <ID>31</ID>
       <Description>"section1104"</Description>
-      <LastState Value="00" RealAddress="01ECEF88"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+1ACEF88</Address>
@@ -254,14 +221,12 @@
     <CheatEntry>
       <ID>43</ID>
       <Description>"section1105?"</Description>
-      <LastState Value="0" RealAddress="01EE2998"/>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+01AE2998</Address>
     </CheatEntry>
     <CheatEntry>
       <ID>49</ID>
       <Description>"section1008? correct?"</Description>
-      <LastState Value="8F" RealAddress="01A2832A"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+162832A</Address>
@@ -276,875 +241,750 @@
         <CheatEntry>
           <ID>50</ID>
           <Description>"1001"</Description>
-          <LastState Value="1" RealAddress="01AE5688"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+16e5688</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>167</ID>
           <Description>"1002"</Description>
-          <LastState Value="1" RealAddress="01B5B2E8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+175b2e8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>51</ID>
           <Description>"1003"</Description>
-          <LastState Value="16" RealAddress="01BF8368"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+17f8368</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>52</ID>
           <Description>"1004"</Description>
-          <LastState Value="0" RealAddress="01C6E798"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+186e798</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>53</ID>
           <Description>"1005"</Description>
-          <LastState Value="8" RealAddress="01D32C38"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1932c38</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>54</ID>
           <Description>"1006"</Description>
-          <LastState Value="0" RealAddress="01D81478"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1981478</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>55</ID>
           <Description>"1007"</Description>
-          <LastState Value="0" RealAddress="01D94E88"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1994e88</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>56</ID>
           <Description>"1008"</Description>
-          <LastState Value="88" RealAddress="01BD0F48"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+17d0f48</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>57</ID>
           <Description>"1009"</Description>
-          <LastState Value="0" RealAddress="01B82708"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1782708</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>58</ID>
           <Description>"1010"</Description>
-          <LastState Value="0" RealAddress="01CD09E8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+18d09e8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>59</ID>
           <Description>"1012"</Description>
-          <LastState Value="0" RealAddress="01C95BB8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1895bb8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>60</ID>
           <Description>"1013"</Description>
-          <LastState Value="0" RealAddress="00F98534"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+b98534</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>176</ID>
           <Description>"1014"</Description>
-          <LastState Value="0" RealAddress="00F2CC54"/>
           <VariableType>Byte</VariableType>
           <Address>00F2CC54</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>61</ID>
           <Description>"1015"</Description>
-          <LastState Value="0" RealAddress="0138854C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+f8854c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>62</ID>
           <Description>"1016"</Description>
-          <LastState Value="0" RealAddress="01667FA0"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1267fa0</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>108</ID>
           <Description>"1017"</Description>
-          <LastState Value="0" RealAddress="00F78F14"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+b78f14</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>63</ID>
           <Description>"1018"</Description>
-          <LastState Value="0" RealAddress="00F325AA"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+b325aa</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>64</ID>
           <Description>"1019?"</Description>
-          <LastState Value="56" RealAddress="00476B52"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+76b52</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>65</ID>
           <Description>"1020"</Description>
-          <LastState Value="0" RealAddress="01DBC2A8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19bc2a8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>66</ID>
           <Description>"1021"</Description>
-          <LastState Value="0" RealAddress="01DF70D8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19f70d8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>67</ID>
           <Description>"1022"</Description>
-          <LastState Value="0" RealAddress="0115BDF8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+d5bdf8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>68</ID>
           <Description>"1023"</Description>
-          <LastState Value="0" RealAddress="0117C78C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+d7c78c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>69</ID>
           <Description>"1025"</Description>
-          <LastState Value="0" RealAddress="02350314"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1f50314</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>70</ID>
           <Description>"1026"</Description>
-          <LastState Value="0" RealAddress="01CF7E08"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+18f7e08</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>71</ID>
           <Description>"1028"</Description>
-          <LastState Value="0" RealAddress="01E94158"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1a94158</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>72</ID>
           <Description>"1029"</Description>
-          <LastState Value="0" RealAddress="01EA7B68"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1aa7b68</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>73</ID>
           <Description>"1030"</Description>
-          <LastState Value="0" RealAddress="01E1E4F8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1a1e4f8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>74</ID>
           <Description>"1031"</Description>
-          <LastState Value="0" RealAddress="012BC94C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+ebc94c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>75</ID>
           <Description>"1033"</Description>
-          <LastState Value="0" RealAddress="01B0CAA8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+170caa8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>76</ID>
           <Description>"1034"</Description>
-          <LastState Value="0" RealAddress="00AB917D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+6b917d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>77</ID>
           <Description>"1036"</Description>
-          <LastState Value="0" RealAddress="01DCFCB8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19cfcb8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>78</ID>
           <Description>"1037"</Description>
-          <LastState Value="0" RealAddress="01C471E8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+18471e8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>79</ID>
           <Description>"1038"</Description>
-          <LastState Value="0" RealAddress="00F78F30"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+b78f30</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>80</ID>
           <Description>"1040"</Description>
-          <LastState Value="40" RealAddress="01A279C0"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+16279c0</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>81</ID>
           <Description>"1041"</Description>
-          <LastState Value="0" RealAddress="01F93A78"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1b93a78</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>82</ID>
           <Description>"1042"</Description>
-          <LastState Value="11" RealAddress="0043CE05"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3ce05</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>83</ID>
           <Description>"1043"</Description>
-          <LastState Value="0" RealAddress="01D5A058"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+195a058</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>84</ID>
           <Description>"1045"</Description>
-          <LastState Value="8" RealAddress="01D46648"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1946648</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>85</ID>
           <Description>"1049"</Description>
-          <LastState Value="0" RealAddress="01CBCFD8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+18bcfd8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>86</ID>
           <Description>"1052"</Description>
-          <LastState Value="0" RealAddress="01FE5B28"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be5b28</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>87</ID>
           <Description>"1065"</Description>
-          <LastState Value="1" RealAddress="005B7168"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1b7168</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>88</ID>
           <Description>"1073"</Description>
-          <LastState Value="0" RealAddress="016539B4"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+12539b4</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>89</ID>
           <Description>"1078"</Description>
-          <LastState Value="0" RealAddress="00AB7E30"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+6b7e30</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>90</ID>
           <Description>"1079"</Description>
-          <LastState Value="1" RealAddress="00DF37FC"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+9f37fc</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>91</ID>
           <Description>"1083"</Description>
-          <LastState Value="0" RealAddress="01FD228C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1bd228c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>92</ID>
           <Description>"1085"</Description>
-          <LastState Value="0" RealAddress="01653DDA"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1253dda</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>93</ID>
           <Description>"1089"</Description>
-          <LastState Value="0" RealAddress="01653858"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1253858</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>94</ID>
           <Description>"1091"</Description>
-          <LastState Value="0" RealAddress="01763354"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1363354</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>95</ID>
           <Description>"1099"</Description>
-          <LastState Value="255" RealAddress="0112B0B8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+d2b0b8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>96</ID>
           <Description>"1100"</Description>
-          <LastState Value="0" RealAddress="00DF419C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+9f419c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>97</ID>
           <Description>"1101"</Description>
-          <LastState Value="0" RealAddress="005B7D88"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1b7d88</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>98</ID>
           <Description>"1102"</Description>
-          <LastState Value="1" RealAddress="005AC436"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1ac436</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>99</ID>
           <Description>"1103"</Description>
-          <LastState Value="0" RealAddress="01EBB578"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1abb578</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>100</ID>
           <Description>"1104"</Description>
-          <LastState Value="0" RealAddress="01ECEF88"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1acef88</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>101</ID>
           <Description>"1105"</Description>
-          <LastState Value="0" RealAddress="01EE2998"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1ae2998</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>175</ID>
           <Description>"1107"</Description>
-          <LastState Value="0" RealAddress="01866AB4"/>
           <VariableType>Byte</VariableType>
           <Address>01866AB4</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>102</ID>
           <Description>"1114"</Description>
-          <LastState Value="0" RealAddress="018C37F4"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+14c37f4</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>103</ID>
           <Description>"1115"</Description>
-          <LastState Value="0" RealAddress="018C34C4"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+14c34c4</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>104</ID>
           <Description>"1124"</Description>
-          <LastState Value="0" RealAddress="00DF4118"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+9f4118</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>105</ID>
           <Description>"1125"</Description>
-          <LastState Value="0" RealAddress="01A26D2C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1626d2c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>106</ID>
           <Description>"1126"</Description>
-          <LastState Value="0" RealAddress="01FEA080"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1bea080</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>109</ID>
           <Description>"1024"</Description>
-          <LastState Value="0" RealAddress="011BC95C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+dbc95c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>110</ID>
           <Description>"1044?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>111</ID>
           <Description>"1046?"</Description>
-          <LastState Value="226" RealAddress="0043A21A"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3a21a</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>112</ID>
           <Description>"1047"</Description>
-          <LastState Value="232" RealAddress="01FE7D50"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7d50</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>113</ID>
           <Description>"1048"</Description>
-          <LastState Value="0" RealAddress="01FE7D78"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7d78</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>114</ID>
           <Description>"1050"</Description>
-          <LastState Value="144" RealAddress="01FE7C14"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7c14</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>115</ID>
           <Description>"1051?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>116</ID>
           <Description>"1053"</Description>
-          <LastState Value="0" RealAddress="01FE5B2C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be5b2c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>117</ID>
           <Description>"1054?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>118</ID>
           <Description>"1055"</Description>
-          <LastState Value="3" RealAddress="0112B044"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+d2b044</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>119</ID>
           <Description>"1056"</Description>
-          <LastState Value="0" RealAddress="016538D8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+12538d8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>120</ID>
           <Description>"1057?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>121</ID>
           <Description>"1059?"</Description>
-          <LastState Value="0" RealAddress="004002B0"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+2b0</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>122</ID>
           <Description>"1061"</Description>
-          <LastState Value="0" RealAddress="016539B0"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+12539b0</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>123</ID>
           <Description>"1062"</Description>
-          <LastState Value="0" RealAddress="01653E04"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1253e04</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>124</ID>
           <Description>"1063"</Description>
-          <LastState Value="0" RealAddress="01653E08"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1253e08</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>125</ID>
           <Description>"1064"</Description>
-          <LastState Value="0" RealAddress="0165F028"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+125f028</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>126</ID>
           <Description>"1066?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>127</ID>
           <Description>"1067?"</Description>
-          <LastState Value="0" RealAddress="00400019"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>128</ID>
           <Description>"1068?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>129</ID>
           <Description>"1071?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>130</ID>
           <Description>"1072?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>131</ID>
           <Description>"1074?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>132</ID>
           <Description>"1076?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>133</ID>
           <Description>"1077?"</Description>
-          <LastState Value="0" RealAddress="00AB917D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+6b917d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>134</ID>
           <Description>"1080?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>135</ID>
           <Description>"1081?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>136</ID>
           <Description>"1082?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>137</ID>
           <Description>"1084?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>138</ID>
           <Description>"1086?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>139</ID>
           <Description>"1087?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>140</ID>
           <Description>"1088?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>141</ID>
           <Description>"1090?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>142</ID>
           <Description>"1093?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>143</ID>
           <Description>"1095?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>144</ID>
           <Description>"1106?"</Description>
-          <LastState Value="99" RealAddress="0040028C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+28c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>145</ID>
           <Description>"1108?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>146</ID>
           <Description>"1109?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>147</ID>
           <Description>"1110?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>148</ID>
           <Description>"1111?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>149</ID>
           <Description>"1112?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>150</ID>
           <Description>"1113?"</Description>
-          <LastState Value="1" RealAddress="0040003D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>151</ID>
           <Description>"1116?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>152</ID>
           <Description>"1117"</Description>
-          <LastState Value="3" RealAddress="01A24A4C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1624a4c</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>153</ID>
           <Description>"1119?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>154</ID>
           <Description>"1120"</Description>
-          <LastState Value="0" RealAddress="01FE9CA8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be9ca8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>155</ID>
           <Description>"1121?"</Description>
-          <LastState Value="0" RealAddress="004001B6"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1b6</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>156</ID>
           <Description>"1122?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>157</ID>
           <Description>"1123?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>158</ID>
           <Description>"1127?"</Description>
-          <LastState Value="1" RealAddress="0040019D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+19d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>159</ID>
           <Description>"1129?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>160</ID>
           <Description>"1130"</Description>
-          <LastState Value="0" RealAddress="01FE9E50"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be9e50</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>161</ID>
           <Description>"1131?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>162</ID>
           <Description>"1132?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>163</ID>
           <Description>"1133?"</Description>
-          <LastState Value="0" RealAddress="00400011"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+11</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>164</ID>
           <Description>"1134?"</Description>
-          <LastState Value="0" RealAddress="024026CC"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+20026cc</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>165</ID>
           <Description>"1135?"</Description>
-          <LastState Value="0" RealAddress="00AB917D"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+6b917d</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>166</ID>
           <Description>"1136?"</Description>
-          <LastState Value="0" RealAddress="00400003"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+3</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>172</ID>
           <Description>"1044_option_a"</Description>
-          <LastState Value="4294967295" RealAddress="00B39624"/>
           <VariableType>4 Bytes</VariableType>
           <Address>"Stronghold Crusader.exe"+739624</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>173</ID>
           <Description>"1044_option_b"</Description>
-          <LastState Value="0" RealAddress="01FE7AA4"/>
           <VariableType>4 Bytes</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7aa4</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>168</ID>
           <Description>"1046_option_a"</Description>
-          <LastState Value="0" RealAddress="01A27604"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1627604</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>169</ID>
           <Description>"1046_option_b"</Description>
-          <LastState Value="0" RealAddress="01FE7DA8"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1be7da8</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>170</ID>
           <Description>"1117_option_a"</Description>
-          <LastState Value="0" RealAddress="00DF4190"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+9f4190</Address>
         </CheatEntry>
         <CheatEntry>
           <ID>171</ID>
           <Description>"1117_option_b"</Description>
-          <LastState Value="3" RealAddress="01A24A4C"/>
           <VariableType>Byte</VariableType>
           <Address>"Stronghold Crusader.exe"+1624a4c</Address>
         </CheatEntry>
@@ -1153,10 +993,21 @@
     <CheatEntry>
       <ID>174</ID>
       <Description>"1107_player_1"</Description>
-      <LastState Value="00" RealAddress="0186D84C"/>
       <ShowAsHex>1</ShowAsHex>
       <VariableType>Byte</VariableType>
       <Address>"Stronghold Crusader.exe"+146D84C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>177</ID>
+      <Description>"drawinthisorientation"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>01FE7AA8</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>178</ID>
+      <Description>"SEC_GameMode2"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>01FE7D78</Address>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>

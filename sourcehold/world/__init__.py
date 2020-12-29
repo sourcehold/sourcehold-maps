@@ -1,9 +1,11 @@
 
 
+
 def create_matrix(dtype="uint32"):
     import numpy
 
     return numpy.zeros(shape=(400,400), dtype=dtype)
+
 
 def create_binary_matrix():
     import numpy

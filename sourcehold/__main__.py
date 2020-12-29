@@ -41,12 +41,13 @@ memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
 memory_parser_group.add_argument("--write", help="write to memory section")
 memory_parser_group.add_argument("--read", help="read from memory section")
+memory_parser_group.add_argument("--inject", help="inject map/sav file into memory")
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
 memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=None)
 memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
 memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
-memory_parser.add_argument("--process-name", help="name of the SHC process", default="Stronghold Crusader")
+memory_parser.add_argument("--process-version", help="version of the Stronghold process", default="SHCHD1.41")
 
 args = main_parser.parse_args()
 
@@ -239,13 +240,18 @@ if args.subparser_name == "memory":
     if platform.system().lower() != "windows":
         raise Exception("memory debugging is currently only supported on Windows")
 
-    import sourcehold.debugtools.memory.common.access
-    from sourcehold.debugtools.memory.common.access import AccessContext
+    #  import sourcehold.debugtools.memory.common.access
+    #  from sourcehold.debugtools.memory.common.access import AccessContext
+    from sourcehold.debugtools.memory import SHC, SHCE
 
-    if args.config is None:
-        args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
-
-    process = AccessContext(cheat_table=args.config, process_name=args.process_name)
+    #  if args.config is None:
+    #      args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
+    if args.process_version == "SHCHD1.41":
+        process = SHC()
+    elif args.process_version == "SHCHD1.41.1-E":
+        process = SHCE()
+    else:
+        raise RuntimeError("Misspecified process version? Supported version: SHCHD1.41 or SHCHD1.41.1-E")
 
     if args.read:
         if args.read == "all":
@@ -270,6 +276,13 @@ if args.subparser_name == "memory":
             process.write_bytes(0, input_data)
         else:
             process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
+
+    elif args.inject:
+        m = load_map(args.inject)
+        for index, section in process.memory_sections.items():
+            if index == "0":
+                continue
+            process.write_section(index, m.directory[int(index)].get_data())
 
 
 # if __name__ == "__main__":
