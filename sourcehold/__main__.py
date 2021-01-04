@@ -42,6 +42,7 @@ memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
 memory_parser_group.add_argument("--write", help="write to memory section")
 memory_parser_group.add_argument("--read", help="read from memory section")
 memory_parser_group.add_argument("--inject", help="inject map/sav file into memory")
+memory_parser_group.add_argument("--dump-into", help="dump game state memory (map/sav/msv) into a binary dump")
 memory_parser.add_argument("--in", help="input data location")
 memory_parser.add_argument("--out", help="output data location", default="-")
 memory_parser.add_argument("--config", help="location of the CheatEngine .CT file", default=None)
@@ -289,6 +290,19 @@ if args.subparser_name == "memory":
             except Exception as e:
                 print(f"failed on section: {e}")
 
+    elif args.dump_into:
+        with open(args.dump_into, "wb") as ofile:
+            for index, section in process.memory_sections.items():
+                if index == "0":
+                    continue
+                try:
+                    data = process.read_section(section)
+                    header = struct.pack("<I", int(index))
+                    header += struct.pack("<I", len(data))
+                    ofile.write(header)
+                    ofile.write(data)
+                except Exception as e:
+                    print(f"failed on section: {e}")
 
 # if __name__ == "__main__":
 #     main()
