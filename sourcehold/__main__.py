@@ -242,7 +242,7 @@ if args.subparser_name == "memory":
 
     #  import sourcehold.debugtools.memory.common.access
     #  from sourcehold.debugtools.memory.common.access import AccessContext
-    from sourcehold.debugtools.memory import SHC, SHCE
+    from sourcehold.debugtools.memory import SHC, SHCE, SH
 
     #  if args.config is None:
     #      args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
@@ -250,8 +250,10 @@ if args.subparser_name == "memory":
         process = SHC()
     elif args.process_version == "SHCHD1.41.1-E":
         process = SHCE()
+    elif args.process_version == "SH1.41":
+        process = SH()
     else:
-        raise RuntimeError("Misspecified process version? Supported version: SHCHD1.41 or SHCHD1.41.1-E")
+        raise RuntimeError("Misspecified process version? Supported version: SH1.41, SHCHD1.41, SHCHD1.41.1-E")
 
     if args.read:
         if args.read == "all":
@@ -282,7 +284,10 @@ if args.subparser_name == "memory":
         for index, section in process.memory_sections.items():
             if index == "0":
                 continue
-            process.write_section(index, m.directory[int(index)].get_data())
+            try:
+                process.write_section(index, m.directory[int(index)].get_data())
+            except Exception as e:
+                print(f"failed on section: {e}")
 
 
 # if __name__ == "__main__":
