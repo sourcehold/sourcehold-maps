@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/sourcehold-maps/static/css/main.073c9b0a.css",
+    "main.js": "/sourcehold-maps/static/js/main.3bd756ef.js",
+    "static/js/787.01d59b3c.chunk.js": "/sourcehold-maps/static/js/787.01d59b3c.chunk.js",
+    "static/media/logo.svg": "/sourcehold-maps/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/sourcehold-maps/index.html",
+    "main.073c9b0a.css.map": "/sourcehold-maps/static/css/main.073c9b0a.css.map",
+    "main.3bd756ef.js.map": "/sourcehold-maps/static/js/main.3bd756ef.js.map",
+    "787.01d59b3c.chunk.js.map": "/sourcehold-maps/static/js/787.01d59b3c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.3bd756ef.js"
+  ]
+}
