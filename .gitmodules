@@ -1,0 +1,3 @@
+[submodule "vendor/pkware"]
+	path = src/vendor/pkware
+	url = https://gynt@github.com/gynt/node-pkware

@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .App-logo {
@@ -35,4 +38,34 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .boxrow {
+  border: 1px dotted grey;
+}
+
+.box .boxrow.header {
+  flex: 0 1 auto;
+  /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+}
+
+.box .boxrow.content {
+  flex: 1 1 auto;
+}
+
+.box .boxrow.footer {
+  flex: 0 1 20px;
+  justify-content: flex-start;
+  display: flex;
+  align-items: center;
 }
