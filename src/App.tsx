@@ -4,10 +4,12 @@ import Toolbar from './components/Toolbar'
 import ImportMapFileModal from './components/ImportMapFileModal'
 import { fileStateAtom } from './state/FileState'
 import { useAtom } from 'jotai'
-import { decompress } from './sourcehold/CompressionInterface'
+import { compress, decompress } from './sourcehold/CompressionInterface'
+import { currentStatusMessageAtom } from './state/CurrentStatusMessage'
 
 function App () {
   const [file] = useAtom(fileStateAtom)
+  const [currentStatusMessage] = useAtom(currentStatusMessageAtom)
 
   return (
     <>
@@ -17,10 +19,18 @@ function App () {
           <p>todo</p>
         </div>
         <div className = "boxrow footer bg-light text-muted font" style={{ paddingLeft: 10 }}>
+          <span>
           <small onClick={async () => {
-            const testResult = await decompress(new Uint8Array([0, 6, 130, 36, 37, 15, 2, 254, 1]), 100)
-            console.log(testResult)
+            const compressed = await compress(new TextEncoder().encode('Hello world!'), 6)
+            console.log(compressed)
+            const decompressed = await decompress(compressed, undefined)
+            console.log(decompressed)
+            console.log(new TextDecoder().decode(decompressed))
           }}>Current file: {file.name}</small>
+          </span>
+          <span>
+            {currentStatusMessage}
+          </span>
         </div>
       </div>
       <ImportMapFileModal/>

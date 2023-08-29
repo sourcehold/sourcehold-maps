@@ -89,18 +89,18 @@ export function compress (data: Uint8Array, level: number): Promise<Uint8Array> 
   d.push(null)
   return new Promise<Uint8Array>(resolve => {
     d.pipe(through(implode(Compression.Binary, ds, { inputBufferSize: data.length, verbose: true }))).pipe(toBuffer((compressedData) => {
-      const result = new Uint8Array(compressedData.buffer.slice(0), compressedData.byteOffset, compressedData.byteLength)
+      const result = new Uint8Array(compressedData.buffer.slice(0), compressedData.byteOffset, compressedData.length)
       resolve(result)
     }))
   })
 }
-export async function decompress (data: Uint8Array, decompressedSize: number): Promise<Uint8Array> {
+export async function decompress (data: Uint8Array, decompressedSize: number | undefined): Promise<Uint8Array> {
   const d = new Duplex()
   d.push(data)
   d.push(null)
   return new Promise<Uint8Array>(resolve => {
-    d.pipe(through(explode({ inputBufferSize: data.length, outputBufferSize: decompressedSize, verbose: true }))).pipe(toBuffer((decompressedData) => {
-      const result = new Uint8Array(decompressedData.buffer.slice(0), decompressedData.byteOffset, decompressedData.byteLength)
+    d.pipe(through(explode({ inputBufferSize: data.length, outputBufferSize: decompressedSize || 0, verbose: true }))).pipe(toBuffer((decompressedData) => {
+      const result = new Uint8Array(decompressedData.buffer.slice(0), decompressedData.byteOffset, decompressedData.length)
       resolve(result)
     }))
   })

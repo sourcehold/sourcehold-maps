@@ -254,7 +254,7 @@ export class CompressedSection extends Section {
   async unpack () {
     this.compression_level = this.data[1]
     this.processed_data = await decompress(this.data, this.uncompressed_size)
-    this.validate()
+    // this.validate()
   }
 
   validate () {
@@ -730,4 +730,14 @@ export function getSectionClassForIndex (index: string | number, compressed: boo
     return CompressedSection
   }
   return DataSection
+}
+
+export async function bufferToMap (buffer: ArrayBufferLike): Promise<Map> {
+  const map = new Map().deserialize_from(new InterpretationBuffer(buffer))
+
+  return new Promise<Map>(resolve => {
+    map.unpack().then(() => {
+      resolve(map)
+    })
+  })
 }

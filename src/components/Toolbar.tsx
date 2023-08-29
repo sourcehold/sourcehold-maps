@@ -4,11 +4,15 @@ import { showImportMapFileModalDialog } from './ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
 import { fileStateAtom } from '../state/FileState'
+import { bufferToMap } from '../sourcehold/Architecture'
+import { mapStateAtom } from '../state/MapState'
 
 function Toolbar () {
   const [, setImportMapFileModalState] = useAtom(importMapFileModalReducerAtom)
 
   const [, setFileState] = useAtom(fileStateAtom)
+
+  const [, setMapState] = useAtom(mapStateAtom)
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">
@@ -21,15 +25,19 @@ function Toolbar () {
             <NavDropdown.Item href="#file/import" onClick={async () => {
               console.log('CLICK')
               const result = await showImportMapFileModalDialog({
-                handleOK: (file: File) => {
-                  console.log(file.name)
-                  setFileState(file)
+                handleOK: (f: File) => {
+                  console.log(f.name)
+                  // setFileState(file)
                 }
               }, setImportMapFileModalState)
 
               if (result.status === 'ok') {
                 console.log('OK')
                 console.log(result.file.name)
+                setFileState(result.file)
+                const map = await result.file.arrayBuffer().then(b => bufferToMap(b))
+                console.log(map)
+                setMapState(map)
               } else {
                 console.log('CANCEL')
               }
