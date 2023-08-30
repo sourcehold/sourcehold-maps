@@ -6,6 +6,7 @@ import { fileStateAtom } from './state/FileState'
 import { useAtom } from 'jotai'
 import { compress, decompress } from './sourcehold/CompressionInterface'
 import { currentStatusMessageAtom } from './state/CurrentStatusMessage'
+import ExportMapToZipModal from './components/EportMaptoZipModal'
 
 function App () {
   const [file] = useAtom(fileStateAtom)
@@ -34,6 +35,7 @@ function App () {
         </div>
       </div>
       <ImportMapFileModal/>
+      <ExportMapToZipModal/>
     </>
   )
 }

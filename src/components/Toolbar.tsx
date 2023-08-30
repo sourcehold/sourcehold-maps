@@ -6,13 +6,17 @@ import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
 import { fileStateAtom } from '../state/FileState'
 import { bufferToMap } from '../sourcehold/Architecture'
 import { mapStateAtom } from '../state/MapState'
+import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
+import { ExportMapToZipModalReducerAtom } from '../state/ExportMapToZipModalState'
 
 function Toolbar () {
   const [, setImportMapFileModalState] = useAtom(importMapFileModalReducerAtom)
 
-  const [, setFileState] = useAtom(fileStateAtom)
+  const [fileState, setFileState] = useAtom(fileStateAtom)
 
-  const [, setMapState] = useAtom(mapStateAtom)
+  const [, setExportMapToZipModalState] = useAtom(ExportMapToZipModalReducerAtom)
+
+  const [mapState, setMapState] = useAtom(mapStateAtom)
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">
@@ -46,9 +50,18 @@ function Toolbar () {
               Export .map
             </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#file/import-zip">Import from .zip</NavDropdown.Item>
-            <NavDropdown.Item href="#file/export-zip">
-              Export to .zip
+            <NavDropdown.Item href="#file/import-zip">Import .map from .zip</NavDropdown.Item>
+            <NavDropdown.Item href="#file/export-zip" onClick={async (e) => {
+              mapState.export_to_zip().then((z) => z.generateAsync({ type: 'blob' }).then(async (zip) => {
+                const url = window.URL.createObjectURL(zip)
+
+                await showExportMapToZipModalDialog({
+                  fileName: fileState.name + '.zip',
+                  objectURL: url
+                }, setExportMapToZipModalState)
+              }))
+            }}>
+              Export .map as .zip
             </NavDropdown.Item>
           </NavDropdown>
           <Nav.Link href="#tab/tilemap-explorer">Tilemap explorer</Nav.Link>
