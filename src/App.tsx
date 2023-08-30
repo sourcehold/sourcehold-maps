@@ -7,31 +7,41 @@ import { useAtom } from 'jotai'
 import { compress, decompress } from './sourcehold/CompressionInterface'
 import { currentStatusMessageAtom } from './state/CurrentStatusMessage'
 import ExportMapToZipModal from './components/EportMaptoZipModal'
+import { Tab, TabContainer } from 'react-bootstrap'
+import { GUIStateAtom } from './state/GuiState'
+import TilemapExplorerTabV2 from './components/TilemapExplorerTabV2'
 
 function App () {
   const [file] = useAtom(fileStateAtom)
   const [currentStatusMessage] = useAtom(currentStatusMessageAtom)
+  const [GUIState] = useAtom(GUIStateAtom)
 
   return (
     <>
       <div className="App box">
-        <Toolbar />
-        <div className="boxrow content">
-          <p>todo</p>
-        </div>
-        <div className = "boxrow footer bg-light text-muted font" style={{ paddingLeft: 10 }}>
+        <TabContainer activeKey={GUIState.activeTabKey}>
+          <Toolbar />
+          <Tab.Content className="boxrow content text-light align-items-stretch">
+            <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">First tab content</Tab.Pane>
+            <Tab.Pane eventKey="tilemap-explorer" className="align-self-stretch align-items-stretch"><TilemapExplorerTabV2/></Tab.Pane>
+          </Tab.Content>
+
+        </TabContainer>
+
+        <div className = "boxrow footer bg-light text-muted font " style={{ paddingLeft: 10 }}>
           <span>
-          <small onClick={async () => {
-            const compressed = await compress(new TextEncoder().encode('Hello world!'), 6)
-            console.log(compressed)
-            const decompressed = await decompress(compressed, undefined)
-            console.log(decompressed)
-            console.log(new TextDecoder().decode(decompressed))
-          }}>Current file: {file.name}</small>
+            <small>{currentStatusMessage}</small>
           </span>
-          <span>
-            {currentStatusMessage}
+          <span className = "ms-auto" style={{ minWidth: '50rem' }}>
+            <small onClick={async () => {
+              const compressed = await compress(new TextEncoder().encode('Hello world!'), 6)
+              console.log(compressed)
+              const decompressed = await decompress(compressed, undefined)
+              console.log(decompressed)
+              console.log(new TextDecoder().decode(decompressed))
+            }}>Current file: {file.name}</small>
           </span>
+
         </div>
       </div>
       <ImportMapFileModal/>

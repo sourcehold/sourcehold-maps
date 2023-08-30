@@ -27,6 +27,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
+    "react-isometric-projection": "^1.0.0",
     "react-scripts": "^5.0.1",
     "readable-stream": "^4.4.2",
     "typescript": "^5.2.2",

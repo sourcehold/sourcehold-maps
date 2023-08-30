@@ -12,19 +12,19 @@ export async function showExportMapToZipModalDialog (customisations: Partial<Exp
 
   console.log(customState)
 
-  return new Promise<void>(resolve => {
+  return new Promise<boolean>(resolve => {
     const finalState = {
       ...customState,
       show: true,
       handleCancel: () => {
         setExportMapToZipModalState({ ...customState, show: false })
         customState.handleCancel()
-        resolve()
+        resolve(false)
       },
       handleOK: () => {
         setExportMapToZipModalState({ ...customState, show: false })
         customState.handleOK()
-        resolve()
+        resolve(true)
       }
     }
 

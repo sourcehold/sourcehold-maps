@@ -1,0 +1,122 @@
+/* https://codepen.io/hzrd149/pen/bdvrjM */
+#tileMapDiv{
+	--tile-scale: 4;
+	--tile-offset: .4px * var(--tile-scale);
+	--tile-size: 16px;
+	background: #CBF0FF;
+	margin: 0px;
+	overflow: hidden;
+}
+table{
+	transform: rotateX(60deg) rotateZ(45deg);
+	position: absolute;
+  border-spacing: 0px;
+}
+tr{
+    height: 0px;
+    width: 0px;
+    display: block;
+}
+td{
+    height: 0px;
+    width: 0px;
+    display: block;
+	padding: 0px;
+}
+.tile{
+	transform: translate3d(0em, 0em, 0em);
+	width: 4em;
+	height: 4em;
+
+	transition: all 1s cubic-bezier(0.22, 0.6, 0.39, 1.42);
+}
+.tile.hide{
+	transform: translate3d(12em, 12em, 0em) !important;
+	opacity: 0;
+
+	transition: all 1s cubic-bezier(0.7, -0.4, 0.88, 0.51);
+}
+.tile>div{
+	transform: 
+		rotateZ(-45deg) rotateY(-60deg)
+		translate3d(-1.1em, -4.8em, 0em);
+
+	width: 11.5em;
+	height: 10em;
+
+    background-size: calc(100% * var(--tile-scale)) 100%;
+    background-position: -6px 0px;
+    background-repeat: no-repeat;
+	background-image: url(http://img14.deviantart.net/f99b/i/2011/354/d/5/isometric_new_tiles_by_spasquini-d4jnp2i.png);
+    image-rendering: pixelated;
+}
+
+@keyframes showTile {
+    from {
+    	transform: translate3d(12em, 12em, 0em);
+    	opacity: 0;
+    }
+    to {
+    	transform: translate3d(0em, 0em, 0em);
+    	opacity: 1;
+    }
+}
+@keyframes hideTile {
+    from {
+    	transform: translate3d(0em, 0em, 0em);
+    	opacity: 1;
+    }
+    to {
+    	transform: translate3d(12em, 12em, 0em);
+    	opacity: 0;
+    }
+}
+
+.tile>div.tile-0{
+    background-position: calc(var(--tile-offset) - (var(--tile-size) * 0)) 0px;
+}
+.tile>div.tile-1{
+    background-position: calc(var(--tile-offset) - (var(--tile-size) * 1)) 0px;
+}
+.tile>div.tile-2{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 2)) 0px;
+}
+.tile>div.tile-3{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 3)) 0px;
+}
+.tile>div.tile-4{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 4)) 0px;
+}
+.tile>div.tile-5{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 5)) 0px;
+}
+.tile>div.tile-6{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 6)) 0px;
+}
+.tile>div.tile-7{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 7)) 0px;
+}
+.tile>div.tile-8{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 8)) 0px;
+}
+.tile>div.tile-9{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 9)) 0px;
+}
+.tile>div.tile-10{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 10)) 0px;
+}
+.tile>div.tile-11{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 11)) 0px;
+}
+.tile>div.tile-12{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 12)) 0px;
+}
+.tile>div.tile-13{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 13)) 0px;
+}
+.tile>div.tile-14{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 14)) 0px;
+}
+.tile>div.tile-15{
+	background-position: calc(var(--tile-offset) - (var(--tile-size) * 15)) 0px;
+}

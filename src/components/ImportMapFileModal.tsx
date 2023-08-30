@@ -64,7 +64,7 @@ function ImportMapFileModal () {
 
         <Modal.Body>
           <Form.Group controlId="importMapFile" className="mb-3">
-            <Form.Label>Select a .map file to explore</Form.Label>
+            <Form.Label>Select a .map file to import</Form.Label>
             <Form.Control type="file" onChange={onFileChange}/>
           </Form.Group>
         </Modal.Body>
