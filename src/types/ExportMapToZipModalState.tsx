@@ -1,4 +1,4 @@
-import { Map } from '../sourcehold/Architecture'
+import { Map } from '../sourcehold/architecture/Map'
 
 export type ExportMapToZipModalState = {
   map: Map;

@@ -4,10 +4,10 @@ import { showImportMapFileModalDialog } from './ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
 import { fileStateAtom } from '../state/FileState'
-import { bufferToMap } from '../sourcehold/Architecture'
 import { mapStateAtom } from '../state/MapState'
 import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
 import { ExportMapToZipModalReducerAtom } from '../state/ExportMapToZipModalState'
+import { bufferToMap } from '../sourcehold/architecture/Map'
 
 function Toolbar () {
   const [, setImportMapFileModalState] = useAtom(importMapFileModalReducerAtom)
