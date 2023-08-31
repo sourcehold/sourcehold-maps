@@ -26,7 +26,7 @@ function Toolbar () {
 
   const [mapStateAvailableTileMapSections] = useAtom(mapStateAvailableTileMapSectionsAtom)
 
-  const addOnTilemapExplorer = <Form.Select onChange={(e) => {
+  const addOnTilemapExplorer = <Navbar.Collapse className="align-items-stretch"><Form.Select onChange={(e) => {
     setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, section: parseInt(e.target.value) } })
   }}>
       <option value="0">Select a tilemap to explore (default: 1001)</option>
@@ -36,6 +36,10 @@ function Toolbar () {
         </option>)
       }
     </Form.Select>
+    <Form.Switch style={{ width: '300px', paddingLeft: '50px' }} label="Continuous colors" id="continuous-colors-switch" checked={GUIState.tilemapExplorer.continuousColorMode} onChange={(e) => {
+      setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, continuousColorMode: e.target.checked } })
+    }} />
+    </Navbar.Collapse>
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">

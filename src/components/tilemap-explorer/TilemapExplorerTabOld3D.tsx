@@ -7,8 +7,8 @@ import { TileIndex } from '../../sourcehold/architecture/abstract/Points'
 import nj from '@d4c/numjs'
 import { Data, Layout } from 'plotly.js'
 
-const OldTileExplorer = (props: { map: Map, sectionIndex: number; explorerColorMode: boolean }) => {
-  const { map, sectionIndex, explorerColorMode } = props
+const OldTileExplorer = (props: { map: Map, sectionIndex: number; continuousColorMode: boolean }) => {
+  const { map, sectionIndex, continuousColorMode } = props
 
   const section = map.directory.sections[map.directory.section_indices.indexOf(sectionIndex)]
 
@@ -32,44 +32,51 @@ const OldTileExplorer = (props: { map: Map, sectionIndex: number; explorerColorM
     throw Error(`invalid datasize, are you sure it is a proper tilesection? ${datasize}`)
   }
 
-  let d_value = Array(400).fill(0).map(() => Array(400).fill(0))
-  const d_serialized_i = Array(400).fill(0).map(() => Array(400).fill(0))
-  const d_serialized_j = Array(400).fill(0).map(() => Array(400).fill(0))
-  const d_serialized_tile_index = Array(400).fill(0).map(() => Array(400).fill(0))
-  const d_adjusted_tile_number = Array(400).fill(0).map(() => Array(400).fill(0))
+  let d_value = Array(400).fill(undefined).map(() => Array(400).fill(0))
+  const d_value_zeroes = Array(400).fill(0).map(() => Array(400).fill(undefined))
+  const d_serialized_i = Array(400).fill(undefined).map(() => Array(400).fill(0))
+  const d_serialized_j = Array(400).fill(undefined).map(() => Array(400).fill(0))
+  const d_serialized_tile_index = Array(400).fill(undefined).map(() => Array(400).fill(0))
+  const d_adjusted_tile_number = Array(400).fill(undefined).map(() => Array(400).fill(0))
+
+  const d_x = Array(400).fill(0).map((v, y) => Array(400).fill(0).map((v, x) => x))
+  const d_y = Array(400).fill(0).map((v, y) => Array(400).fill(0).map((v, x) => y))
 
   let dp = []
 
-  if (!explorerColorMode) {
+  if (continuousColorMode) {
     data.forEach(function (value, index) {
       const p = new TileIndex(index).to_serialized_point().to_adjusted_point()
       d_value[p.i][p.j] = value
+      d_value_zeroes[p.i][p.j] = 0
       d_serialized_i[p.i][p.j] = new TileIndex(index).to_serialized_point().i
       d_serialized_j[p.i][p.j] = new TileIndex(index).to_serialized_point().j
       d_serialized_tile_index[p.i][p.j] = index
       d_adjusted_tile_number[p.i][p.j] = Math.floor((p.i * 400) + p.j)
     })
 
+    // if (sectionIndex === 1045) {
+    //   d_value_zeroes = d_value_zeroes.map((arr, i) => arr.map((v, j) => d_value_zeroes[i][j] !== undefined ? d_value[i][j] : undefined))
+    // }
+
     dp = [
       {
-        z: d_value.map((v) => v.map((value) => 0)),
+        z: d_value_zeroes,
         type: 'surface',
-        surfacecolor: d_value,
+        surfacecolor: d_value.map((arr, i) => arr.map((v, j) => d_value[j][i])),
         colorscale: 'Rainbow',
         zmin: 0,
         zmax: (2 ** (datasize * 8)) - 1,
         name: '',
         customdata: nj.stack([
-          d_serialized_i as unknown as nj.NdArray,
-          d_serialized_j as unknown as nj.NdArray,
+          d_x as unknown as nj.NdArray,
+          d_y as unknown as nj.NdArray,
           d_serialized_tile_index as unknown as nj.NdArray,
-          d_adjusted_tile_number as unknown as nj.NdArray], 2).tolist(),
-        hovertemplate: (['i (serialized):%{customdata[0]:0f}',
-          'j (serialized):%{customdata[1]:0f}',
-          'j (game):%{x:0f}',
-          'tile index (serialized):%{customdata[2]:0f}',
-          'tile index (game):%{customdata[3]:0f}',
-          'value:%{surfacecolor:0f}']).join('<br>')
+          d_value as unknown as nj.NdArray], 2).tolist(),
+        hovertemplate: (['x:%{customdata[0]:i}',
+          'y:%{customdata[1]:i}',
+          'serialized index:%{customdata[2]:i}',
+          'value:%{customdata[3]:0f}']).join('<br>')
       }
     ]
   } else {
@@ -80,6 +87,7 @@ const OldTileExplorer = (props: { map: Map, sectionIndex: number; explorerColorM
 
     data.forEach(function (value, index) {
       const p = new TileIndex(index).to_serialized_point().to_adjusted_point()
+      d_value_zeroes[p.i][p.j] = 0
       d_value[p.i][p.j] = value
       d_value_indexed[p.i][p.j] = unique_values.indexOf(value)
       d_serialized_i[p.i][p.j] = new TileIndex(index).to_serialized_point().i
@@ -88,33 +96,34 @@ const OldTileExplorer = (props: { map: Map, sectionIndex: number; explorerColorM
       d_adjusted_tile_number[p.i][p.j] = Math.floor((p.i * 400) + p.j)
     })
 
+    // if (sectionIndex === 1045) {
+    //   d_value_zeroes = d_value_zeroes.map((arr, i) => arr.map((v, j) => d_value_zeroes[i][j] !== undefined ? d_value[i][j] : undefined))
+    // }
+
     dp = [
       {
-        z: d_value_indexed.map((v) => v.map((value) => 0)),
+        z: d_value_zeroes,
         type: 'surface',
-        surfacecolor: d_value_indexed,
+        surfacecolor: d_value_indexed.map((arr, i) => arr.map((v, j) => d_value_indexed[j][i])),
         colorscale: 'Rainbow',
         zmin: 0,
         zmax: unique_values.length,
         name: '',
         customdata: nj.stack([
-          d_serialized_i as unknown as nj.NdArray,
-          d_serialized_j as unknown as nj.NdArray,
+          d_x as unknown as nj.NdArray,
+          d_y as unknown as nj.NdArray,
           d_serialized_tile_index as unknown as nj.NdArray,
-          d_adjusted_tile_number as unknown as nj.NdArray,
           d_value as unknown as nj.NdArray], 2).tolist(),
-        hovertemplate: (['i (serialized):%{customdata[0]:0f}',
-          'j (serialized):%{customdata[1]:0f}',
-          'j (game):%{x:0f}',
-          'tile index (serialized):%{customdata[2]:0f}',
-          'tile index (game):%{customdata[3]:0f}',
-          'value:%{customdata[4]:0f}']).join('<br>')
+        hovertemplate: (['x:%{customdata[0]:i}',
+          'y:%{customdata[1]:i}',
+          'serialized index:%{customdata[2]:i}',
+          'value:%{customdata[3]:0f}']).join('<br>')
       }
     ]
   }
 
   const layout = {
-    yaxis: { autorange: 'reversed', scaleanchor: 'x', scaleratio: 1 },
+    yaxis: { scaleanchor: 'x', scaleratio: 1 },
     autosize: false,
     width: 1918,
     height: 875,

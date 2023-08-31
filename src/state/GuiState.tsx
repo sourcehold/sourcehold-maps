@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 
 export type TilemapExplorerOptions = {
   section: number;
-  explorerColorMode: boolean;
+  continuousColorMode: boolean;
 }
 
 export type GUIState = {
@@ -14,7 +14,7 @@ export const DefaultGUIState: GUIState = {
   activeTabKey: 'info',
   tilemapExplorer: {
     section: 1001,
-    explorerColorMode: true
+    continuousColorMode: true
   }
 }
 

@@ -22,7 +22,7 @@ function App () {
 
   let tileExplorer = <div>No map active</div>
   if (mapState !== null) {
-    tileExplorer = <OldTileExplorer map={mapState} sectionIndex={si} explorerColorMode={GUIState.tilemapExplorer.explorerColorMode}/>
+    tileExplorer = <OldTileExplorer map={mapState} sectionIndex={si} continuousColorMode={GUIState.tilemapExplorer.continuousColorMode}/>
   }
 
   return (
