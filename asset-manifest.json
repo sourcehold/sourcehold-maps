@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sourcehold-maps/static/css/main.d3a727c4.css",
-    "main.js": "/sourcehold-maps/static/js/main.cd6fa0d4.js",
+    "main.js": "/sourcehold-maps/static/js/main.9556db2c.js",
     "static/js/496.e9396e4e.chunk.js": "/sourcehold-maps/static/js/496.e9396e4e.chunk.js",
     "index.html": "/sourcehold-maps/index.html",
     "main.d3a727c4.css.map": "/sourcehold-maps/static/css/main.d3a727c4.css.map",
-    "main.cd6fa0d4.js.map": "/sourcehold-maps/static/js/main.cd6fa0d4.js.map",
+    "main.9556db2c.js.map": "/sourcehold-maps/static/js/main.9556db2c.js.map",
     "496.e9396e4e.chunk.js.map": "/sourcehold-maps/static/js/496.e9396e4e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d3a727c4.css",
-    "static/js/main.cd6fa0d4.js"
+    "static/js/main.9556db2c.js"
   ]
 }
