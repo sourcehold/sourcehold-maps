@@ -33,10 +33,10 @@ export class Directory extends Structure {
     this.u4 = buffer.readInt()
     this.u5 = buffer.readInt()
     this.section_uncompressed_lengths = buffer.readInts(this.max_sections_count)
-    this.section_lengths = buffer.readInts(this.max_sections_count)
-    this.section_indices = buffer.readInts(this.max_sections_count)
-    this.section_compressed = buffer.readInts(this.max_sections_count)
-    this.section_offsets = buffer.readInts(this.max_sections_count)
+    this.section_lengths = Array.from(buffer.readInts(this.max_sections_count))
+    this.section_indices = Array.from(buffer.readInts(this.max_sections_count))
+    this.section_compressed = Array.from(buffer.readInts(this.max_sections_count))
+    this.section_offsets = Array.from(buffer.readInts(this.max_sections_count))
     this.u6 = buffer.readInt()
 
     this.sections = []

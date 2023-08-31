@@ -30,7 +30,7 @@ export class InterpretationBuffer {
   }
 
   readInts (n: number) {
-    return Array.from(new Uint32Array([...Array(n).keys()].map(() => this.readInt())))
+    return new Uint32Array([...Array(n).keys()].map(() => this.readInt()))
   }
 
   readByte () {

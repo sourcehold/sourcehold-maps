@@ -1,10 +1,10 @@
 import React from 'react'
-import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import { showImportMapFileModalDialog } from './ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
 import { fileStateAtom } from '../state/FileState'
-import { mapStateAtom } from '../state/MapState'
+import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../state/MapState'
 import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
 import { ExportMapToZipModalReducerAtom } from '../state/ExportMapToZipModalState'
 import { bufferToMap } from '../sourcehold/architecture/Map'
@@ -23,6 +23,19 @@ function Toolbar () {
   const [mapState, setMapState] = useAtom(mapStateAtom)
 
   const [GUIState, setGUIState] = useAtom(GUIStateAtom)
+
+  const [mapStateAvailableTileMapSections] = useAtom(mapStateAvailableTileMapSectionsAtom)
+
+  const addOnTilemapExplorer = <Form.Select onChange={(e) => {
+    setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, section: parseInt(e.target.value) } })
+  }}>
+      <option value="0">Select a tilemap to explore (default: 1001)</option>
+      {
+        mapStateAvailableTileMapSections.map((v) => <option value={`${v}`} key={`section-option-${v}`}>
+          {`Section: ${v}`}
+        </option>)
+      }
+    </Form.Select>
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">
@@ -107,7 +120,13 @@ function Toolbar () {
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>
+        <div className="me-auto">
+        {
+              GUIState.activeTabKey === 'tilemap-explorer' ? addOnTilemapExplorer : (<></>)
+        }
+        </div>
       </Container>
+
     </Navbar>
   )
 }

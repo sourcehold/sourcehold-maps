@@ -1,4 +1,5 @@
 // https://docs.immutable.com/docs/x/create-react-app-webpack-5-errors/
+// https://stackoverflow.com/questions/64557638/how-to-polyfill-node-core-modules-in-webpack-5
 const webpack = require('webpack');
 module.exports = function override(config) {
   const fallback = config.resolve.fallback || {};
@@ -10,6 +11,7 @@ module.exports = function override(config) {
     https: require.resolve('https-browserify'),
     os: require.resolve('os-browserify'),
     url: require.resolve('url'),
+    path: require.resolve('path-browserify')
   });
   config.resolve.fallback = fallback;
   config.plugins = (config.plugins || []).concat([

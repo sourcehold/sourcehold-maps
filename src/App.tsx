@@ -9,12 +9,21 @@ import { currentStatusMessageAtom } from './state/CurrentStatusMessage'
 import ExportMapToZipModal from './components/EportMaptoZipModal'
 import { Tab, TabContainer } from 'react-bootstrap'
 import { GUIStateAtom } from './state/GuiState'
-import TilemapExplorerTabV2 from './components/TilemapExplorerTabV2'
+import OldTileExplorer from './components/tilemap-explorer/TilemapExplorerTabOld3D'
+import { mapStateAtom } from './state/MapState'
 
 function App () {
   const [file] = useAtom(fileStateAtom)
   const [currentStatusMessage] = useAtom(currentStatusMessageAtom)
   const [GUIState] = useAtom(GUIStateAtom)
+  const [mapState] = useAtom(mapStateAtom)
+
+  const si = GUIState.tilemapExplorer.section
+
+  let tileExplorer = <div>No map active</div>
+  if (mapState !== null) {
+    tileExplorer = <OldTileExplorer map={mapState} sectionIndex={si} explorerColorMode={GUIState.tilemapExplorer.explorerColorMode}/>
+  }
 
   return (
     <>
@@ -23,7 +32,10 @@ function App () {
           <Toolbar />
           <Tab.Content className="boxrow content text-light align-items-stretch">
             <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">First tab content</Tab.Pane>
-            <Tab.Pane eventKey="tilemap-explorer" className="align-self-stretch align-items-stretch"><TilemapExplorerTabV2/></Tab.Pane>
+            <Tab.Pane eventKey="tilemap-explorer" className="align-self-stretch align-items-stretch">
+              { tileExplorer
+              }
+            </Tab.Pane>
           </Tab.Content>
 
         </TabContainer>
