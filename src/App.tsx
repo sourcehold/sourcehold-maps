@@ -11,6 +11,7 @@ import { Tab, TabContainer } from 'react-bootstrap'
 import { GUIStateAtom } from './state/GuiState'
 import OldTileExplorer from './components/tilemap-explorer/TilemapExplorerTabOld3D'
 import { mapStateAtom } from './state/MapState'
+import UnitsTab from './components/units-tab/UnitsTab'
 
 function App () {
   const [file] = useAtom(fileStateAtom)
@@ -31,20 +32,20 @@ function App () {
         <TabContainer activeKey={GUIState.activeTabKey}>
           <Toolbar />
           <Tab.Content className="boxrow content text-light align-items-stretch">
-            <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">First tab content</Tab.Pane>
+            <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">TODO</Tab.Pane>
             <Tab.Pane eventKey="tilemap-explorer" className="align-self-stretch align-items-stretch">
               { tileExplorer
               }
+            </Tab.Pane>
+            <Tab.Pane eventKey='units' className="align-self-stretch align-items-stretch">
+              {UnitsTab()}
             </Tab.Pane>
           </Tab.Content>
 
         </TabContainer>
 
         <div className = "boxrow footer bg-light text-muted font " style={{ paddingLeft: 10 }}>
-          <span>
-            <small>{currentStatusMessage}</small>
-          </span>
-          <span className = "ms-auto" style={{ minWidth: '50rem' }}>
+          <span >
             <small onClick={async () => {
               const compressed = await compress(new TextEncoder().encode('Hello world!'), 6)
               console.log(compressed)
@@ -52,6 +53,10 @@ function App () {
               console.log(decompressed)
               console.log(new TextDecoder().decode(decompressed))
             }}>Current file: {file.name}</small>
+          </span>
+
+          <span className = "ms-auto" style={{ minWidth: '100rem' }}>
+            <small>{currentStatusMessage}</small>
           </span>
 
         </div>

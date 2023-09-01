@@ -26,5 +26,16 @@ module.exports = function override(config) {
       fullySpecified: false,
     },
   });
+  // https://github.com/react-bootstrap-table/react-bootstrap-table2/pull/1506
+  config.resolve = {
+    ...config.resolve,
+    alias: {
+      ...config.resolve.alias,
+      "react/jsx-dev-runtime": "react/jsx-dev-runtime.js",
+      "react/jsx-runtime": "react/jsx-runtime.js",
+      'react-bootstrap-table2-toolkit-css': `react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css`,
+      'react-bootstrap-table2-toolkit': `react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.js`,
+    }
+  }
   return config;
 };

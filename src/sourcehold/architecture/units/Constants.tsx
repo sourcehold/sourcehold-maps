@@ -1,0 +1,1 @@
+export const CRUSADER_UNIT_SIZE = 1168

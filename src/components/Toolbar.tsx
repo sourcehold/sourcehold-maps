@@ -118,8 +118,8 @@ function Toolbar () {
               <Nav.Link eventKey="tilemap-explorer">Tilemap explorer</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="disabled">
-                Disabled
+              <Nav.Link eventKey="units">
+                Units
               </Nav.Link>
             </Nav.Item>
           </Nav>
