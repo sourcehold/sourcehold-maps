@@ -3,10 +3,14 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
-import { ImportMapFileModalDefaultState, ImportMapFileModalResult, ImportMapFileModalState } from '../state/types/ImportMapFileModalState'
+import { ImportMapFileModalDefaultState, ImportMapFileModalResult, ImportMapFileModalState, importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
+import { STORE } from '../state/Store'
 
-export async function showImportMapFileModalDialog (customisations: Partial<ImportMapFileModalState>, setImportMapFileModalState: (arg0: ImportMapFileModalState) => void) {
+function setImportMapFileModalState (state: Partial<ImportMapFileModalState>) {
+  STORE.set(importMapFileModalReducerAtom, state)
+}
+
+export async function showImportMapFileModalDialog (customisations: Partial<ImportMapFileModalState>) {
   const defaultState = ImportMapFileModalDefaultState
   const customState = { ...defaultState, ...customisations }
 

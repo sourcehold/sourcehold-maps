@@ -1,0 +1,1 @@
+- [ ] Change all jotai variables to use store

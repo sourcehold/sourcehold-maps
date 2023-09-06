@@ -2,7 +2,6 @@ import React from 'react'
 import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import { showImportMapFileModalDialog } from './ImportMapFileModal'
 import { useAtom } from 'jotai/react'
-import { importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
 import { fileStateAtom } from '../state/FileState'
 import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../state/MapState'
 import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
@@ -13,8 +12,6 @@ import { GUIStateAtom } from '../state/GuiState'
 
 function Toolbar () {
   const [, setCurrentMessageState] = useAtom(currentStatusMessageAtom)
-
-  const [, setImportMapFileModalState] = useAtom(importMapFileModalReducerAtom)
 
   const [fileState, setFileState] = useAtom(fileStateAtom)
 
@@ -60,13 +57,13 @@ function Toolbar () {
                     console.log(f.name)
                     // setFileState(file)
                   }
-                }, setImportMapFileModalState)
+                })
 
                 if (result.status === 'ok') {
                   console.log('OK')
                   console.log(result.file.name)
                   setFileState(result.file)
-                  const map = await result.file.arrayBuffer().then(b => bufferToMap(b))
+                  const map = await result.file.arrayBuffer().then((b: ArrayBufferLike) => bufferToMap(b))
                   console.log(map)
                   setMapState(map)
                 } else {

@@ -3,8 +3,7 @@ import React, { useRef } from 'react'
 import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { ExportMapToZipModalReducerAtom } from '../state/ExportMapToZipModalState'
-import { DefaultExportMapToZipModalState, ExportMapToZipModalState } from '../state/types/ExportMapToZipModalState'
+import { DefaultExportMapToZipModalState, ExportMapToZipModalReducerAtom, ExportMapToZipModalState } from '../state/ExportMapToZipModalState'
 
 export async function showExportMapToZipModalDialog (customisations: Partial<ExportMapToZipModalState>, setExportMapToZipModalState: (arg0: ExportMapToZipModalState) => void) {
   const defaultState = DefaultExportMapToZipModalState
