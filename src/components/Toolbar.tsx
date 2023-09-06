@@ -5,7 +5,6 @@ import { useAtom } from 'jotai/react'
 import { fileStateAtom } from '../state/FileState'
 import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../state/MapState'
 import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
-import { ExportMapToZipModalReducerAtom } from '../state/ExportMapToZipModalState'
 import { bufferToMap } from '../sourcehold/architecture/Map'
 import { currentStatusMessageAtom } from '../state/CurrentStatusMessage'
 import { GUIStateAtom } from '../state/GuiState'
@@ -14,8 +13,6 @@ function Toolbar () {
   const [, setCurrentMessageState] = useAtom(currentStatusMessageAtom)
 
   const [fileState, setFileState] = useAtom(fileStateAtom)
-
-  const [, setExportMapToZipModalState] = useAtom(ExportMapToZipModalReducerAtom)
 
   const [mapState, setMapState] = useAtom(mapStateAtom)
 
@@ -67,6 +64,7 @@ function Toolbar () {
                   console.log(map)
                   setMapState(map)
                 } else {
+                  setCurrentMessageState('Import cancelled by user')
                   console.log('CANCEL')
                 }
               }}>Import .map</NavDropdown.Item>
@@ -95,7 +93,7 @@ function Toolbar () {
                     const dialogResult = await showExportMapToZipModalDialog({
                       fileName: fileState.name + '.zip',
                       objectURL: url
-                    }, setExportMapToZipModalState)
+                    })
 
                     if (dialogResult === true) {
                       setCurrentMessageState(`${prefixMessage}... export finished, file downloaded`)

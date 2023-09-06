@@ -10,6 +10,12 @@ import { Data, Layout } from 'plotly.js'
 const OldTileExplorer = (props: { map: Map, sectionIndex: number; continuousColorMode: boolean }) => {
   const { map, sectionIndex, continuousColorMode } = props
 
+  if (map === null || map === undefined) {
+    return (
+      <div>No map currently imported</div>
+    )
+  }
+
   const section = map.directory.sections[map.directory.section_indices.indexOf(sectionIndex)]
 
   const buffer = new InterpretationBuffer(new Uint8ClampedArray(section.get_data()).buffer)
