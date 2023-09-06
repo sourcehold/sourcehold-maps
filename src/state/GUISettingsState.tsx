@@ -4,7 +4,7 @@ export type GUISettingsState = {
   verboseCompression: boolean;
 }
 
-export const DefaultGUISettings = {
+export const DefaultGUISettings: GUISettingsState = {
   verboseCompression: false
 }
 
