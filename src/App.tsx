@@ -23,7 +23,7 @@ function App () {
         <TabContainer activeKey={GUIState.activeTabKey}>
           <Toolbar />
           <Tab.Content className="boxrow content text-light align-items-stretch">
-            <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">TODO</Tab.Pane>
+            <Tab.Pane eventKey="info" className="align-self-stretch align-items-stretch">Info about map type etcetera should appear here</Tab.Pane>
             <Tab.Pane eventKey="tilemap-explorer" className="align-self-stretch align-items-stretch">
               <OldTileExplorer map={mapState} sectionIndex={si} continuousColorMode={GUIState.tilemapExplorer.continuousColorMode}/>
             </Tab.Pane>

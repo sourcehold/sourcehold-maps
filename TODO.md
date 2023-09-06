@@ -1,1 +1,3 @@
 - [ ] Change all jotai variables to use store
+- [ ] Display map info (map type etcetera)
+- [ ] Think of a diff logic similar to DwarfTherapist to commit changes to the file
