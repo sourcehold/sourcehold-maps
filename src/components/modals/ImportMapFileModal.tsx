@@ -3,8 +3,8 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { ImportMapFileModalDefaultState, ImportMapFileModalResult, ImportMapFileModalState, importMapFileModalReducerAtom } from '../state/ImportMapFileModal'
-import { STORE } from '../state/Store'
+import { ImportMapFileModalDefaultState, ImportMapFileModalResult, ImportMapFileModalState, importMapFileModalReducerAtom } from '../../state/ImportMapFileModal'
+import { STORE } from '../../state/Store'
 
 function setImportMapFileModalState (state: Partial<ImportMapFileModalState>) {
   STORE.set(importMapFileModalReducerAtom, state)

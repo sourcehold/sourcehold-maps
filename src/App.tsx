@@ -1,15 +1,15 @@
 import React from 'react'
 import './App.css'
-import Toolbar from './components/Toolbar'
-import ImportMapFileModal from './components/ImportMapFileModal'
+import Toolbar from './components/toolbar/Toolbar'
+import ImportMapFileModal from './components/modals/ImportMapFileModal'
 import { useAtom } from 'jotai'
-import ExportMapToZipModal from './components/EportMaptoZipModal'
+import ExportMapToZipModal from './components/modals/ExportMaptoZipModal'
 import { Tab, TabContainer } from 'react-bootstrap'
 import { GUIStateAtom } from './state/GuiState'
 import OldTileExplorer from './components/tilemap-explorer/TilemapExplorerTabOld3D'
 import { mapStateAtom } from './state/MapState'
 import UnitsTab from './components/units-tab/UnitsTab'
-import Footer from './components/Footer'
+import Footer from './components/status-bar/Footer'
 
 function App () {
   const [GUIState] = useAtom(GUIStateAtom)

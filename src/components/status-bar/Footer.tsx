@@ -1,8 +1,8 @@
 import React from 'react'
-import { compress, decompress } from '../sourcehold/CompressionInterface'
+import { compress, decompress } from '../../sourcehold/CompressionInterface'
 import { useAtom } from 'jotai'
-import { fileStateAtom } from '../state/FileState'
-import { currentStatusMessageAtom } from '../state/CurrentStatusMessage'
+import { fileStateAtom } from '../../state/FileState'
+import { currentStatusMessageAtom } from '../../state/CurrentStatusMessage'
 
 const Footer = () => {
   const [file] = useAtom(fileStateAtom)

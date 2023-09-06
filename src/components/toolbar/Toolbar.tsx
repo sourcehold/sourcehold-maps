@@ -1,13 +1,13 @@
 import React from 'react'
 import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
-import { showImportMapFileModalDialog } from './ImportMapFileModal'
+import { showImportMapFileModalDialog } from '../modals/ImportMapFileModal'
 import { useAtom } from 'jotai/react'
-import { fileStateAtom } from '../state/FileState'
-import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../state/MapState'
-import { showExportMapToZipModalDialog } from './EportMaptoZipModal'
-import { bufferToMap } from '../sourcehold/architecture/Map'
-import { currentStatusMessageAtom } from '../state/CurrentStatusMessage'
-import { GUIStateAtom } from '../state/GuiState'
+import { fileStateAtom } from '../../state/FileState'
+import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../../state/MapState'
+import { bufferToMap } from '../../sourcehold/architecture/Map'
+import { currentStatusMessageAtom } from '../../state/CurrentStatusMessage'
+import { GUIStateAtom } from '../../state/GuiState'
+import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
 
 function Toolbar () {
   const [, setCurrentMessageState] = useAtom(currentStatusMessageAtom)
