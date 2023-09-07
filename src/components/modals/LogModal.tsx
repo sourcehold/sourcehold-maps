@@ -2,7 +2,7 @@ import React from 'react'
 import './LogModal.css'
 import { atom, useAtom } from 'jotai'
 import { Button, Modal } from 'react-bootstrap'
-import { levelToString, logAsString, logLevelToColor, logStateAtom } from '../../state/LogState'
+import { levelToString, logLevelToColor, logStateAtom } from '../../state/LogState'
 import { STORE } from '../../state/Store'
 
 export type LogModalState = {
@@ -58,7 +58,7 @@ const LogModal = () => {
           <Modal.Title>Log</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body className='overflow-scroll'>
           {/* Maybe nice to use as an export log to file thing
           <Form.Group controlId="ExportMapToZip" className="mb-3">
             <Form.Label>Give a name to the .zip</Form.Label>
@@ -67,9 +67,10 @@ const LogModal = () => {
           <ul className="list-group">
             {log.messages.map((msg, i) => {
               return (
-              <li key={`log-msg-${msg.time.getUTCSeconds()}-${i}`} className="list-group-item d-flex justify-content-between align-items-center">
-                {logAsString(msg)}
-                <span className={`badge rounded-pill ${logLevelToColor(msg.level)}`}>{levelToString(msg.level)}</span>
+              <li key={`log-msg-${msg.time.getTime()}-${i}`} className="list-group-item d-flex align-items-start">
+                <span className={`align-self-center me-3 badge rounded-pill ${logLevelToColor(msg.level)}`}>{levelToString(msg.level)}</span>
+                {msg.message}
+                <span className={'ms-auto'}>{msg.time.toLocaleTimeString()}</span>
               </li>)
             })}
           </ul>

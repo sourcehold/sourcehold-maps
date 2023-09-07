@@ -18,7 +18,7 @@ const Footer = () => {
   const [file] = useAtom(fileStateAtom)
 
   /**
-   * Why does this not work?
+   * Why does this not work? Ah, I should have recreated the object on update, pushing to the message list doesn't let anyone know the object was updated!
    */
   const [currentStatusMessage] = useAtom(currentStatusMessageAtom)
   console.log(`Footer message: ${currentStatusMessage.message}`)

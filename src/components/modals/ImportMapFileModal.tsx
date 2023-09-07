@@ -1,10 +1,11 @@
 import { atom, useAtom } from 'jotai'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Form } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { ImportMapFileModalDefaultState, ImportMapFileModalResult, ImportMapFileModalState, importMapFileModalReducerAtom } from '../../state/ImportMapFileModal'
 import { STORE } from '../../state/Store'
+import { trace } from '../../state/LogState'
 
 function setImportMapFileModalState (state: Partial<ImportMapFileModalState>) {
   STORE.set(importMapFileModalReducerAtom, state)
@@ -49,11 +50,13 @@ function ImportMapFileModal () {
 
   const [file, setFile] = useAtom(localFileState)
 
+  const fileInputRef = useRef<HTMLInputElement | null>()
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
       const newFilePath = e.target.files[0].name
       if (file.name !== newFilePath) {
-        console.log(`File path changed to: ${newFilePath}`)
+        trace(`File path changed to: ${newFilePath}`)
         setFile(e.target.files[0])
       }
     }
@@ -61,7 +64,7 @@ function ImportMapFileModal () {
 
   return (
     <Modal show={importMapFileModalState.show} onHide={importMapFileModalState.handleCancel}>
-      <Modal.Dialog>
+
         <Modal.Header closeButton>
           <Modal.Title>Select file</Modal.Title>
         </Modal.Header>
@@ -69,15 +72,19 @@ function ImportMapFileModal () {
         <Modal.Body>
           <Form.Group controlId="importMapFile" className="mb-3">
             <Form.Label>Select a .map file to import</Form.Label>
-            <Form.Control type="file" onChange={onFileChange}/>
+            <Form.Control ref={(r: HTMLInputElement | null | undefined) => { fileInputRef.current = r }} type="file" onChange={onFileChange}/>
           </Form.Group>
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={() => importMapFileModalState.handleCancel()}>Cancel</Button>
-          <Button variant="primary" onClick={() => importMapFileModalState.handleOK(file)}>Import</Button>
+          <Button variant="primary"
+                  disabled={fileInputRef.current?.files === null || fileInputRef.current?.files.length === 0}
+                  onClick={() => importMapFileModalState.handleOK(file)}>
+            Import
+          </Button>
         </Modal.Footer>
-      </Modal.Dialog>
+
     </Modal>
   )
 }

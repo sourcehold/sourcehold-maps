@@ -7,7 +7,7 @@ import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../../state/
 import { bufferToMap } from '../../sourcehold/architecture/Map'
 import { GUIStateAtom } from '../../state/GuiState'
 import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
-import { info } from '../../state/LogState'
+import { debug, info, trace } from '../../state/LogState'
 
 function Toolbar () {
   const [fileState, setFileState] = useAtom(fileStateAtom)
@@ -49,17 +49,21 @@ function Toolbar () {
                 console.log('CLICK')
                 const result = await showImportMapFileModalDialog({
                   handleOK: (f: File) => {
-                    console.log(f.name)
+                    debug(f.name)
                     // setFileState(file)
                   }
                 })
 
                 if (result.status === 'ok') {
-                  console.log('OK')
-                  console.log(result.file.name)
+                  trace('OK')
+                  info(`Importing file... ${result.file.name}`)
                   setFileState(result.file)
-                  const map = await result.file.arrayBuffer().then((b: ArrayBufferLike) => bufferToMap(b))
+                  const map = await result.file.arrayBuffer().then((b: ArrayBufferLike) => {
+                    info('Converting file contents to a Map object')
+                    return bufferToMap(b)
+                  })
                   console.log(map)
+                  info(`Import succesful, setting map object: ${map}`)
                   setMapState(map)
                 } else {
                   info('Import cancelled by user')

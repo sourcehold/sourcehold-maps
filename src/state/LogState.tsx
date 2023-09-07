@@ -81,7 +81,9 @@ export class Logger {
       time: new Date(),
       level: logLevel
     }
-    STORE.get(logStateAtom).messages.push(msg)
+    const state = STORE.get(logStateAtom)
+    state.messages.push(msg)
+    STORE.set(logStateAtom, { ...state })
     return msg
   }
 
@@ -151,7 +153,7 @@ export function logAsString (msg: LogMessage) {
 export const logLevelToColor = (logLevel: LogLevel) => {
   switch (logLevel) {
     case LogLevel.DEBUG:
-      return 'bg-light'
+      return 'bg-secondary'
     case LogLevel.ERROR:
       return 'bg-danger'
     case LogLevel.FATAL:

@@ -51,7 +51,6 @@ function ExportMapToZipModal () {
 
   return (
     <Modal show={exportMapToZipModalState.show} onHide={exportMapToZipModalState.handleCancel}>
-      <Modal.Dialog>
         <Modal.Header closeButton>
           <Modal.Title>Select file</Modal.Title>
         </Modal.Header>
@@ -80,7 +79,6 @@ function ExportMapToZipModal () {
           }}>Export</Button>
           <a ref={(r) => { console.log(r); aRef.current = r }} href={exportMapToZipModalState.objectURL} download={fileName} style={{ display: 'none' }} />
         </Modal.Footer>
-      </Modal.Dialog>
     </Modal>
   )
 }
