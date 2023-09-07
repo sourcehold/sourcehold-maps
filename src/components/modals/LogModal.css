@@ -1,0 +1,8 @@
+.modal-log .modal-dialog {
+  max-width: 80%;
+  height: 90%;
+}
+
+.modal-log .modal-content {
+  height: 100%;
+}

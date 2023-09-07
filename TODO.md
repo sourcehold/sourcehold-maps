@@ -1,3 +1,5 @@
 - [ ] Change all jotai variables to use store
 - [ ] Display map info (map type etcetera)
 - [ ] Think of a diff logic similar to DwarfTherapist to commit changes to the file
+- [ ] Implement a log messages modal pop window to view log messages in a scrollable list
+- [ ] Implement a logging library that writes messages to be displayed in a modal

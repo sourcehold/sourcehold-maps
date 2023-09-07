@@ -5,13 +5,11 @@ import { useAtom } from 'jotai/react'
 import { fileStateAtom } from '../../state/FileState'
 import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../../state/MapState'
 import { bufferToMap } from '../../sourcehold/architecture/Map'
-import { currentStatusMessageAtom } from '../../state/CurrentStatusMessage'
 import { GUIStateAtom } from '../../state/GuiState'
 import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
+import { info } from '../../state/LogState'
 
 function Toolbar () {
-  const [, setCurrentMessageState] = useAtom(currentStatusMessageAtom)
-
   const [fileState, setFileState] = useAtom(fileStateAtom)
 
   const [mapState, setMapState] = useAtom(mapStateAtom)
@@ -64,7 +62,7 @@ function Toolbar () {
                   console.log(map)
                   setMapState(map)
                 } else {
-                  setCurrentMessageState('Import cancelled by user')
+                  info('Import cancelled by user')
                   console.log('CANCEL')
                 }
               }}>Import .map</NavDropdown.Item>
@@ -75,30 +73,30 @@ function Toolbar () {
               <NavDropdown.Item href="#file/import-zip">Import .map from .zip</NavDropdown.Item>
               <NavDropdown.Item href="#file/export-zip" onClick={async (e) => {
                 const prefixMessage = `Creating zip from map file '${fileState.name}'`
-                setCurrentMessageState(prefixMessage)
+                info(prefixMessage)
 
                 if (mapState === null) {
-                  setCurrentMessageState(`${prefixMessage}... aborted: no map file loaded`)
+                  info(`${prefixMessage}... aborted: no map file loaded`)
                   return
                 }
 
                 mapState.export_to_zip().then((z) => {
-                  setCurrentMessageState(`${prefixMessage}... creating binary Blob`)
+                  info(`${prefixMessage}... creating binary Blob`)
                   return z.generateAsync({ type: 'blob' }).then(async (zip) => {
-                    setCurrentMessageState(`${prefixMessage}... creating Object URL`)
+                    info(`${prefixMessage}... creating Object URL`)
 
                     const url = window.URL.createObjectURL(zip)
 
-                    setCurrentMessageState(`${prefixMessage}... showing export dialog`)
+                    info(`${prefixMessage}... showing export dialog`)
                     const dialogResult = await showExportMapToZipModalDialog({
                       fileName: fileState.name + '.zip',
                       objectURL: url
                     })
 
                     if (dialogResult === true) {
-                      setCurrentMessageState(`${prefixMessage}... export finished, file downloaded`)
+                      info(`${prefixMessage}... export finished, file downloaded`)
                     } else {
-                      setCurrentMessageState(`${prefixMessage}... export cancelled`)
+                      info(`${prefixMessage}... export cancelled`)
                     }
                   })
                 })

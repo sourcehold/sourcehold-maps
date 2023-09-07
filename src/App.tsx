@@ -10,6 +10,7 @@ import OldTileExplorer from './components/tilemap-explorer/TilemapExplorerTabOld
 import { mapStateAtom } from './state/MapState'
 import UnitsTab from './components/units-tab/UnitsTab'
 import Footer from './components/status-bar/Footer'
+import LogModal from './components/modals/LogModal'
 
 function App () {
   const [GUIState] = useAtom(GUIStateAtom)
@@ -36,6 +37,7 @@ function App () {
       </div>
       <ImportMapFileModal/>
       <ExportMapToZipModal/>
+      <LogModal/>
     </>
   )
 }
