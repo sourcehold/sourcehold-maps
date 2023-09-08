@@ -3,7 +3,8 @@ import { mapStateAtom } from '../../state/MapState'
 import { atom, useAtom } from 'jotai'
 import { CRUSADER_UNIT_SIZE } from '../../sourcehold/architecture/units/Constants'
 import UnitsTable from './UnitsTableV2'
-import { DefaultUnitFields } from './DefaultUnitFields'
+import { activeUnitDataFieldsAtom } from './DefaultUnitFields'
+import SelectFieldsModal from './SelectFieldsModal'
 
 const unitsDataAtom = atom((get) => {
   const mapState = get(mapStateAtom)
@@ -23,10 +24,13 @@ const unitsDataAtom = atom((get) => {
 
 const UnitsTab = () => {
   const [unitsData] = useAtom(unitsDataAtom)
+  const [activeUnitDataFields] = useAtom(activeUnitDataFieldsAtom)
 
   return (
-    <UnitsTable unitFields={DefaultUnitFields} unitsData={unitsData} />
-
+    <>
+      <UnitsTable unitFields={activeUnitDataFields} unitsData={unitsData} />
+      <SelectFieldsModal/>
+    </>
   )
 }
 

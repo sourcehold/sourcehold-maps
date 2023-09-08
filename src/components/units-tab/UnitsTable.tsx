@@ -1,8 +1,8 @@
 import React from 'react'
-import { DisplayField } from './DisplayField'
+import { DataField } from './DataField'
 import { CRUSADER_UNIT_SIZE } from '../../sourcehold/architecture/units/Constants'
 
-export const UnitRow = (dv: DataView, unitOffset: number, fields: DisplayField[]) => {
+export const UnitRow = (dv: DataView, unitOffset: number, fields: DataField[]) => {
   const values = [
     unitOffset / CRUSADER_UNIT_SIZE,
     ...fields.map((f) => f.value(dv, unitOffset))
@@ -29,7 +29,7 @@ export const UnitRow = (dv: DataView, unitOffset: number, fields: DisplayField[]
   )
 }
 
-export const UnitHeader = (fields: DisplayField[]) => {
+export const UnitHeader = (fields: DataField[]) => {
   return (
     <thead>
       <tr>
@@ -41,7 +41,7 @@ export const UnitHeader = (fields: DisplayField[]) => {
   )
 }
 
-const UnitsTable = (props: {unitsData: DataView | undefined, unitFields: DisplayField[]}) => {
+const UnitsTable = (props: {unitsData: DataView | undefined, unitFields: DataField[]}) => {
   const { unitsData, unitFields } = props
   if (unitsData === undefined || unitsData === null) {
     return (

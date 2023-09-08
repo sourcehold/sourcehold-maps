@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import React from 'react'
+import { Button, Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import { showImportMapFileModalDialog } from '../modals/ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { fileStateAtom } from '../../state/FileState'
@@ -8,6 +8,7 @@ import { bufferToMap, mapToBuffer } from '../../sourcehold/architecture/Map'
 import { GUIStateAtom } from '../../state/GuiState'
 import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
 import { debug, info, trace } from '../../state/LogState'
+import { showSelectFieldsModal } from '../units-tab/SelectFieldsModal'
 
 function Toolbar() {
   const [fileState, setFileState] = useAtom(fileStateAtom)
@@ -31,6 +32,14 @@ function Toolbar() {
     <Form.Switch style={{ width: '300px', paddingLeft: '50px' }} label="Continuous colors" id="continuous-colors-switch" checked={GUIState.tilemapExplorer.continuousColorMode} onChange={(e) => {
       setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, continuousColorMode: e.target.checked } })
     }} />
+  </Navbar.Collapse>
+
+  const addOnUnits = <Navbar.Collapse className="align-items-stretch">
+    <Button onClick={async () => {
+      await showSelectFieldsModal({})
+    }}>
+      Modify fields
+    </Button>
   </Navbar.Collapse>
 
   return (
@@ -146,6 +155,11 @@ function Toolbar() {
           {
             GUIState.activeTabKey === 'tilemap-explorer' ? addOnTilemapExplorer : (<></>)
           }
+        </div>
+        <div className="me-auto">
+        {
+              GUIState.activeTabKey === 'units' ? addOnUnits : (<></>)
+        }
         </div>
       </Container>
 
