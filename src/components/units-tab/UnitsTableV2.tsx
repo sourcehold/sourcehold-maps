@@ -6,7 +6,7 @@ import BootstrapTable, { BootstrapTableProps } from 'react-bootstrap-table-next'
 
 // eslint-disable-next-line no-unused-vars
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
-import { DisplayField } from './DisplayField'
+import { DataField } from './DataField'
 import { CRUSADER_UNIT_SIZE } from '../../sourcehold/architecture/units/Constants'
 
 // eslint-disable-next-line no-unused-vars
@@ -34,7 +34,7 @@ type Unit = {[key: string]: number | string}
 // </ToolkitProvider>)
 // }
 
-const UnitsTable = (props: {unitsData: DataView | undefined, unitFields: DisplayField[]}) => {
+const UnitsTable = (props: {unitsData: DataView | undefined, unitFields: DataField[]}) => {
   const { unitsData, unitFields } = props
 
   const columns = [{

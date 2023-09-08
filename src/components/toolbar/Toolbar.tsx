@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import { Button, Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import { showImportMapFileModalDialog } from '../modals/ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { fileStateAtom } from '../../state/FileState'
@@ -8,6 +8,7 @@ import { bufferToMap } from '../../sourcehold/architecture/Map'
 import { GUIStateAtom } from '../../state/GuiState'
 import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
 import { debug, info, trace } from '../../state/LogState'
+import { showSelectFieldsModal } from '../units-tab/SelectFieldsModal'
 
 function Toolbar () {
   const [fileState, setFileState] = useAtom(fileStateAtom)
@@ -32,6 +33,14 @@ function Toolbar () {
       setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, continuousColorMode: e.target.checked } })
     }} />
     </Navbar.Collapse>
+
+  const addOnUnits = <Navbar.Collapse className="align-items-stretch">
+    <Button onClick={async () => {
+      await showSelectFieldsModal({})
+    }}>
+      Modify fields
+    </Button>
+  </Navbar.Collapse>
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">
@@ -124,6 +133,11 @@ function Toolbar () {
         <div className="me-auto">
         {
               GUIState.activeTabKey === 'tilemap-explorer' ? addOnTilemapExplorer : (<></>)
+        }
+        </div>
+        <div className="me-auto">
+        {
+              GUIState.activeTabKey === 'units' ? addOnUnits : (<></>)
         }
         </div>
       </Container>
