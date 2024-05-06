@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/jszip": "^3.4.1",
     "@types/numjs": "^0.16.8",
     "@types/plotly.js": "^2.29.3",
     "@types/react-bootstrap-table-next": "^4.0.26",
