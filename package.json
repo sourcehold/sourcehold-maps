@@ -24,6 +24,7 @@
     "eslint-plugin-react": "^7.34.1",
     "jotai": "^2.8.0",
     "jszip": "^3.10.1",
+    "node-pkware": "file:src/vendor/pkware",
     "numjs": "^0.16.1",
     "path-browserify": "^1.0.1",
     "plotly.js": "^2.32.0",
@@ -87,6 +88,7 @@
     "react-app-rewired": "^2.2.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "url": "^0.11.3"
+    "url": "^0.11.3",
+    "webpack": "^5.91.0"
   }
 }
