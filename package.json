@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://sourcehold.github.io/sourcehold-maps",
   "private": true,
+  "config-overrides-path": "config-overrides.js",
   "dependencies": {
     "@d4c/numjs": "^0.17.34",
     "@testing-library/jest-dom": "^6.4.5",
