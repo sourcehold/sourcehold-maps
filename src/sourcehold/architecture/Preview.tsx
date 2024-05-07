@@ -16,12 +16,12 @@ export class Preview extends CompressedSection {
   }
 
   async pack () {
-    super.pack()
-    this.preview_size = this.size
+    await super.pack()
+    this.preview_size = this.size()
   }
 
   validate () {
-    if (this.preview_size !== this.size) {
+    if (this.preview_size !== this.size()) {
       throw Error('invalid size')
     }
   }

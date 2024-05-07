@@ -29,7 +29,7 @@ const Footer = () => {
   /**
    * This does work luckily...
    */
-  const msg = getLatestLogMessage() || DefaultStatusMessage
+  const msg = getLatestLogMessage() ?? DefaultStatusMessage
 
   return (
     <div className = "boxrow footer bg-light text-muted font " style={{ paddingLeft: 10 }}>

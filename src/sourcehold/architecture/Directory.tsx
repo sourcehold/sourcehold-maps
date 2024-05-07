@@ -19,11 +19,11 @@ export class Directory extends Structure {
   section_offsets!: number[]
   u6: any
   sections: Section[] = []
-  get max_sections_count () {
+  get max_sections_count() {
     return this.u1 >= 161 ? 150 : 100
   }
 
-  deserialize_from (buffer: InterpretationBuffer) {
+  deserialize_from(buffer: InterpretationBuffer) {
     this.directory_size = buffer.readInt()
     this.total_data_size = buffer.readInt()
     this.sections_count = buffer.readInt()
@@ -51,7 +51,7 @@ export class Directory extends Structure {
     return this
   }
 
-  serialize_to (buffer: InterpretationBuffer) {
+  serialize_to(buffer: InterpretationBuffer) {
     buffer.writeInt(this.directory_size)
     buffer.writeInt(this.total_data_size)
     buffer.writeInt(this.sections_count)
@@ -74,7 +74,7 @@ export class Directory extends Structure {
     return this
   }
 
-  async pack () {
+  async pack() {
     for (const section of this.sections) {
       await section.pack()
     }
@@ -82,6 +82,7 @@ export class Directory extends Structure {
     let accumulator = 0
 
     this.sections_count = this.sections.length
+
     for (const i in this.sections) {
       const section = this.sections[i]
       if (section instanceof CompressedSection) {
@@ -110,7 +111,7 @@ export class Directory extends Structure {
     this.directory_size = (20 * this.max_sections_count) + 36
   }
 
-  section_for_index (index: number) {
+  section_for_index(index: number) {
     const i = this.section_indices.indexOf(index)
     if (i === -1) {
       throw Error('index not found in directory')
@@ -118,7 +119,7 @@ export class Directory extends Structure {
     return this.sections[i]
   }
 
-  async unpack () {
+  async unpack() {
     for (const section of this.sections) {
       await section.unpack()
     }

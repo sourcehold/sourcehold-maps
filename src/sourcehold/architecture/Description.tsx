@@ -6,7 +6,7 @@ export class Description extends CompressedSection {
   use_string_table: any
   string_table_index: any
 
-  deserialize_from (buffer: InterpretationBuffer) {
+  deserialize_from(buffer: InterpretationBuffer) {
     this.description_size = buffer.readInt()
     this.use_string_table = buffer.readInt()
     this.string_table_index = buffer.readInt()
@@ -15,7 +15,7 @@ export class Description extends CompressedSection {
     return this
   }
 
-  serialize_to (buffer: InterpretationBuffer) {
+  serialize_to(buffer: InterpretationBuffer) {
     buffer.writeInt(this.description_size)
     buffer.writeInt(this.use_string_table)
     buffer.writeInt(this.string_table_index)
@@ -24,19 +24,19 @@ export class Description extends CompressedSection {
     return this
   }
 
-  validate () {
+  validate() {
     if (this.description_size !== this.compressed_size + (5 * 4)) {
       throw Error('invalid size')
     }
     super.validate()
   }
 
-  async unpack () {
-    super.unpack()
+  async unpack() {
+    await super.unpack()
   }
 
-  async pack () {
-    super.pack()
+  async pack() {
+    await super.pack()
     this.description_size = this.compressed_size + (5 * 4)
   }
 }

@@ -1,10 +1,8 @@
-export type EnumInformation = {[key: number]: string}
+export type EnumInformation = Record<number, string>;
 export type DisplayFieldType = 'byte' | 'short' | 'int' | 'custom' | 'enumInt' | 'enumShort' | 'enumByte'
 
 export class DisplayField {
-  #dataViewTypeFuncs: {
-    [key: string]: (dv: DataView, byteOffset: number) => number
-  } = {
+  #dataViewTypeFuncs: Record<string, (dv: DataView, byteOffset: number) => number> = {
       byte: (dv: DataView, byteOffset: number) => dv.getInt8(byteOffset),
       short: (dv: DataView, byteOffset: number) => dv.getInt16(byteOffset, true),
       int: (dv: DataView, byteOffset: number) => dv.getInt32(byteOffset, true),
@@ -22,7 +20,7 @@ export class DisplayField {
     this.name = name
     this.fieldOffset = fieldOffset
     this.type = type
-    this.enumInformation = enumInformation || {}
+    this.enumInformation = enumInformation ?? {}
   }
 
   get #isEnum () {

@@ -20,7 +20,7 @@ export class Section1001 extends CompressedSection {
 
 }
 
-export const MAP_SECTIONS: {[key: string]: typeof Section} = {
+export const MAP_SECTIONS: Record<string, typeof Section> = {
   1001: Section1001
 }
 

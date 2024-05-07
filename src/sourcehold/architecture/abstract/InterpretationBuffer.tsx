@@ -76,7 +76,7 @@ export class InterpretationBuffer {
 
   ensureSize (n: number | undefined) {
     const diff = this.size - this.index
-    n = n || 16000000 // 16MB
+    n = n ?? 16000000 // 16MB
     if (diff < n) {
       const newBuffer = new ArrayBuffer(this.size + n)
       new Uint8Array(newBuffer).set(new Uint8Array(this.buffer))

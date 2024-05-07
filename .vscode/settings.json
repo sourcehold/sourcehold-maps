@@ -1,10 +1,11 @@
 {
-    "editor.detectIndentation": false,
-    "editor.tabSize": 2,
-    "notebook.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    },
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    }
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "notebook.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.experimental.useFlatConfig": true
 }

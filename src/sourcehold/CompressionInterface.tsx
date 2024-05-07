@@ -31,7 +31,7 @@ export async function decompress (data: Uint8Array, decompressedSize: number | u
   d.push(data)
   d.push(null)
   return new Promise<Uint8Array>(resolve => {
-    d.pipe(through(explode({ inputBufferSize: data.length, outputBufferSize: decompressedSize || 0, verbose: false }))).pipe(toBuffer((decompressedData) => {
+    d.pipe(through(explode({ inputBufferSize: data.length, outputBufferSize: decompressedSize ?? 0, verbose: false }))).pipe(toBuffer((decompressedData) => {
       const result = new Uint8Array(decompressedData.buffer.slice(0), decompressedData.byteOffset, decompressedData.length)
       resolve(result)
     }))

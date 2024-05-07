@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import { showImportMapFileModalDialog } from '../modals/ImportMapFileModal'
 import { useAtom } from 'jotai/react'
 import { fileStateAtom } from '../../state/FileState'
 import { mapStateAtom, mapStateAvailableTileMapSectionsAtom } from '../../state/MapState'
-import { bufferToMap } from '../../sourcehold/architecture/Map'
+import { bufferToMap, mapToBuffer } from '../../sourcehold/architecture/Map'
 import { GUIStateAtom } from '../../state/GuiState'
 import { showExportMapToZipModalDialog } from '../modals/ExportMaptoZipModal'
 import { debug, info, trace } from '../../state/LogState'
 
-function Toolbar () {
+function Toolbar() {
   const [fileState, setFileState] = useAtom(fileStateAtom)
 
   const [mapState, setMapState] = useAtom(mapStateAtom)
@@ -21,17 +21,17 @@ function Toolbar () {
   const addOnTilemapExplorer = <Navbar.Collapse className="align-items-stretch"><Form.Select onChange={(e) => {
     setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, section: parseInt(e.target.value) } })
   }}>
-      <option value="0">Select a tilemap to explore (default: 1001)</option>
-      {
-        mapStateAvailableTileMapSections.map((v) => <option value={`${v}`} key={`section-option-${v}`}>
-          {`Section: ${v}`}
-        </option>)
-      }
-    </Form.Select>
+    <option value="0">Select a tilemap to explore (default: 1001)</option>
+    {
+      mapStateAvailableTileMapSections.map((v) => <option value={`${v}`} key={`section-option-${v}`}>
+        {`Section: ${v}`}
+      </option>)
+    }
+  </Form.Select>
     <Form.Switch style={{ width: '300px', paddingLeft: '50px' }} label="Continuous colors" id="continuous-colors-switch" checked={GUIState.tilemapExplorer.continuousColorMode} onChange={(e) => {
       setGUIState({ ...GUIState, tilemapExplorer: { ...GUIState.tilemapExplorer, continuousColorMode: e.target.checked } })
     }} />
-    </Navbar.Collapse>
+  </Navbar.Collapse>
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary boxrow header">
@@ -63,14 +63,35 @@ function Toolbar () {
                     return bufferToMap(b)
                   })
                   console.log(map)
-                  info(`Import succesful, setting map object: ${map}`)
+                  info(`Import succesful, setting map object`)
                   setMapState(map)
                 } else {
                   info('Import cancelled by user')
                   console.log('CANCEL')
                 }
               }}>Import .map</NavDropdown.Item>
-              <NavDropdown.Item href="#file/export">
+              <NavDropdown.Item href="#file/export" onClick ={async(e) => {
+                const buffer = await mapToBuffer(mapState);
+
+                const prefixMessage = 'export to blob: ';
+
+                info(`${prefixMessage}... creating Object URL`)
+
+                const url = window.URL.createObjectURL(new Blob([buffer]))
+
+                info(`${prefixMessage}... showing export dialog`)
+                const dialogResult = await showExportMapToZipModalDialog({
+                  fileName: fileState.name + '.map',
+                  objectURL: url
+                })
+
+                if (dialogResult === true) {
+                  info(`${prefixMessage}... export finished, file downloaded`)
+                } else {
+                  info(`${prefixMessage}... export cancelled`)
+                }
+
+              }}>
                 Export .map
               </NavDropdown.Item>
               <NavDropdown.Divider />
@@ -84,7 +105,7 @@ function Toolbar () {
                   return
                 }
 
-                mapState.export_to_zip().then((z) => {
+                mapState.export_to_zip().then(async (z) => {
                   info(`${prefixMessage}... creating binary Blob`)
                   return z.generateAsync({ type: 'blob' }).then(async (zip) => {
                     info(`${prefixMessage}... creating Object URL`)
@@ -102,8 +123,8 @@ function Toolbar () {
                     } else {
                       info(`${prefixMessage}... export cancelled`)
                     }
-                  })
-                })
+                  }).catch((err) => window.alert(err))
+                }).catch((err) => window.alert(err))
               }}>
                 Export .map as .zip
               </NavDropdown.Item>
@@ -122,9 +143,9 @@ function Toolbar () {
           </Nav>
         </Navbar.Collapse>
         <div className="me-auto">
-        {
-              GUIState.activeTabKey === 'tilemap-explorer' ? addOnTilemapExplorer : (<></>)
-        }
+          {
+            GUIState.activeTabKey === 'tilemap-explorer' ? addOnTilemapExplorer : (<></>)
+          }
         </div>
       </Container>
 

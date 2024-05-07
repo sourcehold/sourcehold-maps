@@ -72,7 +72,7 @@ function ExportMapToZipModal () {
             console.log('OK')
             console.log(aRef)
             if (aRef.current !== null) {
-              await aRef.current.click()
+              aRef.current.click()
               window.URL.revokeObjectURL(exportMapToZipModalState.objectURL)
               exportMapToZipModalState.handleOK()
             }

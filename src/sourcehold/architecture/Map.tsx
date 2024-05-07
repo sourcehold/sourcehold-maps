@@ -17,7 +17,7 @@ export class Map extends Structure {
   u4: MapPropertySection4 = new MapPropertySection4()
   ud: any
   directory: Directory = new Directory()
-  deserialize_from (buffer: InterpretationBuffer) {
+  deserialize_from(buffer: InterpretationBuffer) {
     this.magic = buffer.readInt()
     this.preview = new Preview().deserialize_from(buffer)
     this.description = new Description().deserialize_from(buffer)
@@ -31,7 +31,7 @@ export class Map extends Structure {
     return this
   }
 
-  serialize_to (buffer: InterpretationBuffer) {
+  serialize_to(buffer: InterpretationBuffer) {
     buffer.writeInt(this.magic)
     this.preview.serialize_to(buffer)
     this.description.serialize_to(buffer)
@@ -46,13 +46,13 @@ export class Map extends Structure {
     return this
   }
 
-  async unpack () {
+  async unpack() {
     await this.preview.unpack()
     await this.description.unpack()
     await this.directory.unpack()
   }
 
-  async pack () {
+  async pack() {
     this.magic = 0xFFFFFFFF
     await this.preview.pack()
     await this.description.pack()
@@ -63,7 +63,7 @@ export class Map extends Structure {
     await this.u4.pack()
   }
 
-  async export_to_zip () {
+  async export_to_zip() {
     await this.unpack()
 
     // eslint-disable-next-line no-undef
@@ -110,7 +110,7 @@ export class Map extends Structure {
   }
 
   // eslint-disable-next-line no-undef
-  async import_from_zip (zip: JSZip) {
+  async import_from_zip(zip: JSZip) {
     const preview_folder = zip.folder('preview')
     if (preview_folder === null) throw Error('null')
     this.preview = new Preview()
@@ -220,12 +220,25 @@ export class Map extends Structure {
   }
 }
 
-export async function bufferToMap (buffer: ArrayBufferLike): Promise<Map> {
+export async function bufferToMap(buffer: ArrayBufferLike): Promise<Map> {
   const map = new Map().deserialize_from(new InterpretationBuffer(buffer))
 
   return new Promise<Map>(resolve => {
     map.unpack().then(() => {
       resolve(map)
+    }).catch((err) => {
+      window.alert(err);
     })
   })
+}
+
+export async function mapToBuffer(map: Map): Promise<ArrayBuffer> {
+  const ab = new ArrayBuffer(32000000);
+  const buffer = new InterpretationBuffer(ab);
+  await map.pack();
+  map.serialize_to(buffer);
+
+  buffer.truncate();
+
+  return buffer.buffer;
 }

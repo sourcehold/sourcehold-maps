@@ -12,7 +12,7 @@ import { CRUSADER_UNIT_SIZE } from '../../sourcehold/architecture/units/Constant
 // eslint-disable-next-line no-unused-vars
 // const { ToggleList } = ColumnToggle
 
-type Unit = {[key: string]: number | string}
+type Unit = Record<string, number | string>;
 
 // Currently broken, because: https://github.com/react-bootstrap-table/react-bootstrap-table2/pull/1506
 

@@ -17,7 +17,7 @@ const OldTileExplorer = (props: { map: Map, sectionIndex: number; explorerColorM
   const denominator = 80400
   const datasize = buffer.size / denominator
 
-  let data: Array<number> = null as unknown as Array<number>
+  let data: number[] = null as unknown as number[]
 
   if (datasize === 2) {
     data = Array.from(buffer.readShorts(80400))
