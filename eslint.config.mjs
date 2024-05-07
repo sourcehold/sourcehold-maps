@@ -7,6 +7,7 @@ import parser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import teslint from '@typescript-eslint/eslint-plugin';
 import globals from 'globals';
+import nplugin from 'eslint-plugin-n';
 
 export default tseslint.config(
   {
@@ -14,6 +15,7 @@ export default tseslint.config(
       eslint.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
+      nplugin.configs['flat/recommended'],
     ],
     plugins: {
       react,
