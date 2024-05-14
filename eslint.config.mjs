@@ -61,6 +61,7 @@ export default tseslint.config(
       "@typescript-eslint/no-misused-promises": "off",
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
+      "n/no-missing-import": 'off'
     }
   }
 );

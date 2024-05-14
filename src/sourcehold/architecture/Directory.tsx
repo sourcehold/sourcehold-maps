@@ -83,6 +83,7 @@ export class Directory extends Structure {
 
     this.sections_count = this.sections.length
 
+    // eslint-disable-next-line @typescript-eslint/no-for-in-array
     for (const i in this.sections) {
       const section = this.sections[i]
       if (section instanceof CompressedSection) {
