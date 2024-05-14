@@ -86,6 +86,7 @@ function Toolbar() {
 
                 info(`${prefixMessage}... creating Object URL`)
 
+                // eslint-disable-next-line n/no-unsupported-features/node-builtins
                 const url = window.URL.createObjectURL(new Blob([buffer]))
 
                 info(`${prefixMessage}... showing export dialog`)
@@ -119,6 +120,7 @@ function Toolbar() {
                   return z.generateAsync({ type: 'blob' }).then(async (zip) => {
                     info(`${prefixMessage}... creating Object URL`)
 
+                    // eslint-disable-next-line n/no-unsupported-features/node-builtins
                     const url = window.URL.createObjectURL(zip)
 
                     info(`${prefixMessage}... showing export dialog`)

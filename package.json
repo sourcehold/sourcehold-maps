@@ -4,6 +4,9 @@
   "homepage": "https://sourcehold.github.io/sourcehold-maps",
   "private": true,
   "config-overrides-path": "config-overrides.js",
+  "engines": {
+    "node": ">=21.0.0"
+  },
   "dependencies": {
     "@d4c/numjs": "^0.17.34",
     "@testing-library/jest-dom": "^6.4.5",
