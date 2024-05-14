@@ -8,6 +8,7 @@ The goal is to understand the [map file format](#map-file-format) of Stronghold,
 
 - [Map File Format](#map-file-format)
 - [Tools](#tools)
+  - [Online Map Unpacking, Repacking and Exploring](#online-map-unpacking-repacking-and-exploring)
   - [Python Library](#python-library)
     - [Unpacking (CL)](#unpacking-cl)
     - [(Re-) Packing (CL)](#re--packing-cl)
@@ -15,13 +16,16 @@ The goal is to understand the [map file format](#map-file-format) of Stronghold,
     - [Map Preview Image (CL)](#map-preview-image-cl)
     - [Modify Map Properties](#modify-map-properties)
     - [Installation](#installation)
-  - [Online Map Unpacking, Repacking and Exploring](#online-map-unpacking-repacking-and-exploring)
+ 
 - [Contribute](#contribute)
 
 # Map File Format
 The current knowledge of the map file format (`*.map`, `*.sav` and `*.msv`) is documented in a human-readable form in the [wiki](https://github.com/sourcehold/sourcehold-maps/wiki) and in a machine-readable form in [here](/structure).
 
 # Tools
+
+## Online Map Unpacking, Repacking and Exploring
+If you don't want to install the python library and jump directly into action, there is an [online tool](https://sourcehold.github.io/sourcehold-maps/) to unpack, repack and visualize map sections.
 
 ## Python Library
 The python library contains multiple useful tools to interact with map files. The most important tools are directly accessible using the command line (CL), but most of the stuff is access
@@ -83,8 +87,6 @@ Then install using pip:
 python -m pip install sourcehold.whl
 ```
 
-## Online Map Unpacking, Repacking and Exploring
-If you don't want to install the python library and jump directly into action, there is an [online tool](https://sourcehold.github.io/sourcehold-maps/) to unpack, repack and visualize map sections.
 
 # Contribute
 There are multiple ways to contribute to this project, see [Contributing.md](/CONTRIBUTING.md) for more information.
