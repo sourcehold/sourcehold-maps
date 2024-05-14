@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/sourcehold-maps/static/css/main.ca34f892.css",
+    "main.js": "/sourcehold-maps/static/js/main.c25cc809.js",
+    "index.html": "/sourcehold-maps/index.html",
+    "main.ca34f892.css.map": "/sourcehold-maps/static/css/main.ca34f892.css.map",
+    "main.c25cc809.js.map": "/sourcehold-maps/static/js/main.c25cc809.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ca34f892.css",
+    "static/js/main.c25cc809.js"
+  ]
+}
