@@ -1,6 +1,5 @@
 import pathlib
 import argparse
-import pkg_resources
 import sys
 
 from sourcehold import Map
@@ -30,7 +29,7 @@ compression_parser_group.add_argument("--decompress", action='store_const', cons
 compression_parser_group.add_argument("--compress", action='store_const', const=True, default=False, help="compress data")
 compression_parser.add_argument("--in", help="files to (de)compress", required=True)
 compression_parser.add_argument("--out", help="destination file", required=True)
-compression_parser.add_argument("--level", help="compression level", type=int, default=6, required=False)
+# compression_parser.add_argument("--level", help="compression level", type=int, default=6, required=False)
 
 image_parser = subparsers.add_parser("image")
 image_parser.add_argument("--in", help="tile image", required=True)
@@ -147,17 +146,18 @@ if args.subparser_name == "file":
 
     if args.pack:
         for file in input_files:
-            path = pathlib.Path(file)
+            path = pathlib.Path(file).absolute()
 
+            print(f"Loading map from folder: {str(path)}")
             map = Map().load_from_folder(str(path))
+            print(f"Packing map data")
             map.pack(True)
 
             name = path.name
 
-            dst = pathlib.Path(args.out) / (name + args.ext)
+            dst = pathlib.Path(args.out).absolute() / (name + args.ext)
 
-            if args.debug:
-                print(f"packing file from folder {name} to file {dst.name}")
+            print(f"packing file from folder {path} to file {str(dst)}")
 
             save_map(map, dst)
 
@@ -171,7 +171,7 @@ if args.subparser_name == "compression":
     if args.decompress:
         output_data = COMPRESSION.decompress(input_data)
     elif args.compress:
-        output_data = COMPRESSION.compress(input_data, args.level)
+        output_data = COMPRESSION.compress(input_data)
     else:
         raise Exception("either select --compress or --decompress")
 
@@ -226,7 +226,7 @@ if args.subparser_name == "image":
             for j, value in enumerate(row):
                 if value is None:
                     continue
-                pixelmap[i, j] = palette[mapping.index(value)]
+                pixelmap[i, j] = palette[mapping.index(value)] # type: ignore
 
     if output_file == "-":
         img.show()
@@ -243,7 +243,7 @@ if args.subparser_name == "memory":
 
     #  import sourcehold.debugtools.memory.common.access
     #  from sourcehold.debugtools.memory.common.access import AccessContext
-    from sourcehold.debugtools.memory import SHC, SHCE, SH
+    from sourcehold.debugtools.memory.access import SHC, SHCE, SH
 
     #  if args.config is None:
     #      args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
@@ -286,7 +286,7 @@ if args.subparser_name == "memory":
             if index == "0":
                 continue
             try:
-                process.write_section(index, m.directory[int(index)].get_data())
+                process.write_section(index, m.directory[int(index)].get_data()) # type: ignore
             except Exception as e:
                 print(f"failed on section: {e}")
 
