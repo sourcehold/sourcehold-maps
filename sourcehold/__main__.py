@@ -34,6 +34,7 @@ image_parser = subparsers.add_parser("image")
 image_parser.add_argument("--in", help="tile image", required=True)
 image_parser.add_argument("--out", help="destination image file", default="-")
 image_parser.add_argument("--perspective", help="create perspective image", default=False, action="store_const", const=True)
+image_parser.add_argument("--rgb", help="rgb image, default is cmyk", default=False, action="store_const", const=True)
 
 memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
@@ -208,23 +209,43 @@ if args.subparser_name == "image":
         ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
         img = ts.create_image()
     else:
-        size = struct.calcsize(fmt)
-        values = struct.unpack(f"<{80400}" + fmt, input_data)
+        if args.rgb:
+            size = struct.calcsize(fmt)
+            values = struct.unpack(f"<{80400}" + fmt, input_data)
 
-        from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
-        from sourcehold.maps.sections.tools import build_palette
-        matrix = init_matrix(shape=(400, 400), value=None)
-        populate_value_matrix(matrix, values)
+            from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
+            from sourcehold.maps.sections.tools import build_palette
+            matrix = init_matrix(shape=(400, 400), value=None)
+            populate_value_matrix(matrix, values)
 
-        mapping, palette = build_palette(set(values))
+            mapping, palette = build_palette(set(values))
 
-        img = PIL.Image.new('RGB', (400,400), color=0)
-        pixelmap = img.load()
-        for i, row in enumerate(matrix):
-            for j, value in enumerate(row):
-                if value is None:
-                    continue
-                pixelmap[i, j] = palette[mapping.index(value)] # type: ignore
+            img = PIL.Image.new('RGB', (400,400), color=0)
+            pixelmap = img.load()
+            for i, row in enumerate(matrix):
+                for j, value in enumerate(row):
+                    if value is None:
+                        continue
+                    pixelmap[i, j] = palette[mapping.index(value)] # type: ignore
+        else:
+            # cmyk
+            size = struct.calcsize(fmt)
+            values = struct.unpack(f"<{80400}" + fmt, input_data)
+
+            from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
+            from sourcehold.maps.sections.tools import build_palette
+            matrix = init_matrix(shape=(400, 400), value=None)
+            populate_value_matrix(matrix, values)
+
+            mapping, palette = build_palette(set(values))
+
+            img = PIL.Image.new('CMYK', (400,400), color=-1)
+            pixelmap = img.load()
+            for i, row in enumerate(matrix):
+                for j, value in enumerate(row):
+                    if value is None:
+                        continue
+                    pixelmap[i, j] = value # type: ignore
 
     if output_file == "-":
         img.show()
