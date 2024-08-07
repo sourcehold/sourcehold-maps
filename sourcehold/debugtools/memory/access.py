@@ -44,7 +44,7 @@ def load_address_list_from_cheat_table(path=pathlib.Path(pkg_resources.resource_
 
     return address_list
 
-from sourcehold.debugtools.memory import MemorySection
+from sourcehold.debugtools.memory.common import MemorySection
 from sourcehold.debugtools.memory.common import section_lengths
 import struct
 
@@ -102,19 +102,20 @@ class AccessContext(object):
 
         error = None
         try:
-            sys.stdout = open(os.devnull, "w")
-            sys.stderr = open(os.devnull, "w")
+            #sys.stdout = open(os.devnull, "w")
+            #sys.stderr = open(os.devnull, "w")
             self.process = pymem.Pymem(process_name)
             self.base = self.process.process_base.lpBaseOfDll
-        except pymem.exception.ProcessNotFound as pnf:
-            error = pnf
-        except TypeError as te:
+        except Exception as te:
             error = te
         finally:
-            sys.stdout.close()
-            sys.stderr.close()
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
+            #sys.stdout.close()
+            #sys.stderr.close()
+            #sys.stdout = sys.__stdout__
+            #sys.stderr = sys.__stderr__
+            if isinstance(error, pymem.exception.ProcessNotFound): # type: ignore
+                print("Process is not running")
+                exit(1)
             if error is not None:
                 raise error
 

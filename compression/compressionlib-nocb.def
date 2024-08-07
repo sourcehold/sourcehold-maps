@@ -1,7 +1,0 @@
-LIBRARY compressionlib-nocb
-EXPORTS
-explode
-implode
-crc32_pklib
-explode_nocb
-implode_nocb
