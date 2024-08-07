@@ -362,7 +362,6 @@ class Directory(Structure):
         return None
 
     def pack(self, force = False):
-        print(f"...Packing directory")
         for section in self.sections:
             section.pack(force)
 

@@ -47,6 +47,7 @@ memory_parser.add_argument("--config", help="location of the CheatEngine .CT fil
 memory_parser.add_argument("--data", help="raw data to write in hex format (00)", type=str)
 memory_parser.add_argument("--recycle", action='store_const', const=True, default=False)
 memory_parser.add_argument("--process-version", help="version of the Stronghold process", default="SHCHD1.41")
+memory_parser.add_argument("--standardized", help="standardize tilemap sections to use 400x400", action='store_const', const=True, default=False)
 
 args = main_parser.parse_args()
 
@@ -191,7 +192,7 @@ if args.subparser_name == "image":
         input_data = pathlib.Path(input_file).read_bytes()
 
     if len(input_data) % 80400 != 0:
-        raise Exception(f"Invalid tile data length: {len(input_data)}")
+        raise Exception(f"Invalid tile data length: {len(input_data)}, not a tile map section?")
 
     tile_size = len(input_data) // 80400
     if tile_size == 1:
@@ -258,6 +259,27 @@ if args.subparser_name == "memory":
             dump = process.read_all_memory()
         else:
             dump = process.read_section(str(args.read))
+            if args.standardized:
+                if len(dump) % 80400 != 0:
+                    raise Exception(f"--standardize is only supported on tile map sections")
+                tile_size = len(dump) // 80400
+                if tile_size == 1:
+                    fmt = "B"
+                elif tile_size == 2:
+                    fmt = "H"
+                elif tile_size == 4:
+                    fmt = "I"
+                else:
+                    raise Exception(f"unsupported tile size: {tile_size}")
+                
+                import struct
+                from sourcehold.world import create_matrix, create_binary_matrix
+                matrix = create_matrix()
+                i = create_binary_matrix()
+
+                matrix[i] = struct.unpack(f"<80400{fmt}", dump)
+
+                dump = matrix.tobytes()
         if args.out == "-":
             sys.stdout.buffer.write(dump)
         elif args.out:
@@ -275,6 +297,31 @@ if args.subparser_name == "memory":
         if args.write == "all":
             process.write_bytes(0, input_data)
         else:
+            if args.standardized:
+                if len(input_data) % 400*400 != 0:
+                    raise Exception(f"--standardize is only supported with 400x400 data")
+                tile_size = len(input_data) // (400*400)
+                if tile_size == 1:
+                    fmt = "B"
+                elif tile_size == 2:
+                    fmt = "H"
+                elif tile_size == 4:
+                    fmt = "I"
+                else:
+                    raise Exception(f"unsupported tile size: {tile_size}")
+                
+                import struct
+                from sourcehold.world import create_matrix, create_binary_matrix
+                matrix = create_matrix()
+                i = create_binary_matrix()
+
+                import numpy
+                trues = numpy.zeros(shape=(400, 400), dtype="bool")
+                trues[:] = True
+
+                matrix[trues] = struct.unpack(f"<{400*400}{fmt}", input_data)
+
+                input_data = matrix[i].tobytes()
             process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
 
     elif args.inject:
