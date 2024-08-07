@@ -1,6 +1,5 @@
 import pathlib
 import argparse
-import pkg_resources
 import sys
 
 from sourcehold import Map
