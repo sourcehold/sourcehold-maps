@@ -31,13 +31,12 @@ class DCL(AbstractCompressor):
     def compress(self, data, level = 6):
         if level == 6:
           obj = dclimplode.compressobj(dclimplode.CMP_BINARY, 4096)
-          obj.compress(self._sanitize(data))
-          return obj.flush()
+          return obj.compress(self._sanitize(data)) + obj.flush()
         raise NotImplementedError(f"Compression level not implemented: {level}")
     
     def decompress(self, data):
         obj = dclimplode.decompressobj()
-        obj.decompress(self._sanitize(data))
-        return obj.flush()
+        return obj.decompress(self._sanitize(data))
+        
 
 COMPRESSION = DCL()

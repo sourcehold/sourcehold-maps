@@ -20,7 +20,6 @@ file_manipulation_parser_group.add_argument("--unpack", action='store_const', co
 file_manipulation_parser_group.add_argument("--pack", action='store_const', const=True, default=False, help="pack a folder into a .map/.sav/.msv file")
 file_manipulation_parser.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
 file_manipulation_parser.add_argument("--out", help="a folder to (un)pack files to")
-file_manipulation_parser.add_argument("--ext", help="when packing, which extension to give the file", default=".map")
 file_manipulation_parser.add_argument("--what", help="what to unpack from the map file, e.g., '1001' for section 1001", default="all")
 
 compression_parser = subparsers.add_parser('compression')
@@ -148,14 +147,12 @@ if args.subparser_name == "file":
         for file in input_files:
             path = pathlib.Path(file).absolute()
 
-            print(f"Loading map from folder: {str(path)}")
             map = Map().load_from_folder(str(path))
-            print(f"Packing map data")
             map.pack(True)
 
             name = path.name
 
-            dst = pathlib.Path(args.out).absolute() / (name + args.ext)
+            dst = pathlib.Path(args.out).absolute()
 
             print(f"packing file from folder {path} to file {str(dst)}")
 
