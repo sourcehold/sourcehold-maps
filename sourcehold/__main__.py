@@ -35,6 +35,7 @@ image_parser.add_argument("--in", help="tile image", required=True)
 image_parser.add_argument("--out", help="destination image file", default="-")
 image_parser.add_argument("--perspective", help="create perspective image", default=False, action="store_const", const=True)
 image_parser.add_argument("--rgb", help="rgb image, default is cmyk", default=False, action="store_const", const=True)
+image_parser.add_argument("--transform", help="for cmyk, make byte sized sections paint in the 32 bit color range", default=False, action="store_const", const=True)
 
 memory_parser = subparsers.add_parser("memory")
 memory_parser_group = memory_parser.add_mutually_exclusive_group(required=True)
@@ -237,7 +238,17 @@ if args.subparser_name == "image":
             matrix = init_matrix(shape=(400, 400), value=None)
             populate_value_matrix(matrix, values)
 
-            mapping, palette = build_palette(set(values))
+            if args.transform:
+              if tile_size == 1:
+                  multiplier = lambda v: v << (32 - 8)
+              elif tile_size == 2:
+                  multiplier = lambda v: v << (32 - 16)
+              elif tile_size == 4:
+                  multiplier = lambda v: v
+              else:
+                  raise Exception()
+            else:
+                multiplier = lambda v: v
 
             img = PIL.Image.new('CMYK', (400,400), color=-1)
             pixelmap = img.load()
@@ -245,7 +256,7 @@ if args.subparser_name == "image":
                 for j, value in enumerate(row):
                     if value is None:
                         continue
-                    pixelmap[i, j] = value # type: ignore
+                    pixelmap[i, j] = multiplier(value) # type: ignore
 
     if output_file == "-":
         img.show()
