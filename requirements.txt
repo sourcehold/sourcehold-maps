@@ -2,4 +2,3 @@ Pillow
 pymem
 dclimplode
 numpy
-colorsys

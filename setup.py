@@ -21,9 +21,9 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.8',
-    install_requires=["pymem", "Pillow", "dclimplode", "numpy", "colorsys"],
+    install_requires=["pymem", "Pillow", "dclimplode", "numpy"],
     test_suite="tests",
     entry_points={
-        'console_scripts': ['sourcehold=sourcehold:entry_point', 'srchold=sourcehold:entry_point']
+        'console_scripts': ['sourcehold=sourcehold:entry_point']
     }
 )
