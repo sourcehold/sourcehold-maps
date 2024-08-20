@@ -49,6 +49,18 @@ from sourcehold.debugtools.memory.common import section_lengths
 import struct
 
 
+def read_address_list_village(process):
+    addr = 0x004709b8
+    end = 0x00470a98
+    size = 4+4+4+2+2
+    data = process.read_bytes(addr, end-addr)
+    for i in range(0, end-addr, size):
+        sub = data[i:i+size]
+        m = MemorySection(name=str(struct.unpack("<H", sub[14:16])[0]),
+                          size=struct.unpack("<I", sub[8:12])[0],
+                          address=struct.unpack("<I", sub[:4])[0])
+        yield m
+
 def read_address_list_shce(process):
     addr = 0x00b92be8
     end = 0x00b93398
@@ -181,3 +193,36 @@ class SHCE(AccessContext):
     def __init__(self):
         super().__init__(process_name="Stronghold_Crusader_Extreme")
         self.memory_sections = {m.name: m for m in read_address_list_shce(self.process)}
+
+
+class Village(AccessContext):
+    
+    def __init__(self):
+        super().__init__(process_name="village")
+        self.memory_sections = {m.name: m for m in read_address_list_village(self.process)}
+
+    def show(self, section):
+        import numpy
+        import struct
+        from matplotlib import pyplot
+
+        select_all = numpy.ones((100, 100), dtype='bool')
+
+        typ = ""
+        data = self.read_section(section)
+        if len(data) == 100 * 100:
+            matrix = numpy.zeros((100, 100), dtype='uint8')
+            typ = "B"
+        elif len(data) == 100 * 100 * 2:
+            matrix = numpy.zeros((100, 100), dtype='uint16')
+            typ = "H"
+        elif len(data) == 100 * 100 * 4:
+            matrix = numpy.zeros((100, 100), dtype='uint32')
+            typ = "I"
+        else:
+            raise Exception("cannot show")
+        matrix[select_all] = struct.unpack(f"<{100*100}{typ}", data)
+
+        pyplot.imshow(matrix)
+        pyplot.show()
+        
