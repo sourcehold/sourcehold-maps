@@ -25,7 +25,7 @@ process.show('2006')
 # construction type
 process.show('2007')
 
-# While tile has which step
+# Which tile has which step
 process.show('2008')
 
 # Total steps or something? No idea, unused
@@ -49,5 +49,3 @@ process.show('2013')
 
 # Pause delay to apply (to all pauses), pauses are useful for waiting for money to flow in
 struct.unpack("<1I", process.read_section('2014'))
-
-select_all = numpy.ones((100, 100), dtype='bool')
