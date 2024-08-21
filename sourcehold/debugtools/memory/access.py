@@ -6,7 +6,6 @@ except ValueError:
 
 import pathlib
 import xml.etree.ElementTree as ET
-import pkg_resources
 
 from sourcehold.debugtools.memory.common import section_lengths
 
@@ -17,32 +16,6 @@ def read_all_mem(p):
 
 def load_cheat_table(path):
     return ET.parse(str(path))
-
-
-def load_address_list_from_cheat_table(path=pathlib.Path(pkg_resources.resource_filename(__name__, "shc_data.CT")), offset=0):
-    #data = path.read_bytes()
-
-    address_list = {}
-
-    root = ET.parse(str(path))
-
-    imported = [entry for entry in root.findall(".//CheatEntry") if "imported" in entry.find(".//Description").text][0]
-
-    entries = imported.findall(".//CheatEntry")
-    for entry in entries:
-        description = entry.find('./Description').text.replace('"', '')
-        address = entry.find('./Address').text
-
-        if not description[:4].isalnum():
-            continue
-
-        if "Stronghold Crusader.exe" in address:
-            addr = address.split('"Stronghold Crusader.exe"+')[1]
-            address = int(addr, 16) + offset
-
-        address_list[description.replace('"', "")] = address
-
-    return address_list
 
 from sourcehold.debugtools.memory.common import MemorySection
 from sourcehold.debugtools.memory.common import section_lengths
