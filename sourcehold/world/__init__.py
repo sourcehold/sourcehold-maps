@@ -20,6 +20,8 @@ def create_binary_matrix():
 
     return matrix
 
+create_selection_matrix = create_binary_matrix
+
 
 def create_tile_index_matrix():
     import numpy
