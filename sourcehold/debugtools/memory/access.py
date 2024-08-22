@@ -100,7 +100,6 @@ class AccessContext(object):
             #sys.stderr = sys.__stderr__
             if isinstance(error, pymem.exception.ProcessNotFound): # type: ignore
                 print("Process is not running")
-                exit(1)
             if error is not None:
                 raise error
 

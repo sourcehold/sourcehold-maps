@@ -60,341 +60,344 @@ memory_parser.add_argument("--process-version", help="version of the Stronghold 
 memory_parser.add_argument("--standardized", help="standardize tilemap sections to use 400x400", action='store_const', const=True, default=False)
 
 args = main_parser.parse_args()
-if args.service == "aiv":
-  if args.method == "file":
-    raise Exception("not implemented")
-  
-  if args.method == "memory":
-    raise Exception("not implemented")
 
-  sys.exit(0)
+def main():
+  if args.service == "aiv":
+    if args.method == "file":
+      raise Exception("not implemented")
+    
+    if args.method == "memory":
+      raise Exception("not implemented")
 
-if args.service == "map":
-  if args.method == "file":
-      input_files = getattr(args, "in")
+    return
 
-      if args.out == "-":
-          if len(input_files) > 1:
-              raise Exception("the parameter '--out -' only supports unpacking a single input file")
-          if args.what == "all":
-              raise Exception("the parameter '--out -' does not support unpacking 'all', please select with '--what'. For example, '--what preview'")
+  if args.service == "map":
+    if args.method == "file":
+        input_files = getattr(args, "in")
 
-      if not args.unpack and not args.pack and args.out:
-          if all(inf[-4:] in [".sav", ".map", ".msv"] for inf in input_files):
-              args.unpack = True
-          if all(pathlib.Path(inf).is_dir() for inf in input_files):
-              args.pack = True
+        if args.out == "-":
+            if len(input_files) > 1:
+                raise Exception("the parameter '--out -' only supports unpacking a single input file")
+            if args.what == "all":
+                raise Exception("the parameter '--out -' does not support unpacking 'all', please select with '--what'. For example, '--what preview'")
 
-      if args.unpack:
-          for inf in input_files:
-              if not pathlib.Path(inf).is_file():
-                  raise Exception("Unexpected usage of unpack: all inputs must be files")
+        if not args.unpack and not args.pack and args.out:
+            if all(inf[-4:] in [".sav", ".map", ".msv"] for inf in input_files):
+                args.unpack = True
+            if all(pathlib.Path(inf).is_dir() for inf in input_files):
+                args.pack = True
 
-          if not args.out:
-              args.out = str(pathlib.Path().absolute())
+        if args.unpack:
+            for inf in input_files:
+                if not pathlib.Path(inf).is_file():
+                    raise Exception("Unexpected usage of unpack: all inputs must be files")
 
-      if args.pack:
-          for inf in input_files:
-              if not pathlib.Path(inf).is_dir():
-                  raise Exception("Unexpected usage of pack: all inputs must be directories")
+            if not args.out:
+                args.out = str(pathlib.Path().absolute())
 
-          if not args.out:
-              args.out = str(pathlib.Path().absolute())
+        if args.pack:
+            for inf in input_files:
+                if not pathlib.Path(inf).is_dir():
+                    raise Exception("Unexpected usage of pack: all inputs must be directories")
+
+            if not args.out:
+                args.out = str(pathlib.Path().absolute())
 
 
-  if args.method == "file":
-      input_files = getattr(args, "in")
+    if args.method == "file":
+        input_files = getattr(args, "in")
 
-      if args.unpack and args.pack:
-          raise Exception("Cannot unpack and pack at the same time")
+        if args.unpack and args.pack:
+            raise Exception("Cannot unpack and pack at the same time")
 
-      if args.unpack:
-          for file in input_files:
+        if args.unpack:
+            for file in input_files:
 
-              path = pathlib.Path(file)
-              map = load_map(file)
+                path = pathlib.Path(file)
+                map = load_map(file)
 
-              name = path.name
-              name = name.split(".")[0]
+                name = path.name
+                name = name.split(".")[0]
 
-              if args.what != "all":
-                  if args.what.isnumeric():
-                      section = args.what
-                      what = map.directory[int(section)].get_data()
-                      what_name = section
-                  else:
-                      what_elements = [p for p in args.what.split("/") if p]
-                      obj = map
+                if args.what != "all":
+                    if args.what.isnumeric():
+                        section = args.what
+                        what = map.directory[int(section)].get_data()
+                        what_name = section
+                    else:
+                        what_elements = [p for p in args.what.split("/") if p]
+                        obj = map
 
-                      wel = what_elements
+                        wel = what_elements
 
-                      if wel[0] == "directory" and wel[1].isnumeric():
-                          obj = map.directory[int(wel[1])]
-                          what_name = wel[1]
-                          wel = wel[2:]
+                        if wel[0] == "directory" and wel[1].isnumeric():
+                            obj = map.directory[int(wel[1])]
+                            what_name = wel[1]
+                            wel = wel[2:]
 
-                      for i, key in enumerate(wel):
-                          if not hasattr(obj, key):
-                              raise Exception(f"error in --what '{args.what}', invalid path: {wel[:i+1]}")
-                          obj = getattr(obj, key)
-                      what = obj.get_data()
-                      what_name = what_elements[-1]
+                        for i, key in enumerate(wel):
+                            if not hasattr(obj, key):
+                                raise Exception(f"error in --what '{args.what}', invalid path: {wel[:i+1]}")
+                            obj = getattr(obj, key)
+                        what = obj.get_data()
+                        what_name = what_elements[-1]
 
-                  if args.out == "-":
-                      dst_handle = sys.stdout.buffer
-                      dst_handle.write(what)
-                  else:
+                    if args.out == "-":
+                        dst_handle = sys.stdout.buffer
+                        dst_handle.write(what)
+                    else:
 
-                      dst = pathlib.Path(args.out) / name
-                      if not dst.exists():
-                          dst.mkdir(parents=True)
+                        dst = pathlib.Path(args.out) / name
+                        if not dst.exists():
+                            dst.mkdir(parents=True)
 
-                      if args.debug:
-                          print(f"unpacking {what_name} to folder {dst.name}")
+                        if args.debug:
+                            print(f"unpacking {what_name} to folder {dst.name}")
 
-                      (dst / what_name).write_bytes(what)
-              else:
-                  dst = pathlib.Path(args.out) / name
-                  if not dst.exists():
-                      dst.mkdir(parents=True)
-
-                  if args.debug:
-                      print(f"unpacking file {name} to folder {dst.name}")
-
-                  map.dump_to_folder(str(dst))
-
-      if args.pack:
-          for file in input_files:
-              path = pathlib.Path(file).absolute()
-
-              map = Map().load_from_folder(str(path))
-              map.pack(True)
-
-              name = path.name
-
-              dst = pathlib.Path(args.out).absolute()
-
-              print(f"packing file from folder {path} to file {str(dst)}")
-
-              save_map(map, dst)
-
-  import PIL.Image
-  import struct
-  from sourcehold.maps.sections.types import TileSystem
-  if args.method == "image":
-
-      input_file = getattr(args, "in")
-      output_file = args.out
-      if input_file == "-":
-          input_data = sys.stdin.buffer.read()
-      else:
-          input_data = pathlib.Path(input_file).read_bytes()
-
-      if len(input_data) % 80400 != 0:
-          raise Exception(f"Invalid tile data length: {len(input_data)}, not a tile map section?")
-
-      tile_size = len(input_data) // 80400
-      if tile_size == 1:
-          fmt = "B"
-      elif tile_size == 2:
-          fmt = "H"
-      elif tile_size == 4:
-          fmt = "I"
-      else:
-          raise Exception(f"unsupported tile size: {tile_size}")
-
-      if args.perspective:
-          ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
-          img = ts.create_image()
-      else:
-          if args.rgb:
-              size = struct.calcsize(fmt)
-              values = struct.unpack(f"<{80400}" + fmt, input_data)
-
-              from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
-              from sourcehold.maps.sections.tools import build_palette
-              matrix = init_matrix(shape=(400, 400), value=None)
-              populate_value_matrix(matrix, values)
-
-              mapping, palette = build_palette(set(values))
-
-              img = PIL.Image.new('RGB', (400,400), color=0)
-              pixelmap = img.load()
-              for i, row in enumerate(matrix):
-                  for j, value in enumerate(row):
-                      if value is None:
-                          continue
-                      pixelmap[i, j] = palette[mapping.index(value)] # type: ignore
-          else:
-              # cmyk
-              size = struct.calcsize(fmt)
-              values = struct.unpack(f"<{80400}" + fmt, input_data)
-
-              from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
-              from sourcehold.maps.sections.tools import build_palette
-              matrix = init_matrix(shape=(400, 400), value=None)
-              populate_value_matrix(matrix, values)
-
-              if args.transform:
-                if tile_size == 1:
-                    multiplier = lambda v: v << (32 - 8)
-                elif tile_size == 2:
-                    multiplier = lambda v: v << (32 - 16)
-                elif tile_size == 4:
-                    multiplier = lambda v: v
+                        (dst / what_name).write_bytes(what)
                 else:
-                    raise Exception()
-              else:
-                  multiplier = lambda v: v
+                    dst = pathlib.Path(args.out) / name
+                    if not dst.exists():
+                        dst.mkdir(parents=True)
 
-              img = PIL.Image.new('CMYK', (400,400), color=-1)
-              pixelmap = img.load()
-              for i, row in enumerate(matrix):
-                  for j, value in enumerate(row):
-                      if value is None:
-                          continue
-                      pixelmap[i, j] = multiplier(value) # type: ignore
+                    if args.debug:
+                        print(f"unpacking file {name} to folder {dst.name}")
 
-      if output_file == "-":
-          img.show()
-      else:
-          img.save(output_file)
+                    map.dump_to_folder(str(dst))
 
-  import binascii
-  import platform
+        if args.pack:
+            for file in input_files:
+                path = pathlib.Path(file).absolute()
 
-  if args.method == "memory":
+                map = Map().load_from_folder(str(path))
+                map.pack(True)
 
-      if platform.system().lower() != "windows":
-          raise Exception("memory debugging is currently only supported on Windows")
+                name = path.name
 
-      #  import sourcehold.debugtools.memory.common.access
-      #  from sourcehold.debugtools.memory.common.access import AccessContext
-      from sourcehold.debugtools.memory.access import SHC, SHCE, SH
+                dst = pathlib.Path(args.out).absolute()
 
-      #  if args.config is None:
-      #      args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
-      if args.process_version == "SHCHD1.41":
-          process = SHC()
-      elif args.process_version == "SHCHD1.41.1-E":
-          process = SHCE()
-      elif args.process_version == "SH1.41":
-          process = SH()
-      else:
-          raise RuntimeError("Misspecified process version? Supported version: SH1.41, SHCHD1.41, SHCHD1.41.1-E")
+                print(f"packing file from folder {path} to file {str(dst)}")
 
-      if args.read:
-          if args.read == "all":
-              dump = process.read_all_memory()
-          else:
-              dump = process.read_section(str(args.read))
-              if args.standardized:
-                  if len(dump) % 80400 != 0:
-                      raise Exception(f"--standardize is only supported on tile map sections")
-                  tile_size = len(dump) // 80400
+                save_map(map, dst)
+
+    import PIL.Image
+    import struct
+    from sourcehold.maps.sections.types import TileSystem
+    if args.method == "image":
+
+        input_file = getattr(args, "in")
+        output_file = args.out
+        if input_file == "-":
+            input_data = sys.stdin.buffer.read()
+        else:
+            input_data = pathlib.Path(input_file).read_bytes()
+
+        if len(input_data) % 80400 != 0:
+            raise Exception(f"Invalid tile data length: {len(input_data)}, not a tile map section?")
+
+        tile_size = len(input_data) // 80400
+        if tile_size == 1:
+            fmt = "B"
+        elif tile_size == 2:
+            fmt = "H"
+        elif tile_size == 4:
+            fmt = "I"
+        else:
+            raise Exception(f"unsupported tile size: {tile_size}")
+
+        if args.perspective:
+            ts = TileSystem().from_bytes(data=input_data, fmt=fmt)
+            img = ts.create_image()
+        else:
+            if args.rgb:
+                size = struct.calcsize(fmt)
+                values = struct.unpack(f"<{80400}" + fmt, input_data)
+
+                from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
+                from sourcehold.maps.sections.tools import build_palette
+                matrix = init_matrix(shape=(400, 400), value=None)
+                populate_value_matrix(matrix, values)
+
+                mapping, palette = build_palette(set(values))
+
+                img = PIL.Image.new('RGB', (400,400), color=0)
+                pixelmap = img.load()
+                for i, row in enumerate(matrix):
+                    for j, value in enumerate(row):
+                        if value is None:
+                            continue
+                        pixelmap[i, j] = palette[mapping.index(value)] # type: ignore
+            else:
+                # cmyk
+                size = struct.calcsize(fmt)
+                values = struct.unpack(f"<{80400}" + fmt, input_data)
+
+                from sourcehold.debugtools.maps import populate_value_matrix, init_matrix
+                from sourcehold.maps.sections.tools import build_palette
+                matrix = init_matrix(shape=(400, 400), value=None)
+                populate_value_matrix(matrix, values)
+
+                if args.transform:
                   if tile_size == 1:
-                      fmt = "B"
+                      multiplier = lambda v: v << (32 - 8)
                   elif tile_size == 2:
-                      fmt = "H"
+                      multiplier = lambda v: v << (32 - 16)
                   elif tile_size == 4:
-                      fmt = "I"
+                      multiplier = lambda v: v
                   else:
-                      raise Exception(f"unsupported tile size: {tile_size}")
-                  
-                  import struct
-                  from sourcehold.world import create_matrix, create_binary_matrix
-                  matrix = create_matrix()
-                  i = create_binary_matrix()
+                      raise Exception()
+                else:
+                    multiplier = lambda v: v
 
-                  matrix[i] = struct.unpack(f"<80400{fmt}", dump)
+                img = PIL.Image.new('CMYK', (400,400), color=-1)
+                pixelmap = img.load()
+                for i, row in enumerate(matrix):
+                    for j, value in enumerate(row):
+                        if value is None:
+                            continue
+                        pixelmap[i, j] = multiplier(value) # type: ignore
 
-                  dump = matrix.tobytes()
-          if args.out == "-":
-              sys.stdout.buffer.write(dump)
-          elif args.out:
-              pathlib.Path(args.out).write_bytes(dump)
+        if output_file == "-":
+            img.show()
+        else:
+            img.save(output_file)
 
-      elif args.write:
-          infile = getattr(args, "in")
-          if infile is None and args.data:
-              input_data = binascii.a2b_hex(args.data)
-          elif infile == "-":
-              input_data = sys.stdin.buffer.read()
-          else:
-              input_data = pathlib.Path(infile).read_bytes()
+    import binascii
+    import platform
 
-          if args.write == "all":
-              process.write_bytes(0, input_data)
-          else:
-              if args.standardized:
-                  if len(input_data) % 400*400 != 0:
-                      raise Exception(f"--standardize is only supported with 400x400 data")
-                  tile_size = len(input_data) // (400*400)
-                  if tile_size == 1:
-                      fmt = "B"
-                  elif tile_size == 2:
-                      fmt = "H"
-                  elif tile_size == 4:
-                      fmt = "I"
-                  else:
-                      raise Exception(f"unsupported tile size: {tile_size}")
-                  
-                  import struct
-                  from sourcehold.world import create_matrix, create_binary_matrix
-                  matrix = create_matrix()
-                  i = create_binary_matrix()
+    if args.method == "memory":
 
-                  import numpy
-                  trues = numpy.zeros(shape=(400, 400), dtype="bool")
-                  trues[:] = True
+        if platform.system().lower() != "windows":
+            raise Exception("memory debugging is currently only supported on Windows")
 
-                  matrix[trues] = struct.unpack(f"<{400*400}{fmt}", input_data)
+        #  import sourcehold.debugtools.memory.common.access
+        #  from sourcehold.debugtools.memory.common.access import AccessContext
+        from sourcehold.debugtools.memory.access import SHC, SHCE, SH
 
-                  input_data = matrix[i].tobytes()
-              process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
+        #  if args.config is None:
+        #      args.config = str(pathlib.Path(pkg_resources.resource_filename(sourcehold.debugtools.memory.common.access.__name__, "shc_data.CT")))
+        if args.process_version == "SHCHD1.41":
+            process = SHC()
+        elif args.process_version == "SHCHD1.41.1-E":
+            process = SHCE()
+        elif args.process_version == "SH1.41":
+            process = SH()
+        else:
+            raise RuntimeError("Misspecified process version? Supported version: SH1.41, SHCHD1.41, SHCHD1.41.1-E")
 
-      elif args.inject:
-          m = load_map(args.inject)
-          for index, section in process.memory_sections.items():
-              if index == "0":
-                  continue
-              try:
-                  process.write_section(index, m.directory[int(index)].get_data()) # type: ignore
-              except Exception as e:
-                  print(f"failed on section: {e}")
+        if args.read:
+            if args.read == "all":
+                dump = process.read_all_memory()
+            else:
+                dump = process.read_section(str(args.read))
+                if args.standardized:
+                    if len(dump) % 80400 != 0:
+                        raise Exception(f"--standardize is only supported on tile map sections")
+                    tile_size = len(dump) // 80400
+                    if tile_size == 1:
+                        fmt = "B"
+                    elif tile_size == 2:
+                        fmt = "H"
+                    elif tile_size == 4:
+                        fmt = "I"
+                    else:
+                        raise Exception(f"unsupported tile size: {tile_size}")
+                    
+                    import struct
+                    from sourcehold.world import create_matrix, create_binary_matrix
+                    matrix = create_matrix()
+                    i = create_binary_matrix()
 
-      elif args.dump_into:
-          with open(args.dump_into, "wb") as ofile:
-              for index, section in process.memory_sections.items():
-                  if index == "0":
-                      continue
-                  try:
-                      data = process.read_section(section)
-                      header = struct.pack("<I", int(index))
-                      header += struct.pack("<I", len(data))
-                      ofile.write(header)
-                      ofile.write(data)
-                  except Exception as e:
-                      print(f"failed on section: {e}")
+                    matrix[i] = struct.unpack(f"<80400{fmt}", dump)
 
-if args.service == "compression":
-      input_file = getattr(args, "in")
-      if input_file == "-":
-          input_data = sys.stdin.buffer.read()
-      else:
-          input_data = pathlib.Path(input_file).read_bytes()
+                    dump = matrix.tobytes()
+            if args.out == "-":
+                sys.stdout.buffer.write(dump)
+            elif args.out:
+                pathlib.Path(args.out).write_bytes(dump)
 
-      if args.decompress:
-          output_data = COMPRESSION.decompress(input_data)
-      elif args.compress:
-          output_data = COMPRESSION.compress(input_data)
-      else:
-          raise Exception("either select --compress or --decompress")
+        elif args.write:
+            infile = getattr(args, "in")
+            if infile is None and args.data:
+                input_data = binascii.a2b_hex(args.data)
+            elif infile == "-":
+                input_data = sys.stdin.buffer.read()
+            else:
+                input_data = pathlib.Path(infile).read_bytes()
 
-      output_file = args.out
-      if output_file == "-":
-          sys.stdout.buffer.write(output_data)
-      else:
-          pathlib.Path(output_file).write_bytes(output_data)
-# if __name__ == "__main__":
-#     main()
+            if args.write == "all":
+                process.write_bytes(0, input_data)
+            else:
+                if args.standardized:
+                    if len(input_data) % 400*400 != 0:
+                        raise Exception(f"--standardize is only supported with 400x400 data")
+                    tile_size = len(input_data) // (400*400)
+                    if tile_size == 1:
+                        fmt = "B"
+                    elif tile_size == 2:
+                        fmt = "H"
+                    elif tile_size == 4:
+                        fmt = "I"
+                    else:
+                        raise Exception(f"unsupported tile size: {tile_size}")
+                    
+                    import struct
+                    from sourcehold.world import create_matrix, create_binary_matrix
+                    matrix = create_matrix()
+                    i = create_binary_matrix()
+
+                    import numpy
+                    trues = numpy.zeros(shape=(400, 400), dtype="bool")
+                    trues[:] = True
+
+                    matrix[trues] = struct.unpack(f"<{400*400}{fmt}", input_data)
+
+                    input_data = matrix[i].tobytes()
+                process.write_section(section=str(args.write), data=input_data, recycle=args.recycle)
+
+        elif args.inject:
+            m = load_map(args.inject)
+            for index, section in process.memory_sections.items():
+                if index == "0":
+                    continue
+                try:
+                    process.write_section(index, m.directory[int(index)].get_data()) # type: ignore
+                except Exception as e:
+                    print(f"failed on section: {e}")
+
+        elif args.dump_into:
+            with open(args.dump_into, "wb") as ofile:
+                for index, section in process.memory_sections.items():
+                    if index == "0":
+                        continue
+                    try:
+                        data = process.read_section(section)
+                        header = struct.pack("<I", int(index))
+                        header += struct.pack("<I", len(data))
+                        ofile.write(header)
+                        ofile.write(data)
+                    except Exception as e:
+                        print(f"failed on section: {e}")
+
+  if args.service == "compression":
+        input_file = getattr(args, "in")
+        if input_file == "-":
+            input_data = sys.stdin.buffer.read()
+        else:
+            input_data = pathlib.Path(input_file).read_bytes()
+
+        if args.decompress:
+            output_data = COMPRESSION.decompress(input_data)
+        elif args.compress:
+            output_data = COMPRESSION.compress(input_data)
+        else:
+            raise Exception("either select --compress or --decompress")
+
+        output_file = args.out
+        if output_file == "-":
+            sys.stdout.buffer.write(output_data)
+        else:
+            pathlib.Path(output_file).write_bytes(output_data)
+  # if __name__ == "__main__":
+  #     main()
+main()
