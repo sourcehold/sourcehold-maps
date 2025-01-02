@@ -1,4 +1,4 @@
-# sourcehold-maps [![Discord](https://img.shields.io/discord/566293677329219595.svg?color=7389D8&label=%20&logo=discord&logoColor=ffffff)](https://discord.gg/dzdBuNy) <!-- omit in toc -->
+# sourcehold-maps [![Discord](https://img.shields.io/discord/1259903348077756527.svg?color=7389D8&label=%20&logo=discord&logoColor=ffffff)](https://discord.gg/SKJGEGgPTv) <!-- omit in toc -->
 Reverse engineering the map file format of the 2D Stronghold Games.
 
 ### Project Goal <!-- omit in toc -->
