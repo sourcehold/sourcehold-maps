@@ -148,7 +148,7 @@ section_lengths = {
 }
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -156,6 +156,7 @@ class MemorySection(object):
     name: str
     address: int
     size: int
+    base: int = field(default=0)
 
     def __repr__(self):
         return f"MemorySection<{self.name}@{self.address}>"

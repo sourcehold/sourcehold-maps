@@ -4,6 +4,7 @@ except ValueError:
     import sys
     print("memory debugging is only supported on windows currently", file=sys.stderr)
 
+from multiprocessing import process
 import pathlib
 import xml.etree.ElementTree as ET
 
@@ -32,6 +33,19 @@ def read_address_list_village(process):
         m = MemorySection(name=str(struct.unpack("<H", sub[14:16])[0]),
                           size=struct.unpack("<I", sub[8:12])[0],
                           address=struct.unpack("<I", sub[:4])[0])
+        yield m
+
+def read_address_list_shcde(ac):
+    addr = ac.base + 0x0002f7c60
+    end = ac.base + 0x0002f89b0
+    size = 8+4+4+2+2+4
+    data = ac.process.read_bytes(addr, end-addr)
+    for i in range(0, end-addr, size):
+        sub = data[i:i+size]
+        m = MemorySection(name=str(struct.unpack("<H", sub[18:20])[0]),
+                          size=struct.unpack("<I", sub[12:16])[0],
+                          address=struct.unpack("<Q", sub[:8])[0],
+                          base = ac.base)
         yield m
 
 def read_address_list_shce(process):
@@ -165,6 +179,44 @@ class SHCE(AccessContext):
     def __init__(self):
         super().__init__(process_name="Stronghold_Crusader_Extreme")
         self.memory_sections = {m.name: m for m in read_address_list_shce(self.process)}
+
+
+class SHCDE(AccessContext):
+    
+    def __init__(self):
+        error = None
+        try:
+            #sys.stdout = open(os.devnull, "w")
+            #sys.stderr = open(os.devnull, "w")
+            self.process = pymem.Pymem("Stronghold Crusader Definitive Edition.exe")
+        except Exception as te:
+            error = te
+        finally:
+            #sys.stdout.close()
+            #sys.stderr.close()
+            #sys.stdout = sys.__stdout__
+            #sys.stderr = sys.__stderr__
+            if isinstance(error, pymem.exception.ProcessNotFound): # type: ignore
+                print("Process is not running")
+            if error is not None:
+                raise error
+        found = False
+        modules = self.process.list_modules()
+        for m in modules:
+            if m.name == "CrusaderDE_real.dll":
+                self.module = m
+                self.base = m.lpBaseOfDll
+                found = True
+                break
+            if m.name == "CrusaderDE.dll" and not found:
+                self.module = m
+                self.base = m.lpBaseOfDll
+                found = True
+                # Continue searching for _real.dll if necessary
+        else:
+            if not found:
+              raise Exception("Did not find CrusaderDE.dll")
+        self.memory_sections = {m.name: m for m in read_address_list_shcde(self)}
 
 
 class Village(AccessContext):
