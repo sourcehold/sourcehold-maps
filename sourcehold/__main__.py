@@ -8,14 +8,15 @@ from sourcehold import load_map
 from sourcehold import Buffer
 from sourcehold.compression import COMPRESSION
 
+file_input_output = argparse.ArgumentParser(add_help=False)
+file_input_output.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
+file_input_output.add_argument("--out", help="a folder to (un)pack files to")
 
-file_manipulation_parser = argparse.ArgumentParser(add_help=False)
+file_manipulation_parser = argparse.ArgumentParser(add_help=False, parents=[file_input_output])
 file_manipulation_parser_group = file_manipulation_parser.add_mutually_exclusive_group(required=True)
 file_manipulation_parser_group.add_argument("--unpack", action='store_const', const=True, default=False, help="unpack a .map/.sav/.msv file to a folder")
 file_manipulation_parser_group.add_argument("--pack", action='store_const', const=True, default=False, help="pack a folder into a .map/.sav/.msv file")
-file_manipulation_parser.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
-file_manipulation_parser.add_argument("--out", help="a folder to (un)pack files to")
-file_manipulation_parser.add_argument("--what", help="what to unpack from the map file, e.g., '1001' for section 1001", default="all")
+file_manipulation_parser_group.add_argument("--what", help="what to unpack from the map file, e.g., '1001' for section 1001", default="all")
 
 main_parser = argparse.ArgumentParser(prog="sourcehold")
 main_parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
@@ -25,6 +26,11 @@ main_subparsers = main_parser.add_subparsers(title="service", dest="service", re
 aiv_parser = main_subparsers.add_parser('aiv')
 aiv_subparsers = aiv_parser.add_subparsers(dest='method', required=True, title='method')
 aiv_file_parser = aiv_subparsers.add_parser('file', parents=[file_manipulation_parser])
+
+convert_parser = main_subparsers.add_parser('convert')
+convert_subparsers = convert_parser.add_subparsers(dest='type', required=True, title='type')
+convert_aiv_parser = convert_subparsers.add_parser('aiv', parents=[file_input_output])
+
 
 compression_parser = main_subparsers.add_parser('compression')
 compression_parser_group = compression_parser.add_mutually_exclusive_group(required=True)
@@ -62,6 +68,18 @@ memory_parser.add_argument("--standardized", help="standardize tilemap sections 
 args = main_parser.parse_args()
 
 def main():
+  if args.service == "convert":
+    if args.type == "aiv":
+        inp = getattr(args, 'in')[0]
+        if not pathlib.Path(inp).exists():
+            raise Exception(f"file does not exist: {inp}")
+        if args.out == None:
+            args.out = f"{pathlib.Path(inp).name}.json"
+        print(f"converting aiv file '{inp}' to file '{args.out}'")  
+        from sourcehold.aivs.conversion import to_json
+        pathlib.Path(args.out).write_text(to_json(path = inp))
+
+
   if args.service == "aiv":
     if args.method == "file":
       raise Exception("not implemented")
