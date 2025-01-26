@@ -14,27 +14,28 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [windows-latest]
         platform: [x86, x64]
-        python-version: [3.8]
+        python-version: [3.8, 3.9, 3.10, 3.11, 3.12, 3.13]
         python-platform: [x86, x64]
-        exclude:
-          - platform: x86
-            python-platform: x64
-          - os: ubuntu-latest
-            python-platform: x86
-          - os: ubuntu-latest
-            platform: x86
-          - os: macOS-latest
-            python-platform: x86
-          - os: macOS-latest
-            platform: x86
-          - platform: x64
-            python-platform: x86
+        # exclude:
+        #   - platform: x86
+        #     python-platform: x64
+        #   - os: ubuntu-latest
+        #     python-platform: x86
+        #   - os: ubuntu-latest
+        #     platform: x86
+        #   - os: macOS-latest
+        #     python-platform: x86
+        #   - os: macOS-latest
+        #     platform: x86
+        #   - platform: x64
+        #     python-platform: x86
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         architecture: ${{ matrix.python-platform }}
@@ -81,30 +82,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [windows-latest]
         platform: [x86, x64]
-        python-version: [3.8]
+        python-version: [3.8, 3.9, 3.10, 3.11, 3.12, 3.13]
         python-platform: [x86, x64]
-        exclude:
-          - platform: x86
-            python-platform: x64
-          - os: ubuntu-latest
-            python-platform: x86
-          - os: ubuntu-latest
-            platform: x86
-          - os: macOS-latest
-            python-platform: x86
-          - os: macOS-latest
-            platform: x86
-          - platform: x64
-            python-platform: x86
     steps:
     - name: Download package
       uses: actions/download-artifact@v4.1.7
       with:
         name: sourcehold-py${{ matrix.python-version }}-${{ matrix.python-platform }}-${{ matrix.os }}-${{ matrix.platform }}
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         architecture: ${{ matrix.python-platform }}
