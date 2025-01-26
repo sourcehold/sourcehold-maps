@@ -55,6 +55,7 @@ def to_json(aiv=None, path: str=''):
 
   processed = {}
 
+  buildings = 0
   offset = -1
   for i in range(100):
     for j in range(100):
@@ -85,7 +86,7 @@ def to_json(aiv=None, path: str=''):
       
       buildingType = construction # Needs conversion from something to a Mapper or not yet?
       
-      if buildingType in [25, 46, 26, 35, 106, 99]:
+      if buildingType in [10, 11, 12, 13, 20, 21, 22, 23, 24]:
         continue # not processed yet
       
       processed[offset] = True
@@ -93,8 +94,13 @@ def to_json(aiv=None, path: str=''):
       if step > len(frames):
         raise Exception(f"step size too high at ({i}, {j}, {offset}): {step} => {len(frames)}")
       if frames[step] is None:
+        buildings += 1
         shouldPause = step in pauses
         frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [offset], 'shouldPause': shouldPause}
+
+  print(f"INFO: buildings: {buildings}")
+
+  nonbuildings = 0
 
   offset = -1
   for i in range(100):
@@ -109,6 +115,9 @@ def to_json(aiv=None, path: str=''):
         if frames[step] is None:
           frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [], 'shouldPause': shouldPause}
         frames[step]['tilePositionOfsets'].append(offset)
+        nonbuildings += 1
+
+  print(f"INFO: walls | pitch | moat: {nonbuildings}")
 
   for unitType in range(24):
     for entry in range(10):
