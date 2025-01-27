@@ -139,7 +139,10 @@ class Preview(CompressedSection):
             image = image.quantize(256)  # TODO: mode P conversion may be redundant
 
         pal = palette.pack_palette_to_stream(image.getpalette())
-        if len(pal) != 512:
+        if len(pal) < palette_size:
+            togo = palette_size - len(pal)
+            pal += b'\x00' * togo
+        if len(pal) != palette_size:
             raise Exception("Invalid length: {}".format(len(pal)))
 
         self.uncompressed = pal + image.tobytes()
