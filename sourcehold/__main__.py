@@ -30,6 +30,7 @@ aiv_file_parser = aiv_subparsers.add_parser('file', parents=[file_manipulation_p
 convert_parser = main_subparsers.add_parser('convert')
 convert_subparsers = convert_parser.add_subparsers(dest='type', required=True, title='type')
 convert_aiv_parser = convert_subparsers.add_parser('aiv', parents=[file_input_output])
+convert_aiv_parser.add_argument('--extra', action='store_const', const=True, default=False)
 
 
 compression_parser = main_subparsers.add_parser('compression')
@@ -77,7 +78,7 @@ def main():
             args.out = f"{pathlib.Path(inp).name}.json"
         print(f"converting aiv file '{inp}' to file '{args.out}'")  
         from sourcehold.aivs.conversion import to_json
-        pathlib.Path(args.out).write_text(to_json(path = inp))
+        pathlib.Path(args.out).write_text(to_json(path = inp, include_extra=args.extra))
 
 
   if args.service == "aiv":
