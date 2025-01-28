@@ -45,7 +45,7 @@ class LiveByteArray(object):
 
 
 from xml.etree import ElementTree as ET
-from sourcehold.structure_tools import DataProperty
+from sourcehold.structure_tools.DataProperty import DataProperty
 
 
 def create_data_properties_from_csx(xml_path):

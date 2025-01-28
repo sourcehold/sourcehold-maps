@@ -1,5 +1,6 @@
 import unittest
-from sourcehold import structure_tools, maps
+from sourcehold.structure_tools import Buffer
+from sourcehold import maps
 import pathlib
 
 
@@ -9,7 +10,7 @@ class TestMapSections(unittest.TestCase):
     def setUpClass(cls) -> None:
         map_file = str(pathlib.Path("resources/map/crusader/MxM_unseen_1.map"))
         with open(map_file, 'rb') as f:
-            buf = structure_tools.Buffer(f.read())
+            buf = Buffer(f.read())
 
         m = maps.Map().from_buffer(buf)
         m.directory.unpack(False)

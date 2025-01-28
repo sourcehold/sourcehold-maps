@@ -7,9 +7,13 @@ import struct
 from sourcehold.aivs.sections import AIVSection, CompressedAIVSection, get_section_for_index
 from sourcehold.iotools import read_file, write_to_file
 from sourcehold.maps import CompressedSection
-from sourcehold.structure_tools import Buffer, Field, Structure, bytes_to_int_array, ints_to_byte_array
+from sourcehold.structure_tools import bytes_to_int_array, ints_to_byte_array
+from typing import List
+from io import StringIO
 
-
+from sourcehold.structure_tools.Buffer import Buffer
+from sourcehold.structure_tools.Field import Field
+from sourcehold.structure_tools.Structure import Structure
 
 class AIVDirectory1(Structure):
     pass
@@ -21,13 +25,13 @@ class AIVDirectory(Structure):
     directory_size = Field("directory_size", "I")
     size = Field("size", "I")
     sections_count = Field("sections_count", "I")
-    version_number = Field("version_number", "I")
-    directory_u1 = Field("directory_u1", "I", 4)
-    section_uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_lengths = Field("section_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
-    section_compressed = Field("section_compressed", "I", _MAX_SECTIONS_COUNT)
-    section_offsets = Field("section_offsets", "I", _MAX_SECTIONS_COUNT)
+    version_number = Field[int]("version_number", "I")
+    directory_u1 = Field[List[int]]("directory_u1", "I", 4)
+    section_uncompressed_lengths = Field[List[int]]("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_lengths = Field[List[int]]("section_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_indices = Field[List[int]]("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
+    section_compressed = Field[List[int]]("section_compressed", "I", _MAX_SECTIONS_COUNT)
+    section_offsets = Field[List[int]]("section_offsets", "I", _MAX_SECTIONS_COUNT)
     directory_u7 = Field("directory_u7", "I")
 
     def keys(self):
@@ -138,7 +142,7 @@ class AIVDirectory(Structure):
             section.serialize_to_buffer(buf)
 
     def _dump_spec(self):
-        buf = csv.StringIO()
+        buf = StringIO()
 
         writer = csv.DictWriter(buf, fieldnames=["uncompressed_length", "section_length", "section_index", "compressed",
                                                  "section_offset"])
@@ -152,7 +156,7 @@ class AIVDirectory(Structure):
         return buf.getvalue().encode('ascii')
 
     def _load_spec(self, data: str):
-        buf = csv.StringIO(data)
+        buf = StringIO(data)
 
         reader = csv.DictReader(buf)
         i = 0

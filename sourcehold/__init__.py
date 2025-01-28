@@ -1,4 +1,4 @@
-from .iotools import Buffer
+from .structure_tools.Buffer import Buffer
 from .maps import Map
 import pathlib
 import unittest

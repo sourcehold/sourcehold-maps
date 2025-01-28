@@ -5,7 +5,7 @@ import sys
 from sourcehold import Map
 from sourcehold import save_map
 from sourcehold import load_map
-from sourcehold import Buffer
+from sourcehold.structure_tools.Buffer import Buffer
 from sourcehold.compression import COMPRESSION
 
 file_input_output = argparse.ArgumentParser(add_help=False)

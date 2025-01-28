@@ -1,6 +1,6 @@
 import struct
 
-from sourcehold.structure_tools import Buffer
+from sourcehold.structure_tools.Buffer import Buffer
 
 
 def unpack(type: str, data: bytes, amount=0):

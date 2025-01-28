@@ -1,8 +1,8 @@
 
 import logging
 from sourcehold.maps import CompressedSection
-from sourcehold.structure_tools import Structure
-
+from sourcehold.structure_tools.Structure import Structure
+from typing import cast
 
 class AIVSection(Structure):
 
@@ -16,7 +16,7 @@ class AIVSection(Structure):
         super().from_buffer(buf, **kwargs)
         if 'length' not in kwargs:
             raise KeyError()
-        self.length = kwargs.get('length')
+        self.length = cast(int, kwargs.get('length'))
         self.data = buf.read(self.length)
         return self
 

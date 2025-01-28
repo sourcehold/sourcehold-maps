@@ -1,5 +1,6 @@
+from ...structure_tools.DataProperty import DataProperty
 from .types import ArrayMapCompressedSection
-from .objects import ChildStructure, DataProperty
+from .objects import ChildStructure
 
 
 class Stub1016(ChildStructure):

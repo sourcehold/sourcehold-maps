@@ -7,8 +7,10 @@ from PIL import Image
 
 from sourcehold import compression, palette
 from sourcehold.iotools import read_file, write_to_file
-from sourcehold.structure_tools import Structure, Field
-from sourcehold.structure_tools import DataProperty
+from sourcehold.structure_tools.Buffer import Buffer
+from sourcehold.structure_tools.Field import Field
+from sourcehold.structure_tools.DataProperty import DataProperty
+from sourcehold.structure_tools.Structure import Structure
 
 
 class SimpleSection(Structure):
@@ -260,7 +262,7 @@ class CompressedMapSection(CompressedSection):
 from sourcehold.maps.sections import find_section_for_index
 
 import csv
-from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array, Buffer
+from sourcehold.structure_tools import ints_to_byte_array, bytes_to_int_array
 
 
 def get_section_for_index(index, compressed):

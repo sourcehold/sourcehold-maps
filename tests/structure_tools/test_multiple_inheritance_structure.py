@@ -2,7 +2,9 @@
 import unittest
 
 
-from sourcehold.structure_tools import Structure, Field, Buffer
+from sourcehold.structure_tools.Buffer import Buffer
+from sourcehold.structure_tools.Field import Field
+from sourcehold.structure_tools.Structure import Structure
 
 
 class A(Structure):

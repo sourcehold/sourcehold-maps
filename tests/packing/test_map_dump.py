@@ -1,7 +1,8 @@
 import unittest
 import tempfile
 
-from sourcehold import structure_tools, maps, load_map, save_map, Map, Buffer
+from sourcehold import structure_tools, maps, load_map, save_map, Map
+from sourcehold.structure_tools.Buffer import Buffer
 
 
 class TestDumpAndLoadFromFolder(unittest.TestCase):

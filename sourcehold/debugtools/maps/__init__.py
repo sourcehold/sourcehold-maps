@@ -2,6 +2,7 @@
 from sourcehold import *
 import struct
 
+from sourcehold.structure_tools.Buffer import Buffer
 from sourcehold.world import TileLocationTranslator
 tlt = TileLocationTranslator(square_width=400)
 

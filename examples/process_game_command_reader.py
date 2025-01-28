@@ -1,9 +1,10 @@
 
 
 from sourcehold.debugtools.memory import SHC
+from sourcehold.structure_tools.DataProperty import DataProperty
 process = SHC()
 
-from sourcehold.structure_tools import Structure, DataProperty
+from sourcehold.structure_tools.Structure import Structure
 
 
 class GameCommand(Structure):

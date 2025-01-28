@@ -1,7 +1,7 @@
 import unittest
 
-from sourcehold import structure_tools, maps
-
+from sourcehold.structure_tools import Buffer
+from sourcehold.maps import Map
 
 class TestEqual(unittest.TestCase):
 
@@ -9,13 +9,13 @@ class TestEqual(unittest.TestCase):
     def setUpClass(cls) -> None:
         with open("resources/map/crusader/MxM_unseen_1.map", 'rb') as f:
             cls.raw1 = f.read()
-            buf = structure_tools.Buffer(cls.raw1)
+            buf = Buffer(cls.raw1)
 
-        m = maps.Map().from_buffer(buf)
+        m = Map().from_buffer(buf)
         m.unpack()
         m.directory.unpack()
 
-        buf2 = structure_tools.Buffer()
+        buf2 = Buffer()
         m.serialize_to_buffer(buf2)
         cls.m = m
         cls.buf2 = buf2
@@ -24,9 +24,9 @@ class TestEqual(unittest.TestCase):
         self.assertEqual(TestEqual.raw1, TestEqual.buf2.getvalue())
 
     def test_packing(self):
-        m1 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
+        m1 = Map().from_buffer(Buffer(TestEqual.raw1))
         m1.unpack()
-        m2 = maps.Map().from_buffer(structure_tools.Buffer(TestEqual.raw1))
+        m2 = Map().from_buffer(Buffer(TestEqual.raw1))
         m2.unpack()
 
         m2.pack()

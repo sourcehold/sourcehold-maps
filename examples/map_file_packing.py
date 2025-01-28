@@ -5,7 +5,7 @@ PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
-from sourcehold import structure_tools, maps
+from sourcehold.structure_tools import Buffer, maps
 
 import argparse
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
         for file in args.files:
             with open(file, 'rb') as f:
-                buf = structure_tools.Buffer(f.read())
+                buf = Buffer.Buffer(f.read())
 
             name = os.path.basename(file)
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
             name = os.path.basename(file)
 
-            buf = structure_tools.Buffer()
+            buf = Buffer.Buffer()
 
             map.serialize_to_buffer(buf)
 

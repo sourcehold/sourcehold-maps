@@ -1,6 +1,7 @@
 # Project specific files
 compression/cppklib.cpp
 .vscode/
+output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

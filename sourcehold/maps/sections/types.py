@@ -23,7 +23,7 @@ class TileSystemRow(object):
         self.data[key] = value
 
 
-from ...iotools import Buffer
+from ...structure_tools.Buffer import Buffer
 
 
 

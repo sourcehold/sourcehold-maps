@@ -1,6 +1,6 @@
 import struct
 
-from sourcehold.iotools import Buffer
+from sourcehold.structure_tools.Buffer import Buffer
 from sourcehold.iotools import unpack
 
 

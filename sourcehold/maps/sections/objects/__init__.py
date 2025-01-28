@@ -1,5 +1,7 @@
 
-from sourcehold.structure_tools import Structure, Field, DataProperty
+from sourcehold.structure_tools.Field import Field
+from sourcehold.structure_tools.DataProperty import DataProperty
+from sourcehold.structure_tools.Structure import Structure
 
 
 class ChildStructure(Structure):
