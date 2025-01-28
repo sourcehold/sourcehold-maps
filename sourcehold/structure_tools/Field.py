@@ -66,7 +66,8 @@ class Field(Generic[T]):
                 buf.write(r)
             else:
                 if self.array_size == "*":
-                    for o in self.__get__(cast(Iterable, obj)):
+                    obj = cast(Iterable, obj)
+                    for o in self.__get__(obj):
                         buf.write(struct.pack(self.type, o))
                 elif self.array_size.__class__ == int:
                     for o in self.__get__(obj):

@@ -1,3 +1,4 @@
+from typing import cast
 from sourcehold.structure_tools import _resolve_cls_as_type, create_structure_from_buffer
 
 
@@ -107,6 +108,7 @@ class DataProperty(object):
                     if self.array_size == "*":
                         s = struct.calcsize(self.type)
                         r = []
+                        raise Exception("fixme: do we have break_array?")
                         while not self.break_array(buf):
                             r.append(struct.unpack(self.type, buf.read(s))[0])
                         #return r
@@ -128,17 +130,18 @@ class DataProperty(object):
                     return r
             elif self.type.__class__ == type:
                 if self.array_size == 0:
-                    r = create_structure_from_buffer(self.type, buf, **kwargs)
+                    r = create_structure_from_buffer(cast(type, self.type), buf, **kwargs)
                     return r
                 else:
                     if self.array_size == "*":
                         s = struct.calcsize(self.type)
                         r = []
+                        raise Exception("fixme: do we have break_array?")
                         while not self.break_array(buf):
                             r.append(create_structure_from_buffer(self.type, buf, **kwargs))
                         return r
                     elif self.array_size.__class__ == int:
-                        r = [create_structure_from_buffer(self.type, buf, **kwargs) for i in range(self.array_size)]
+                        r = [create_structure_from_buffer(cast(type, self.type), buf, **kwargs) for i in range(self.array_size)]
                         return r
                     elif self.array_size.__class__.__name__ == 'function':
                         raise NotImplementedError()

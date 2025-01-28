@@ -21,7 +21,7 @@ class Structure(object):
     #     self.fields[key].fset(self, value)
 
     @classmethod
-    def get_fields(cls) -> dict:
+    def get_fields(cls) -> dict[str, Field]:
         fields = {}
 
         tree = list(cls.__mro__)
