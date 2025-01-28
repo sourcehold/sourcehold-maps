@@ -99,9 +99,9 @@ def to_json(aiv=None, path: str='', include_extra=False):
         processed[offset] = True
         continue
       
-      buildingType = construction # Needs conversion from something to a Mapper or not yet?
+      buildingType = convertAIVEnumToMapperEnum(v = construction)
       
-      if buildingType in [10, 11, 12, 13, 20, 21, 22, 23, 24]:
+      if buildingType in [25, 46, 26, 35, 106, 99]: # [10, 11, 12, 13, 20, 21, 22, 23, 24]:
         continue # not processed yet
       
       processed[offset] = True
@@ -125,7 +125,7 @@ def to_json(aiv=None, path: str='', include_extra=False):
         # do all the special stuff
         construction = constructions[i, j].item()
         step = steps[i, j].item()
-        buildingType = construction
+        buildingType = convertAIVEnumToMapperEnum(v = construction)
         shouldPause = step in pauses
         if frames[step] is None:
           frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [], 'shouldPause': shouldPause}
@@ -259,7 +259,7 @@ BUILDING_TYPE_AIV_FILES_KV = {
   "DUNKINGSTOOL" : 108,
 }
 
-BUILDING_TYPE_AIV_FILES_VK = {(value, key) for key, value in BUILDING_TYPE_AIV_FILES_KV.items()}
+BUILDING_TYPE_AIV_FILES_VK = dict((value, key) for key, value in BUILDING_TYPE_AIV_FILES_KV.items())
 
 MAPPERS_SH1_KV = {
   "MAPPER_NULL" : 0x0,
@@ -639,9 +639,17 @@ MAPPERS_SH1_KV = {
   "MAPPER_PLACE_ASSEMBLY_POINTT1" : 0x171,
 }
 
-MAPPERS_SH1_VK = {(value, key) for key, value in MAPPERS_SH1_KV.items()}
+MAPPERS_SH1_VK = dict((value, key) for key, value in MAPPERS_SH1_KV.items())
 
-def convertAIVToMapper(k):
+CONVERSION = [110, 111, 112, 113, 114, 180, 312, 98, 61, 86, 144, 145, 146, 147, 105, 0, 0, 0, 0, 0, 82, 50, 83, 85, 84, 87, 81, 88, 89, 65, 52, 51, 56, 55, 90, 91, 77, 0, 0, 0, 80, 72, 73, 70, 78, 71, 74, 75, 76, 92, 54, 95, 96, 97, 93, 330, 342, 0, 0, 0, 175, 324, 313, 318, 169, 166, 325, 327, 0, 0, 176, 301, 177, 305, 307, 308, 306, 310, 311]
+def convertAIVEnumToMapperEnum(k=None, v=None):
+  if k is None:
+    if v is None:
+      raise Exception()
+    k = BUILDING_TYPE_AIV_FILES_VK[v]
+  else:
+    v = BUILDING_TYPE_AIV_FILES_KV[k]
+
   if k == "HIGH_WALL":
     return MAPPERS_SH1_KV["MAPPER_WALL"]
   if k == "LOW_WALL":
@@ -673,3 +681,7 @@ def convertAIVToMapper(k):
   if k == "PITCHDITCH_2":
     return MAPPERS_SH1_KV["MAPPER_PITCH_DITCH"]
   
+  if v - 30 > 0x4F:
+    return 108
+  
+  return CONVERSION[v - (120 // 4)]
