@@ -25,7 +25,17 @@ INDEX_PAUSES = 2011
 INDEX_MISC = 2012
 INDEX_PAUSE = 2014
 
-def to_json(aiv=None, path: str='', include_extra=False):
+
+def xrange():
+  return range(100)
+
+def yrange(invert_y=False):
+  if invert_y:
+    return range(100-1, -1, -1)
+  else:
+    return range(100)
+
+def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
   if aiv == None and not path:
     raise Exception()
   if aiv == None:
@@ -72,8 +82,8 @@ def to_json(aiv=None, path: str='', include_extra=False):
 
   buildings = 0
   offset = -1
-  for i in range(100):
-    for j in range(100):
+  for i in xrange():
+    for j in yrange(invert_y=invert_y):
       offset += 1
       
       if offset in processed:
@@ -118,8 +128,8 @@ def to_json(aiv=None, path: str='', include_extra=False):
   nonbuildings = 0
 
   offset = -1
-  for i in range(100):
-    for j in range(100):
+  for i in xrange():
+    for j in yrange(invert_y=invert_y):
       offset += 1
       if offset not in processed:
         # do all the special stuff
