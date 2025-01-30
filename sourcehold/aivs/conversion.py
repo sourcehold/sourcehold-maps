@@ -6,7 +6,7 @@ except:
   sys.path.insert(0, str(pathlib.Path(".").parent))
 
 import sourcehold.aivs
-from sourcehold.aivs import AIV
+from sourcehold.aivs.AIV import AIV
 
 # from matplotlib import pyplot
 

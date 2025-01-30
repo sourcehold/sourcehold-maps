@@ -1,5 +1,5 @@
 import sourcehold.aivs
-from sourcehold.aivs import AIV
+from sourcehold.aivs.AIV import AIV
 
 aiv = AIV().from_file("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Stronghold Crusader Extreme\\aiv\\saladin1.aiv")
 

@@ -1,12 +1,12 @@
 import unittest
 
-from sourcehold import compression
+from sourcehold.compression import DCL
 
 datac = b'\x00\x04\x82$%\x8f\x80\x7f'
 datac2 = b'\x00\x06\x82$%\x0f\x02\xfe\x01'
 datad = b'AIAIAIAIAIAIA'
 
-c1 = compression.DCL()
+c1 = DCL()
 # c2 = compression.BlastDecompression()
 # c3 = compression.SubprocessCompression()
 

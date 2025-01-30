@@ -2,7 +2,7 @@
 import pathlib
 import unittest
 
-from sourcehold.aivs import AIV
+from sourcehold.aivs.AIV import AIV
 from sourcehold.aivs.conversion import to_json
 
 BASEPATH = pathlib.Path("C:/Program Files (x86)/Steam/steamapps/common/Stronghold Crusader Extreme/aiv")

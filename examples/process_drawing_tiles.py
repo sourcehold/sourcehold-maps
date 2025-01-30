@@ -5,7 +5,7 @@ process = AccessContext()
 import struct
 
 
-from sourcehold.world import TileLocationTranslator
+from sourcehold.world.TileLocationTranslator import TileLocationTranslator
 SerializedTilePoint = TileLocationTranslator().SerializedTilePoint
 
 

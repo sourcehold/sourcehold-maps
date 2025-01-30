@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from sourcehold.debugtools.maps import yield_values, populate_value_matrix, init_matrix
 from sourcehold.maps.sections import find_section_for_index
 import struct
-from sourcehold.world import TileLocationTranslator
+from sourcehold.world.TileLocationTranslator import TileLocationTranslator
 
 
 

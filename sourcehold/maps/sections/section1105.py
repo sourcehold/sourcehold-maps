@@ -2,7 +2,7 @@ from .types import TileMapSection
 from .types import ArrayMapCompressedSection
 from .objects import ChildStructure
 import struct
-from sourcehold.world import TileLocationTranslator
+from sourcehold.world.TileLocationTranslator import TileLocationTranslator
 world = TileLocationTranslator()
 
 

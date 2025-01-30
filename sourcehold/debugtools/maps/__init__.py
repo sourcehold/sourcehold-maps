@@ -3,7 +3,7 @@ from sourcehold import *
 import struct
 
 from sourcehold.structure_tools.Buffer import Buffer
-from sourcehold.world import TileLocationTranslator
+from sourcehold.world.TileLocationTranslator import TileLocationTranslator
 tlt = TileLocationTranslator(square_width=400)
 
 
@@ -35,7 +35,7 @@ def dstack(matrices, shape=(400,400)):
 
 
 def show_section(section_object, categorical_color_mode=False):
-    import plotly.graph_objects as go
+    import plotly.graph_objects as go # type: ignore
 
     dv = list(yield_values(section_object))
     # Square array of data where north-west is 0,0

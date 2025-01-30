@@ -161,7 +161,7 @@ class TileSystem(object):
         return data.getvalue()
 
 
-from sourcehold.world import TileLocationTranslator
+from sourcehold.world.TileLocationTranslator import TileLocationTranslator
 world = TileLocationTranslator()
 
 
