@@ -1,4 +1,5 @@
-from sourcehold import SHC_FILES, load_map, expand_var_path
+from sourcehold import load_map, expand_var_path
+from sourcehold.maps.library import SHC_FILES
 
 map = load_map(SHC_FILES.get_all_map_paths()[0])
 

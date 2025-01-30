@@ -2,7 +2,7 @@ import unittest
 import pathlib
 
 from sourcehold.structure_tools import Buffer
-from sourcehold import maps
+from sourcehold.maps import Map
 
 
 def _test_parse_map(path):
@@ -15,7 +15,7 @@ def _test_parse_map(path):
             data = f.read()
 
         buf = Buffer(data)
-        m = maps.Map().from_buffer(buf)
+        m = Map.Map().from_buffer(buf)
 
         m.unpack()
         m.directory.unpack()

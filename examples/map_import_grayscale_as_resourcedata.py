@@ -3,7 +3,7 @@ TILE_COUNT = MAP_SIZE * ((MAP_SIZE // 2) + 1 )
 # python -m pip install Pillow
 import struct, numpy
 from sourcehold.world import create_selection_matrix
-import cv2 as cv
+import cv2 as cv # type: ignore
 import tkinter.filedialog
 
 img_path = tkinter.filedialog.askopenfilename()

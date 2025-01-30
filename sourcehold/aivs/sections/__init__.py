@@ -1,6 +1,6 @@
 
 import logging
-from sourcehold.maps import CompressedSection
+from sourcehold.maps.CompressedSection import CompressedSection
 from sourcehold.structure_tools.Structure import Structure
 from typing import cast
 

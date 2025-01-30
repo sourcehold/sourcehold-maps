@@ -1,37 +1,33 @@
+from sourcehold.iotools import read_file, write_to_file
+from sourcehold.maps import determine_version, get_section_for_index
+from sourcehold.maps.CompressedMapSection import CompressedMapSection
+from sourcehold.maps.MapSection import MapSection
+from sourcehold.structure_tools import bytes_to_int_array, ints_to_byte_array
+from sourcehold.structure_tools.Buffer import Buffer
+from sourcehold.structure_tools.Field import Field
+from sourcehold.structure_tools.Structure import Structure
+
 
 import csv
 import logging
 import os
 import pathlib
 import struct
-from sourcehold.aivs.sections import AIVSection, CompressedAIVSection, get_section_for_index
-from sourcehold.iotools import read_file, write_to_file
-from sourcehold.maps.CompressedSection import CompressedSection
-from sourcehold.structure_tools import bytes_to_int_array, ints_to_byte_array
-from typing import List
-from io import StringIO
 
-from sourcehold.structure_tools.Buffer import Buffer
-from sourcehold.structure_tools.Field import Field
-from sourcehold.structure_tools.Structure import Structure
 
-class AIVDirectory1(Structure):
-    pass
-
-class AIVDirectory(Structure):
+class Directory(Structure):
     # Stronghold crusader has values 161, 168, or 170, or 172 if custom Stronghold
     # The version differ in the amount of sections, 150 or 100.
-    _MAX_SECTIONS_COUNT = lambda v: 100
+    _MAX_SECTIONS_COUNT = determine_version
     directory_size = Field("directory_size", "I")
     size = Field("size", "I")
     sections_count = Field("sections_count", "I")
-    version_number = Field[int]("version_number", "I")
-    directory_u1 = Field[List[int]]("directory_u1", "I", 4)
-    section_uncompressed_lengths = Field[List[int]]("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_lengths = Field[List[int]]("section_lengths", "I", _MAX_SECTIONS_COUNT)
-    section_indices = Field[List[int]]("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
-    section_compressed = Field[List[int]]("section_compressed", "I", _MAX_SECTIONS_COUNT)
-    section_offsets = Field[List[int]]("section_offsets", "I", _MAX_SECTIONS_COUNT)
+    directory_u1 = Field("directory_u1", "I", 5)
+    section_uncompressed_lengths = Field("uncompressed_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_lengths = Field("section_lengths", "I", _MAX_SECTIONS_COUNT)
+    section_indices = Field("section_indices", "I", _MAX_SECTIONS_COUNT)  # Beware that this contains null values (0's)
+    section_compressed = Field("section_compressed", "I", _MAX_SECTIONS_COUNT)
+    section_offsets = Field("section_offsets", "I", _MAX_SECTIONS_COUNT)
     directory_u7 = Field("directory_u7", "I")
 
     def keys(self):
@@ -102,18 +98,18 @@ class AIVDirectory(Structure):
             section.pack(force)
 
         # Lets keep things simple for now and not assume change in compressed and indices
-        # zeroes = AIVDirectory._MAX_SECTIONS_COUNT(self) - len(self.sections)
+        zeroes = Directory._MAX_SECTIONS_COUNT(self) - len(self.sections)
 
         accum = 0
 
         self.sections_count = len(self.sections)
         for i in range(self.sections_count):
             s = self.sections[i]
-            if isinstance(s, AIVSection):
+            if isinstance(s, MapSection):
                 self.section_uncompressed_lengths[i] = s.size_of()
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 0
-            elif isinstance(s, CompressedAIVSection):
+            elif isinstance(s, CompressedMapSection):
                 self.section_uncompressed_lengths[i] = s.uncompressed_size
                 self.section_lengths[i] = s.size_of()
                 self.section_compressed[i] = 1
@@ -121,7 +117,7 @@ class AIVDirectory(Structure):
             self.section_offsets[i] = accum
             accum += int(self.section_lengths[i])
 
-        for i in range(self.sections_count, AIVDirectory._MAX_SECTIONS_COUNT(self)):
+        for i in range(self.sections_count, Directory._MAX_SECTIONS_COUNT(self)):
             self.section_lengths[i] = 0
             self.section_uncompressed_lengths[i] = 0
             self.section_compressed[i] = 0
@@ -142,7 +138,7 @@ class AIVDirectory(Structure):
             section.serialize_to_buffer(buf)
 
     def _dump_spec(self):
-        buf = StringIO()
+        buf = csv.StringIO()
 
         writer = csv.DictWriter(buf, fieldnames=["uncompressed_length", "section_length", "section_index", "compressed",
                                                  "section_offset"])
@@ -156,7 +152,7 @@ class AIVDirectory(Structure):
         return buf.getvalue().encode('ascii')
 
     def _load_spec(self, data: str):
-        buf = StringIO(data)
+        buf = csv.StringIO(data)
 
         reader = csv.DictReader(buf)
         i = 0
@@ -179,12 +175,11 @@ class AIVDirectory(Structure):
         for i in range(len(self.sections)):
             write_to_file(os.path.join(path, str(self.section_indices[i])), self.sections[i].get_data())
 
-        write_to_file(os.path.join(path, 'directory_version_number'), struct.pack("I", self.version_number))
         write_to_file(os.path.join(path, "directory_u1"), ints_to_byte_array(self.directory_u1))
         write_to_file(os.path.join(path, "directory_u7"), struct.pack("I", self.directory_u7))
 
     def load_from_folder(self, path):
-        self.version_number = list(bytes_to_int_array(read_file(os.path.join(path, "directory_version_number"))))[0]
+
         self.directory_u1 = list(bytes_to_int_array(read_file(os.path.join(path, "directory_u1"))))
         self.directory_u7 = list(bytes_to_int_array(read_file(os.path.join(path, "directory_u7"))))[0]
 
@@ -241,36 +236,3 @@ class AIVDirectory(Structure):
                     yield self.section_indices[i]
         else:
             return "ALL"
-        
-
-class AIV(Structure):
-    directory = Field("directory", AIVDirectory)
-    
-    def unpack(self, force = False):
-        self.directory.unpack(force)
-
-    def pack(self, force = False):
-        self.directory.pack(force)
-
-    def dump_to_folder(self, path):
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        self.directory.dump_to_folder(os.path.join(path, "sections"))
-
-    def load_from_folder(self, path):
-
-        self.directory = AIVDirectory()
-        self.directory.load_from_folder(os.path.join(path, "sections"))
-
-        return self
-
-    def from_file(self, fp: str):
-        with open(fp, 'rb') as f:
-            return self.from_buffer(Buffer(f.read()))
-
-    def to_file(self, fp: str):
-        b = Buffer()
-        self.serialize_to_buffer(b)
-        with open(fp, 'wb') as f:
-            f.write(b.getvalue())

@@ -1,9 +1,11 @@
 ## Example:
 
-from sourcehold.debugtools.memory.common.access import AccessContext
-from sourcehold.debugtools.memory.common.manipulation import LiveSection1015, LiveSection1013, LiveSection1022
 
-process = AccessContext()
+from sourcehold.debugtools.memory.access import AccessContext
+from sourcehold.debugtools.memory.manipulation import LiveSection1013, LiveSection1015, LiveSection1022
+
+
+process = AccessContext(process_name="test")
 units = LiveSection1015(process)
 units.unpack_items()
 

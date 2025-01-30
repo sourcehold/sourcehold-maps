@@ -32,7 +32,7 @@ show(height_matrix)
 
 def generate_random_heights():
   # python -m pip install perlin-noise
-  from perlin_noise import PerlinNoise
+  from perlin_noise import PerlinNoise # type: ignore
   noise = PerlinNoise(octaves=10, seed=1)
   xpix, ypix = 400, 400
   pic = [[noise([i/xpix, j/ypix]) for j in range(xpix)] for i in range(ypix)]

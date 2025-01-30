@@ -1,8 +1,9 @@
 import pathlib
 
 from sourcehold import expand_var_path, load_map
-from sourcehold.debugtools.memory.common.access import AccessContext
-process = AccessContext()
+from sourcehold.debugtools.memory.access import AccessContext
+
+process = AccessContext(process_name="Stronghold Crusader.exe")
 
 # Number of maps: 7 * 2
 map_files = [load_map(expand_var_path(f"shcusermap~/m{i}.map")) for i in range(1, 16)]

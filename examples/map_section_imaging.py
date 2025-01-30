@@ -2,6 +2,8 @@ from PIL import Image, ImageDraw
 
 import os, sys
 
+from sourcehold.maps.sections.types import TileSystem
+
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 PACKAGE_PARENT = '..'
@@ -59,7 +61,7 @@ size_mapping = {160800: "H", 80400: "B", 321600: "I", 723600: "9B"}
 
 
 def unpack_big_integer(data, fmt="uintle:72"):
-    from bitstring import BitStream
+    from bitstring import BitStream # type: ignore
     return BitStream(bytes=data).unpack(fmt)
 
 
@@ -83,8 +85,6 @@ def dump_spec(data):
 
 tw, th = (32, 16)
 
-from sourcehold.maps.sections import TileSystem
-
 
 def export_images(unpacked_map_folder, destination):
     if not os.path.exists(destination):
@@ -98,7 +98,7 @@ def export_images(unpacked_map_folder, destination):
         #d = cut_strict(read_file("{}/sections/{}".format(unpacked_map_folder, section)), s, 198)
         #d = TileSystem().from_bytes(read_file("{}/sections/{}".format(unpacked_map_folder, section), fmt=s)).get_tiles()
         #im = make_image_of_data(d, system=TiledDiamondSystem(rows=len(d), tilewidth=32, tileheight=16))
-        im = TileSystem().from_bytes(read_file("{}/sections/{}".format(unpacked_map_folder, section), fmt=s)).create_image()
+        im = TileSystem().from_bytes(data=read_file("{}/sections/{}".format(unpacked_map_folder, section)), fmt=s).create_image()
         im.save("{}/{}.png".format(destination, section))
 
         # write_to_file("{}/{}.spec".format(destination, section), dump_spec(d))

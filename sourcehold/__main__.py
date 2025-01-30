@@ -2,7 +2,7 @@ import pathlib
 import argparse
 import sys
 
-from sourcehold import Map
+from sourcehold.maps.Map import Map
 from sourcehold import save_map
 from sourcehold import load_map
 from sourcehold.structure_tools.Buffer import Buffer

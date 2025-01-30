@@ -1,7 +1,7 @@
 import unittest
 
 from sourcehold.structure_tools import Buffer
-from sourcehold.maps import Map
+from sourcehold.maps.Map import Map
 
 class TestEqual(unittest.TestCase):
 

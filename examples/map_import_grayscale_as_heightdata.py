@@ -2,7 +2,7 @@
 # python -m pip install Pillow
 import struct
 from sourcehold.world import create_selection_matrix
-import cv2 as cv
+import cv2 as cv # type: ignore
 import tkinter.filedialog
 
 img_path = tkinter.filedialog.askopenfilename()

@@ -1,7 +1,7 @@
 import PIL.Image as I
 import unittest
 import pathlib
-from sourcehold.maps import Map
+from sourcehold.maps.Map import Map
 from sourcehold.structure_tools.Buffer import Buffer
 
 

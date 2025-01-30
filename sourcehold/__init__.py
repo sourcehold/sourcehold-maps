@@ -1,5 +1,5 @@
 from .structure_tools.Buffer import Buffer
-from .maps import Map
+from .maps.Map import Map
 import pathlib
 import unittest
 import sys

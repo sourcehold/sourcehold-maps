@@ -1,6 +1,8 @@
 
 import os, sys
 
+from sourcehold.debugtools.memory.access import AccessContext
+
 #sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 PACKAGE_PARENT = '..'
@@ -11,7 +13,6 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 import matplotlib.pyplot as plt
 
 from sourcehold.debugtools.maps import yield_values, populate_value_matrix, init_matrix
-from sourcehold.debugtools.memory import SHC as AccessContext
 from sourcehold.maps.sections import find_section_for_index
 import struct
 from sourcehold.world import TileLocationTranslator
@@ -52,7 +53,7 @@ def format_coord(x, y):
     return ""
 
 
-process = AccessContext()
+process = AccessContext(process_name="Stronghold Crusader.exe")
 dump = process.read_section(str(section))
 cls = find_section_for_index(int(section))
 

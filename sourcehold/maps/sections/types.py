@@ -1,6 +1,6 @@
 
-from sourcehold.maps import CompressedMapSection
-from sourcehold.maps import MapSection
+from sourcehold.maps.CompressedMapSection import CompressedMapSection
+from sourcehold.maps.MapSection import MapSection
 from sourcehold.maps.sections.tools import cut
 from sourcehold.maps.sections.tools import make_image_of_data
 import struct

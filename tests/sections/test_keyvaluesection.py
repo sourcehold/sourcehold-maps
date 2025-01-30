@@ -1,6 +1,6 @@
 import unittest
 from sourcehold.structure_tools import Buffer
-from sourcehold import maps
+from sourcehold.maps import Map
 import pathlib
 
 
@@ -12,7 +12,7 @@ class TestMapSections(unittest.TestCase):
         with open(map_file, 'rb') as f:
             buf = Buffer(f.read())
 
-        m = maps.Map().from_buffer(buf)
+        m = Map.Map().from_buffer(buf)
         m.directory.unpack(False)
 
         cls.map = m

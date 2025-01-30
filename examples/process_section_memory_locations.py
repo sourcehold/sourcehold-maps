@@ -1,4 +1,4 @@
-from sourcehold.debugtools.memory.common.access import AccessContext
+from sourcehold.debugtools.memory.access import SHC as AccessContext
 from sourcehold.debugtools.memory.common import memory_find, memory_findall
 
 process = AccessContext()

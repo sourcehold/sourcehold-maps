@@ -1,6 +1,8 @@
 
-from sourcehold.debugtools.memory.common.access import AccessContext
 import pathlib
+
+from sourcehold.debugtools.memory.access import AccessContext
+from sourcehold.debugtools.memory.common import memory_findall
 
 
 def dump(name):
@@ -29,14 +31,12 @@ import random
 mapnames = mapnames[-5:]
 
 from sourcehold import load_map, expand_var_path
-from debugtools.memory.common import memory_findall
 
 saves = [load_save(mapname) for mapname in mapnames]
 #dumps = [load_dump(mapname) for mapname in mapnames]
 
 location_options = {}
 
-from debugtools.memory.common.access import load_address_list_from_cheat_table
 
 all_section_selection = [int(k[:4]) for k in load_address_list_from_cheat_table().keys() if '?' in k]
 section_selection = [k for k in all_section_selection if len(set([map.directory[k].get_data() for map in saves])) > 2]  # We need > 2 here, else the results are not accurate in case of 0s in the data.

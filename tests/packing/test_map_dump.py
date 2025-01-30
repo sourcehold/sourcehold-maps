@@ -1,7 +1,8 @@
 import unittest
 import tempfile
 
-from sourcehold import structure_tools, maps, load_map, save_map, Map
+from sourcehold import structure_tools, maps, load_map, save_map
+from sourcehold.maps.Map import Map
 from sourcehold.structure_tools.Buffer import Buffer
 
 
