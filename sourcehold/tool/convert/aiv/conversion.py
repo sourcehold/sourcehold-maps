@@ -35,13 +35,14 @@ def yrange(invert_y=False):
   else:
     return range(100)
 
-def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
+def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, report=False):
   if aiv == None and not path:
     raise Exception()
   if aiv == None:
     aiv = AIV().from_file(path)
-
-  print(f"INFO: aiv has version: {aiv.directory.version_number}")
+  
+  if report:
+    print(f"INFO: aiv has version: {aiv.directory.version_number}")
 
   select_all = np.ones((100,100), 'bool')
 
@@ -56,12 +57,12 @@ def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
   step_count = struct.unpack("<I", aiv.directory[INDEX_STEP_COUNT].get_data())[0]
   step_count_max = steps.max().item()
   if step_count < step_count_max:
-    print(f"WARNING: step count ({step_count}) is lower than max step value from steps matrix ({step_count_max}), taking max step value as truth")
+    print(f"WARNING: step count ({step_count}) is lower than max step value from steps matrix ({step_count_max}), taking max step value as truth", file=sys.stderr)
     step_count = step_count_max
 
   pauses_raw = aiv.directory[INDEX_PAUSES].get_data()
   if len(pauses_raw) != 50 * 4:
-    print(f"WARNING: pauses is not expected size of {50*4} but {len(pauses_raw)}, adjusting")
+    print(f"WARNING: pauses is not expected size of {50*4} but {len(pauses_raw)}, adjusting", file=sys.stderr)
     pauses = list(struct.unpack(f"<10i", pauses_raw))  
   else:
     pauses = list(struct.unpack("<50i", pauses_raw))  
@@ -123,7 +124,8 @@ def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
         shouldPause = step in pauses
         frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [offset], 'shouldPause': shouldPause}
 
-  print(f"INFO: buildings: {buildings}")
+  if report:
+    print(f"INFO: buildings: {buildings}")
 
   nonbuildings = 0
 
@@ -141,8 +143,9 @@ def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
           frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [], 'shouldPause': shouldPause}
         frames[step]['tilePositionOfsets'].append(offset)
         nonbuildings += 1
-
-  print(f"INFO: walls | pitch | moat: {nonbuildings}")
+  
+  if report:
+    print(f"INFO: walls | pitch | moat: {nonbuildings}")
 
   misc = 0
   for unitType in range(24):
@@ -152,13 +155,15 @@ def to_json(aiv=None, path: str='', include_extra=False, invert_y=True):
         continue
       misc += 1
       miscItems.append({'itemType': unitType, 'positionOfset': location, 'number': entry})
-  print(f"INFO: units | flags | brazier | misc: {misc}")
+
+  if report:
+    print(f"INFO: units | flags | brazier | misc: {misc}")
 
   emptyFrames = [index for index, frame in enumerate(output['frames']) if not frame]
   knownEmptyFrames = [0,1]
   unexpectedEmptyFrames = list(index for index in emptyFrames if index not in knownEmptyFrames)
   if len(unexpectedEmptyFrames) > 0:
-    print(f"WARNING: unexpected count of empty frames, expected one (the first), but there were: {len(unexpectedEmptyFrames)} more: {','.join(str(v) for v in unexpectedEmptyFrames)}")
+    print(f"WARNING: unexpected count of empty frames, expected one (the first), but there were: {len(unexpectedEmptyFrames)} more: {','.join(str(v) for v in unexpectedEmptyFrames)}", file=sys.stderr)
   output['frames'] = [frame for frame in output['frames'] if frame]
 
   if include_extra:

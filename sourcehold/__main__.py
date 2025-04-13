@@ -8,9 +8,18 @@ from sourcehold import load_map
 from sourcehold.structure_tools.Buffer import Buffer
 from sourcehold.compression import COMPRESSION
 
+from sourcehold.tool.argparsers.common import main_parser
+from sourcehold.tool.argparsers.services import services_parser, convert_parser
+
 file_input_output = argparse.ArgumentParser(add_help=False)
 file_input_output.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
 file_input_output.add_argument("--out", help="a folder to (un)pack files to")
+
+multiple_file_input_output = argparse.ArgumentParser(add_help=False)
+multiple_file_input_output.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
+multiple_file_input_output.add_argument("--out", help="a folder to (un)pack files to")
+
+
 
 file_manipulation_parser = argparse.ArgumentParser(add_help=False, parents=[file_input_output])
 file_manipulation_parser_group = file_manipulation_parser.add_mutually_exclusive_group(required=True)
@@ -18,22 +27,19 @@ file_manipulation_parser_group.add_argument("--unpack", action='store_const', co
 file_manipulation_parser_group.add_argument("--pack", action='store_const', const=True, default=False, help="pack a folder into a .map/.sav/.msv file")
 file_manipulation_parser_group.add_argument("--what", help="what to unpack from the map file, e.g., '1001' for section 1001", default="all")
 
-main_parser = argparse.ArgumentParser(prog="sourcehold")
-main_parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
-
-main_subparsers = main_parser.add_subparsers(title="service", dest="service", required=True)
-
-aiv_parser = main_subparsers.add_parser('aiv')
+aiv_parser = services_parser.add_parser('aiv')
 aiv_subparsers = aiv_parser.add_subparsers(dest='method', required=True, title='method')
 aiv_file_parser = aiv_subparsers.add_parser('file', parents=[file_manipulation_parser])
 
-convert_parser = main_subparsers.add_parser('convert')
-convert_subparsers = convert_parser.add_subparsers(dest='type', required=True, title='type')
-convert_aiv_parser = convert_subparsers.add_parser('aiv', parents=[file_input_output])
-convert_aiv_parser.add_argument('--extra', action='store_const', const=True, default=False)
 
 
-compression_parser = main_subparsers.add_parser('compression')
+# 
+# python -m sourcehold convert aiv --in 'C:\Program Files (x86)\Steam\steamapps\common\Stronghold Crusader Extreme\aiv\snake1.aiv' --extra
+#
+
+
+
+compression_parser = services_parser.add_parser('compression')
 compression_parser_group = compression_parser.add_mutually_exclusive_group(required=True)
 compression_parser_group.add_argument("--decompress", action='store_const', const=True, default=False, help="decompress data")
 compression_parser_group.add_argument("--compress", action='store_const', const=True, default=False, help="compress data")
@@ -41,7 +47,7 @@ compression_parser.add_argument("--in", help="files to (de)compress", required=T
 compression_parser.add_argument("--out", help="destination file", required=True)
 # compression_parser.add_argument("--level", help="compression level", type=int, default=6, required=False)
 
-maps_parser = main_subparsers.add_parser('map')
+maps_parser = services_parser.add_parser('map')
 maps_subparsers = maps_parser.add_subparsers(dest="method", required=True, title="method")
 maps_subparsers.add_parser('file', parents=[file_manipulation_parser])
 
@@ -68,18 +74,10 @@ memory_parser.add_argument("--standardized", help="standardize tilemap sections 
 
 args = main_parser.parse_args()
 
-def main():
-  if args.service == "convert":
-    if args.type == "aiv":
-        inp = getattr(args, 'in')[0]
-        if not pathlib.Path(inp).exists():
-            raise Exception(f"file does not exist: {inp}")
-        if args.out == None:
-            args.out = f"{pathlib.Path(inp).name}.json"
-        print(f"converting aiv file '{inp}' to file '{args.out}'")  
-        from sourcehold.aivs.conversion import to_json
-        pathlib.Path(args.out).write_text(to_json(path = inp, include_extra=args.extra))
+from .tool.convert.aiv import convert_aiv
 
+def main():
+  convert_aiv(args)
 
   if args.service == "aiv":
     if args.method == "file":
@@ -92,15 +90,15 @@ def main():
 
   if args.service == "map":
     if args.method == "file":
-        input_files = getattr(args, "in")
+        input_files = args.input
 
-        if args.out == "-":
+        if args.output == "-":
             if len(input_files) > 1:
                 raise Exception("the parameter '--out -' only supports unpacking a single input file")
             if args.what == "all":
                 raise Exception("the parameter '--out -' does not support unpacking 'all', please select with '--what'. For example, '--what preview'")
 
-        if not args.unpack and not args.pack and args.out:
+        if not args.unpack and not args.pack and args.output:
             if all(inf[-4:] in [".sav", ".map", ".msv"] for inf in input_files):
                 args.unpack = True
             if all(pathlib.Path(inf).is_dir() for inf in input_files):
@@ -111,20 +109,20 @@ def main():
                 if not pathlib.Path(inf).is_file():
                     raise Exception("Unexpected usage of unpack: all inputs must be files")
 
-            if not args.out:
-                args.out = str(pathlib.Path().absolute())
+            if not args.output:
+                args.output = str(pathlib.Path().absolute())
 
         if args.pack:
             for inf in input_files:
                 if not pathlib.Path(inf).is_dir():
                     raise Exception("Unexpected usage of pack: all inputs must be directories")
 
-            if not args.out:
-                args.out = str(pathlib.Path().absolute())
+            if not args.output:
+                args.output = str(pathlib.Path().absolute())
 
 
     if args.method == "file":
-        input_files = getattr(args, "in")
+        input_files = args.input
 
         if args.unpack and args.pack:
             raise Exception("Cannot unpack and pack at the same time")
@@ -161,12 +159,12 @@ def main():
                         what = obj.get_data()
                         what_name = what_elements[-1]
 
-                    if args.out == "-":
+                    if args.output == "-":
                         dst_handle = sys.stdout.buffer
                         dst_handle.write(what)
                     else:
 
-                        dst = pathlib.Path(args.out) / name
+                        dst = pathlib.Path(args.output) / name
                         if not dst.exists():
                             dst.mkdir(parents=True)
 
@@ -175,7 +173,7 @@ def main():
 
                         (dst / what_name).write_bytes(what)
                 else:
-                    dst = pathlib.Path(args.out) / name
+                    dst = pathlib.Path(args.output) / name
                     if not dst.exists():
                         dst.mkdir(parents=True)
 
@@ -193,7 +191,7 @@ def main():
 
                 name = path.name
 
-                dst = pathlib.Path(args.out).absolute()
+                dst = pathlib.Path(args.output).absolute()
 
                 print(f"packing file from folder {path} to file {str(dst)}")
 
@@ -204,8 +202,8 @@ def main():
     from sourcehold.maps.sections.types import TileSystem
     if args.method == "image":
 
-        input_file = getattr(args, "in")
-        output_file = args.out
+        input_file = args.input
+        output_file = args.output
         if input_file == "-":
             input_data = sys.stdin.buffer.read()
         else:
@@ -330,13 +328,13 @@ def main():
                     matrix[i] = struct.unpack(f"<80400{fmt}", dump)
 
                     dump = matrix.tobytes()
-            if args.out == "-":
+            if args.output == "-":
                 sys.stdout.buffer.write(dump)
-            elif args.out:
-                pathlib.Path(args.out).write_bytes(dump)
+            elif args.output:
+                pathlib.Path(args.output).write_bytes(dump)
 
         elif args.write:
-            infile = getattr(args, "in")
+            infile = args.input
             if infile is None and args.data:
                 input_data = binascii.a2b_hex(args.data)
             elif infile == "-":
@@ -399,7 +397,7 @@ def main():
                         print(f"failed on section: {e}")
 
   if args.service == "compression":
-        input_file = getattr(args, "in")
+        input_file = args.input
         if input_file == "-":
             input_data = sys.stdin.buffer.read()
         else:
@@ -412,7 +410,7 @@ def main():
         else:
             raise Exception("either select --compress or --decompress")
 
-        output_file = args.out
+        output_file = args.output
         if output_file == "-":
             sys.stdout.buffer.write(output_data)
         else:
