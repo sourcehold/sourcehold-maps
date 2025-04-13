@@ -1,20 +1,3 @@
-import sys
-try:
-  import sourcehold
-except:
-  import os, pathlib
-  sys.path.insert(0, str(pathlib.Path(".").parent))
-
-import sourcehold.aivs
-from sourcehold.aivs.AIV import AIV
-
-# from matplotlib import pyplot
-
-import struct
-
-import numpy as np
-
-import json
 # 2001, 2002, 2003, 2004, 2005, 2013, 2006, 2009
 # 2007, 2008, 2010, 2011, 2012, 2014
 INDEX_CONSTRUCTIONS = 2007
@@ -25,168 +8,6 @@ INDEX_PAUSES = 2011
 INDEX_MISC = 2012
 INDEX_PAUSE = 2014
 
-
-def xrange():
-  return range(100)
-
-def yrange(invert_y=False):
-  if invert_y:
-    return range(100-1, -1, -1)
-  else:
-    return range(100)
-
-def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, report=False):
-  if aiv == None and not path:
-    raise Exception()
-  if aiv == None:
-    aiv = AIV().from_file(path)
-  
-  if report:
-    print(f"INFO: aiv has version: {aiv.directory.version_number}")
-
-  select_all = np.ones((100,100), 'bool')
-
-  constructions = np.zeros((100, 100), dtype='uint16')
-  constructions[select_all] = struct.unpack(f"<{100*100}H", aiv.directory[INDEX_CONSTRUCTIONS].get_data())
-
-
-  steps = np.zeros((100, 100), dtype='uint32')
-  steps[select_all] = struct.unpack(f"<{100*100}I", aiv.directory[INDEX_STEPS].get_data())
-
-# This value can lie!
-  step_count = struct.unpack("<I", aiv.directory[INDEX_STEP_COUNT].get_data())[0]
-  step_count_max = steps.max().item()
-  if step_count < step_count_max:
-    print(f"WARNING: step count ({step_count}) is lower than max step value from steps matrix ({step_count_max}), taking max step value as truth", file=sys.stderr)
-    step_count = step_count_max
-
-  pauses_raw = aiv.directory[INDEX_PAUSES].get_data()
-  if len(pauses_raw) != 50 * 4:
-    print(f"WARNING: pauses is not expected size of {50*4} but {len(pauses_raw)}, adjusting", file=sys.stderr)
-    pauses = list(struct.unpack(f"<10i", pauses_raw))  
-  else:
-    pauses = list(struct.unpack("<50i", pauses_raw))  
-
-  units = np.reshape(list(struct.unpack(f"<{24*10}i", aiv.directory[INDEX_MISC].get_data())), (24, 10))
-
-  pauseDelayAmount = struct.unpack("<1i", aiv.directory[INDEX_PAUSE].get_data())[0]
-
-  output = {}
-  frames = [None] * step_count # + 1 is already stored in the aiv format
-  miscItems = []
-
-  output["frames"] = frames
-  output["miscItems"] = miscItems
-  output["pauseDelayAmount"] = pauseDelayAmount
-
-  processed = {}
-
-  buildings = 0
-  offset = -1
-  for i in xrange():
-    for j in yrange(invert_y=invert_y):
-      offset += 1
-      
-      if offset in processed:
-        continue
-
-      construction = constructions[i, j].item()
-      step = steps[i, j].item()
-
-      if construction == 0:
-        processed[offset] = True
-        continue
-
-      # Not in source code, but added here
-      elif construction == 1:
-        processed[offset] = True
-        continue
-      
-      elif construction == 2:
-        processed[offset] = True
-        continue
-      
-      elif construction == 38: #keep2
-        processed[offset] = True
-        continue
-      
-      buildingType = convertAIVEnumToMapperEnum(v = construction)
-      
-      if buildingType in [25, 46, 26, 35, 106, 99]: # [10, 11, 12, 13, 20, 21, 22, 23, 24]:
-        continue # not processed yet
-      
-      processed[offset] = True
-      
-      if step > len(frames):
-        raise Exception(f"step size too high at ({i}, {j}, {offset}): {step} => {len(frames)}")
-      if frames[step] is None:
-        buildings += 1
-        shouldPause = step in pauses
-        frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [offset], 'shouldPause': shouldPause}
-
-  if report:
-    print(f"INFO: buildings: {buildings}")
-
-  nonbuildings = 0
-
-  offset = -1
-  for i in xrange():
-    for j in yrange(invert_y=invert_y):
-      offset += 1
-      if offset not in processed:
-        # do all the special stuff
-        construction = constructions[i, j].item()
-        step = steps[i, j].item()
-        buildingType = convertAIVEnumToMapperEnum(v = construction)
-        shouldPause = step in pauses
-        if frames[step] is None:
-          frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [], 'shouldPause': shouldPause}
-        frames[step]['tilePositionOfsets'].append(offset)
-        nonbuildings += 1
-  
-  if report:
-    print(f"INFO: walls | pitch | moat: {nonbuildings}")
-
-  misc = 0
-  for unitType in range(24):
-    for entry in range(10):
-      location = units[unitType, entry].item()
-      if location == 0:
-        continue
-      misc += 1
-      miscItems.append({'itemType': unitType, 'positionOfset': location, 'number': entry})
-
-  if report:
-    print(f"INFO: units | flags | brazier | misc: {misc}")
-
-  emptyFrames = [index for index, frame in enumerate(output['frames']) if not frame]
-  knownEmptyFrames = [0,1]
-  unexpectedEmptyFrames = list(index for index in emptyFrames if index not in knownEmptyFrames)
-  if len(unexpectedEmptyFrames) > 0:
-    print(f"WARNING: unexpected count of empty frames, expected one (the first), but there were: {len(unexpectedEmptyFrames)} more: {','.join(str(v) for v in unexpectedEmptyFrames)}", file=sys.stderr)
-  output['frames'] = [frame for frame in output['frames'] if frame]
-
-  if include_extra:
-    output['extra'] = {
-      'version' : aiv.directory.version_number,
-      'directory_size' : aiv.directory.directory_size,
-      'size' : aiv.directory.size,
-      'u1' : aiv.directory.directory_u1,
-      'u7' : aiv.directory.directory_u7,
-      'sections': [i for i in aiv.directory.section_indices if i],
-      # 'rng': aiv.directory[2003].get_data() # RNG
-      '2001': int.from_bytes(aiv.directory[2001].get_data(), 'little'),
-      '2002': int.from_bytes(aiv.directory[2001].get_data(), 'little'),
-      'recent_selected_step_in_editor': int.from_bytes(aiv.directory[2010].get_data(), 'little'), # Last selected step in editor?
-      'step_count': step_count,
-      # 'typeData': np.frombuffer(aiv.directory[2004].get_data(), dtype = 'uint8').reshape((100,100)),
-      # '2005': # wall edges or something?
-      # '2006' : texture noise
-      # '2013' : misc and unit locations in tilemap form?
-    }
-
-
-  return json.dumps(output, indent=2)
 
 
 BUILDING_TYPE_AIV_FILES_KV = {
@@ -458,12 +279,12 @@ MAPPERS_SH1_KV = {
   "MAPPER_UNUSED_18" : 0xb2,
   "MAPPER_UNUSED_19" : 0xb3,
   "MAPPER_OIL_SMELTER" : 0xb4,
-  "MAPPER_UNUSED_20" : 0xb5,
-  "MAPPER_UNUSED_21" : 0xb6,
-  "MAPPER_UNUSED_22" : 0xb7,
-  "MAPPER_UNUSED_23" : 0xb8,
-  "MAPPER_UNUSED_24" : 0xb9,
-  "MAPPER_UNUSED_25" : 0xba,
+  "MAPPER_STAIR1" : 0xb5,
+  "MAPPER_STAIR2" : 0xb6,
+  "MAPPER_STAIR3" : 0xb7,
+  "MAPPER_STAIR4" : 0xb8,
+  "MAPPER_STAIR5" : 0xb9,
+  "MAPPER_STAIR6" : 0xba,
   "MAPPER_UNUSED_26" : 0xbb,
   "MAPPER_UNUSED_27" : 0xbc,
   "MAPPER_UNUSED_28" : 0xbd,
@@ -656,7 +477,88 @@ MAPPERS_SH1_KV = {
 
 MAPPERS_SH1_VK = dict((value, key) for key, value in MAPPERS_SH1_KV.items())
 
-CONVERSION = [110, 111, 112, 113, 114, 180, 312, 98, 61, 86, 144, 145, 146, 147, 105, 0, 0, 0, 0, 0, 82, 50, 83, 85, 84, 87, 81, 88, 89, 65, 52, 51, 56, 55, 90, 91, 77, 0, 0, 0, 80, 72, 73, 70, 78, 71, 74, 75, 76, 92, 54, 95, 96, 97, 93, 330, 342, 0, 0, 0, 175, 324, 313, 318, 169, 166, 325, 327, 0, 0, 176, 301, 177, 305, 307, 308, 306, 310, 311]
+CONVERSION = [
+  110, 
+  111, 
+  112, 
+  113, 
+  114, 
+  180, 
+  312, 
+  98, 
+  61, 
+  86, 
+  144, 
+  145, 
+  146, 
+  147, 
+  105,
+  0,
+  0,
+  0,
+  0,
+  0,
+  82,
+  50,
+  83,
+  85,
+  84,
+  87,
+  81,
+  88,
+  89,
+  65,
+  52,
+  51,
+  56,
+  55,
+  90,
+  91,
+  77,
+  0,
+  0,
+  0,
+  80,
+  72,
+  73,
+  70,
+  78,
+  71,
+  74,
+  75,
+  76,
+  92,
+  54,
+  95,
+  96,
+  97,
+  93,
+  330,
+  342,
+  0,
+  0,
+  0,
+  175,
+  324,
+  313,
+  318,
+  169,
+  166,
+  325,
+  327,
+  0,
+  0,
+  176,
+  301,
+  177,
+  305,
+  307,
+  308,
+  306,
+  310,
+  311
+]
+
 def convertAIVEnumToMapperEnum(k=None, v=None):
   if k is None:
     if v is None:
@@ -674,17 +576,17 @@ def convertAIVEnumToMapperEnum(k=None, v=None):
   if k == "LOW_CRENAL":
     return MAPPERS_SH1_KV["MAPPER_PATH_END"]
   if k == "STAIRS_1":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_20"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR1"]
   if k == "STAIRS_2":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_21"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR2"]
   if k == "STAIRS_3":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_22"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR3"]
   if k == "STAIRS_4":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_23"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR4"]
   if k == "STAIRS_5":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_24"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR5"]
   if k == "STAIRS_6":
-    return MAPPERS_SH1_KV["MAPPER_UNUSED_25"]
+    return MAPPERS_SH1_KV["MAPPER_STAIR6"]
   if k == "MOAT_a":
     return MAPPERS_SH1_KV["MAPPER_MOAT"]
   if k == "MOAT_b":
@@ -700,3 +602,232 @@ def convertAIVEnumToMapperEnum(k=None, v=None):
     return 108
   
   return CONVERSION[v - (120 // 4)]
+
+def convertMapperEnumToAIVEnum(k=None, v=None):
+  if k is None:
+    if v is None:
+      raise Exception()
+    k = MAPPERS_SH1_VK[v]
+  else:
+    v = MAPPERS_SH1_KV[k]
+
+  if k == "MAPPER_WALL":
+    return BUILDING_TYPE_AIV_FILES_KV["HIGH_WALL"]
+  if k == "MAPPER_WOODWALL":
+    return BUILDING_TYPE_AIV_FILES_KV["LOW_WALL"]
+  if k == "MAPPER_CRENAL":
+    return BUILDING_TYPE_AIV_FILES_KV["HIGH_CRENAL"]
+  if k == "MAPPER_PATH_END":
+    return BUILDING_TYPE_AIV_FILES_KV["LOW_CRENAL"]
+  if k == "MAPPER_STAIR1":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_1"]
+  if k == "MAPPER_STAIR2":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_2"]
+  if k == "MAPPER_STAIR3":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_3"]
+  if k == "MAPPER_STAIR4":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_4"]
+  if k == "MAPPER_STAIR5":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_5"]
+  if k == "MAPPER_STAIR6":
+    return BUILDING_TYPE_AIV_FILES_KV["STAIRS_6"]
+  if k == "MAPPER_MOAT":
+    return BUILDING_TYPE_AIV_FILES_KV["MOAT_a"]
+  # TODO: fixme: multiple if statements with same if clause makes no sense, what to do
+  if k == "MOAT_b":
+    return BUILDING_TYPE_AIV_FILES_KV["MAPPER_MOAT"]
+  if k == "MOAT_c":
+    return BUILDING_TYPE_AIV_FILES_KV["MAPPER_MOAT"]
+  if k == "MOAT_d":
+    return BUILDING_TYPE_AIV_FILES_KV["MAPPER_MOAT"]
+  # End of TODO
+  if k == "MAPPER_PITCH_DITCH":
+    return BUILDING_TYPE_AIV_FILES_KV["PITCHDITCH_2"]
+  
+  # TODO: fixme: reverse implement this truncation??
+  #if v - 30 > 0x4F:
+  #  return 108
+  
+  return CONVERSION.index(v) + (120 // 4)
+
+assert convertMapperEnumToAIVEnum(v = convertAIVEnumToMapperEnum(v = 108)) == 108
+
+MAPPER_BUILDING_SIZES = {
+  "MAPPER_FLETCHER" : 4, # 0x32
+  "MAPPER_WOODSMAN" : 3, # 0x33
+  "MAPPER_STORES" : 5, # 0x34
+  "MAPPER_HOVEL" : 4, # 0x36
+  "MAPPER_OXENBASE" : 2, # 0x37
+  "MAPPER_QUARRY" : 6, # 0x38
+  "MAPPER_STABLES" : 6, # 0x41
+  "MAPPER_WHEATFARM" : 9, # 0x46
+  "MAPPER_HOPSFARM" : 9, # 0x47
+  "MAPPER_APPLEFARM" : 10, # 0x48
+  "MAPPER_CATTLEFARM" : 10, # 0x49
+  "MAPPER_MILL" : 3, # 0x4a
+  "MAPPER_BAKER" : 4, # 0x4b
+  "MAPPER_BREWER" : 4, # 0x4c
+  "MAPPER_TRADEPOST" : 5, # 0x4d
+  "MAPPER_HUNTER" : 3, # 0x4e
+  "MAPPER_GRANARY" : 4, # 0x50
+  "MAPPER_ARMOURY" : 4, # 0x51
+  "MAPPER_POLETURNER" : 4, # 0x52
+  "MAPPER_BLACKSMITH" : 4, # 0x53
+  "MAPPER_ARMOURER" : 4, # 0x54
+  "MAPPER_TANNER" : 4, # 0x55
+  "MAPPER_BARRACKS_WOOD" : 10, # 0x56
+  "MAPPER_BARRACKS_STONE" : 10, # 0x57
+  "MAPPER_ENGINEERS_GUILD" : 5, # 0x58
+  "MAPPER_TUNNELERS_GUILD" : 5, # 0x59
+  "MAPPER_IRON_MINE" : 4, # 0x5a
+  "MAPPER_PITCH_WORKINGS" : 4, # 0x5b
+  "MAPPER_INN" : 5, # 0x5c
+  "MAPPER_HEALER" : 3, # 0x5d
+  "MAPPER_CHURCH1" : 6, # 0x5f
+  "MAPPER_CHURCH2" : 9, # 0x60
+  "MAPPER_CHURCH3" : 13, # 0x61
+  "MAPPER_KILLING_PIT" : 1, # 0x62
+  "MAPPER_PITCH_DITCH" : 1, # 0x63
+  "MAPPER_DRAWBRIDGE" : 5, # 0x69
+  "MAPPER_TOWER1" : 3, # 0x6e
+  "MAPPER_TOWER2" : 4, # 0x6f
+  "MAPPER_TOWER3" : 5, # 0x70
+  "MAPPER_TOWER4" : 6, # 0x71
+  "MAPPER_TOWER5" : 6, # 0x72
+  "MAPPER_GATE_STONE1A" : 5, # 0x90
+  "MAPPER_GATE_STONE1B" : 5, # 0x91
+  "MAPPER_GATE_STONE2A" : 7, # 0x92
+  "MAPPER_GATE_STONE2B" : 7, # 0x93
+  "MAPPER_GARDEN7" : 2, # 0xa6
+  "MAPPER_GARDEN10" : 4, # 0xa9
+  "MAPPER_MAYPOLE" : 3, # 0xaf
+  "MAPPER_GALLOWS" : 2, # 0xb0
+  "MAPPER_STOCKS" : 3, # 0xb1
+  "MAPPER_OIL_SMELTER" : 4, # 0xb4
+  "MAPPER_STAIR1" : 1,
+  "MAPPER_STAIR2" : 1,
+  "MAPPER_STAIR3" : 1,
+  "MAPPER_STAIR4" : 1,
+  "MAPPER_STAIR5" : 1,
+  "MAPPER_STAIR6" : 1,
+  "MAPPER_CESS_PIT1" : 5, # 0x12d
+  "MAPPER_BURNING_STAKE" : 3, # 0x131
+  "MAPPER_GIBBET" : 2, # 0x132
+  "MAPPER_DUNGEON" : 5, # 0x133
+  "MAPPER_RACK_STRETCHING" : 3, # 0x134
+  "MAPPER_CHOPPING_BLOCK" : 3, # 0x136
+  "MAPPER_DUNKING_STOOL" : 5, # 0x137
+  "MAPPER_DOG_CAGE" : 3, # 0x138
+  "MAPPER_STATUE1" : 2, # 0x139
+  "MAPPER_SHRINE1" : 2, # 0x13e
+  "MAPPER_DANCING_BEAR" : 5, # 0x144
+  "MAPPER_WELL" : 3, # 0x14a
+  "MAPPER_SUB_MENU_GATEHOUSES" : 4, # 0x156
+}
+MAPPER_BUILDING_SIZES_ID = {
+  50 : 4, #0x32
+  51 : 3, #0x33
+  52 : 5, #0x34
+  54 : 4, #0x36
+  55 : 2, #0x37
+  56 : 6, #0x38
+  65 : 6, #0x41
+  70 : 9, #0x46
+  71 : 9, #0x47
+  72 : 10, #0x48
+  73 : 10, #0x49
+  74 : 3, #0x4a
+  75 : 4, #0x4b
+  76 : 4, #0x4c
+  77 : 5, #0x4d
+  78 : 3, #0x4e
+  80 : 4, #0x50
+  81 : 4, #0x51
+  82 : 4, #0x52
+  83 : 4, #0x53
+  84 : 4, #0x54
+  85 : 4, #0x55
+  86 : 10, #0x56
+  87 : 10, #0x57
+  88 : 5, #0x58
+  89 : 5, #0x59
+  90 : 4, #0x5a
+  91 : 4, #0x5b
+  92 : 5, #0x5c
+  93 : 6, #0x5d
+  93 : 1, #0x5d
+  93 : 1, #0x5d
+  93 : 1, #0x5d
+  93 : 1, #0x5d
+  93 : 1, #0x5d
+  93 : 1, #0x5d
+  93 : 3, #0x5d
+  95 : 6, #0x5f
+  96 : 9, #0x60
+  97 : 13, #0x61
+  98 : 1, #0x62
+  99 : 1, #0x63
+  105 : 5, #0x69
+  110 : 3, #0x6e
+  111 : 4, #0x6f
+  112 : 5, #0x70
+  113 : 6, #0x71
+  114 : 6, #0x72
+  144 : 5, #0x90
+  145 : 5, #0x91
+  146 : 7, #0x92
+  147 : 7, #0x93
+  166 : 2, #0xa6
+  169 : 4, #0xa9
+  175 : 3, #0xaf
+  176 : 2, #0xb0
+  177 : 3, #0xb1
+  180 : 4, #0xb4
+  301 : 5, #0x12d
+  305 : 3, #0x131
+  306 : 2, #0x132
+  307 : 5, #0x133
+  308 : 3, #0x134
+  310 : 3, #0x136
+  311 : 5, #0x137
+  312 : 3, #0x138
+  313 : 2, #0x139
+  318 : 2, #0x13e
+  324 : 5, #0x144
+  330 : 3, #0x14a
+  342 : 4, #0x156
+}
+
+AIV_WIDTH = 100
+AIV_HEIGHT = 100
+
+CONSTRUCTIONS_STRUCT_FORMAT = f"<{AIV_WIDTH*AIV_HEIGHT}H"
+import numpy as np
+def get_constructions_matrix():
+  return np.zeros((AIV_WIDTH, AIV_HEIGHT), dtype='uint16')
+
+STEPS_STRUCT_FORMAT = f"<{100*100}I"
+def get_steps_matrix():
+  return np.zeros((AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
+
+STEP_COUNT_STRUCT_FORMAT = "<1I"
+
+PAUSES_STRUCT_FORMAT_10 = "<10i"
+PAUSES_STRUCT_FORMAT_50 = "<50i"
+
+UNITS_STRUCT_FORMAT = f"<{24*10}i"
+def get_units_matrix(data = None):
+  if data == None:
+    return np.zeros(shape=(24, 10), dtype="int32")
+  return np.reshape(data, (24, 10))
+
+PAUSE_DELAY_AMOUNT_STRUCT_FORMAT = "<1i"
+
+def x_range():
+  return range(AIV_WIDTH)
+
+def y_range(invert_y=False):
+  if invert_y:
+    return range(AIV_HEIGHT-1, -1, -1)
+  else:
+    return range(AIV_HEIGHT)

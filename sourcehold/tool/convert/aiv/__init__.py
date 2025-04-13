@@ -1,6 +1,7 @@
 import pathlib
 
-from .conversion import to_json
+from sourcehold.tool.convert.aiv.exports import to_json
+from sourcehold.tool.convert.aiv.imports import from_json
 
 
 def convert_aiv(args):
@@ -19,16 +20,32 @@ def convert_aiv(args):
   if not inp_format:
       if inp.endswith(".aiv"):
         inp_format = 'aiv'
+      elif inp.endswith(".json"):
+        inp_format = "json"
   out_format = args.to_format
-  if inp_format == "aiv":
-    out_format = "json"
+  if not out_format:
+    if inp_format == "aiv":
+      out_format = "json"
+    elif inp_format == "json":
+      out_format = "aiv"
   if args.output == None:
-    args.output = f"{pathlib.Path(inp).name}.json"
+    if out_format == "json":
+      args.output = "-"
+    elif out_format == "aiv":
+      args.output = f"{pathlib.Path(inp).name}.aiv"
+    #args.output = f"{pathlib.Path(inp).name}.json"
 
   if args.debug:
     print(f"converting '{inp_format}' file '{inp}' to '{out_format}' file '{args.output}'")
   if inp_format == 'aiv' and out_format == "json":
-    pathlib.Path(args.output).write_text(to_json(path = inp, include_extra=args.extra, report=args.debug))
+    conv = to_json(path = inp, include_extra=args.extra, report=args.debug)
+    if args.output == "-":
+      print(conv)
+    else:
+      pathlib.Path(args.output).write_text(conv)
+  elif inp_format == "json" and out_format == "aiv":
+    conv = from_json(path = inp, report=args.debug)
+    conv.to_file(args.output)
   else:
     raise NotImplementedError(f"combination of in-format '{inp_format}' and out-format '{out_format}' not implemented")
 
