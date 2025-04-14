@@ -1,4 +1,4 @@
-import pathlib
+import pathlib, sys
 
 from sourcehold.tool.convert.aiv.exports import to_json
 from sourcehold.tool.convert.aiv.imports import from_json
@@ -13,7 +13,7 @@ def convert_aiv(args):
      return None
   
   inp = args.input
-  if not pathlib.Path(inp).exists():
+  if inp != '-' and not pathlib.Path(inp).exists():
       raise Exception(f"file does not exist: {inp}")
   inp_invert_y = False
   inp_format = args.from_format
@@ -45,7 +45,10 @@ def convert_aiv(args):
     if out_format == "json":
       args.output = "-"
     elif out_format == "aiv":
-      args.output = f"{pathlib.Path(inp).name}.aiv"
+      if inp == "-":
+        args.output = "output.aiv"
+      else:
+        args.output = f"{pathlib.Path(inp).name}.aiv"
     #args.output = f"{pathlib.Path(inp).name}.json"
   
   if args.debug:
@@ -55,13 +58,17 @@ def convert_aiv(args):
 
     conv = to_json(path = inp, include_extra=args.extra, report=args.debug, invert_y=out_invert_y, skip_keep=out_skip_keep)
     if args.output == "-":
-      print(conv)
+      sys.stdout.write(conv)
+      sys.stdout.flush()
     else:
       pathlib.Path(args.output).write_text(conv)
   elif inp_format.startswith('json') and out_format.startswith("aiv"):
-    conv = from_json(path = inp, report=args.debug, invert_y=inp_invert_y)
+    if inp == "-":
+      conv = from_json(f = sys.stdin, report=args.debug, invert_y=inp_invert_y)
+    else:
+      conv = from_json(path = inp, report=args.debug, invert_y=inp_invert_y)
     conv.to_file(args.output)
   else:
-    raise NotImplementedError(f"combination of in-format '{inp_format}' and out-format '{out_format}' not implemented")
+    raise NotImplementedError(f"combination of from-format '{inp_format}' and to-format '{out_format}' not implemented")
 
   return True

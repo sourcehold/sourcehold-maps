@@ -21,12 +21,15 @@ import json
 
 
 
-def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, skip_keep=False, report=False):
-  if aiv == None and not path:
+def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, skip_keep=False, report=False):
+  if not aiv and not path and not f:
     raise Exception()
   if aiv == None:
-    aiv = AIV().from_file(path)
-  
+    if path:
+      aiv = AIV().from_file(path)
+    else:
+      aiv = AIV().from_buffer(f) # type: ignore
+
   if report:
     print(f"INFO: aiv has version: {aiv.directory.version_number}")
 

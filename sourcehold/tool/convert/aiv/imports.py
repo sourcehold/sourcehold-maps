@@ -28,13 +28,16 @@ def convert_offsets(offsets, invert_y=False):
   for loc in offsets:
     yield convert_offset(loc, invert_y=invert_y)
 
-def from_json(path = None, data: Dict | None = None, invert_y = True, report = False):
-  if not path and not data:
+def from_json(path: str | None = None, data: Dict | None = None, f=None, invert_y = True, report = False):
+  if not path and not data and not f:
     raise Exception()
   
-  if path and not data:
-    with open(path, 'rb') as f:
-      data = json.load(f)
+  if not data:
+      if path:
+        with open(path, 'rb') as f:
+          data = json.load(f)
+      elif f:
+        data = json.load(f)
   
   if data == None:
     raise Exception()
