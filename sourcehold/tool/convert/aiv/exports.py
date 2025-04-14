@@ -21,7 +21,7 @@ import json
 
 
 
-def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, report=False):
+def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, skip_keep=False, report=False):
   if aiv == None and not path:
     raise Exception()
   if aiv == None:
@@ -91,7 +91,7 @@ def to_json(aiv=None, path: str='', include_extra=False, invert_y=True, report=F
         processed[offset] = True
         continue
       
-      elif construction == 38: #keep2
+      elif skip_keep and construction == 38: #keep2
         processed[offset] = True
         continue
       
