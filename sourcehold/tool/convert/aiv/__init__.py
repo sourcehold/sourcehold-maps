@@ -22,7 +22,6 @@ def convert_aiv(args):
       inp_format = 'aiv'
     elif inp.endswith(".json"):
       inp_format = "json"
-      inp_invert_y = True
   else:
     inp_format_tokens = inp_format.split(",")
     if 'inverty' in inp_format_tokens:
@@ -34,7 +33,6 @@ def convert_aiv(args):
   if not out_format:
     if inp_format == "aiv":
       out_format = "json"
-      out_invert_y = True
     elif inp_format == "json":
       out_format = "aiv"
   else:
