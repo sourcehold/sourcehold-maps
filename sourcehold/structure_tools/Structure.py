@@ -1,3 +1,4 @@
+from typing import Dict
 from sourcehold.structure_tools.Buffer import Buffer
 from sourcehold.structure_tools.DataProperty import DataProperty
 
@@ -21,7 +22,7 @@ class Structure(object):
     #     self.fields[key].fset(self, value)
 
     @classmethod
-    def get_fields(cls) -> dict[str, Field]:
+    def get_fields(cls) -> Dict[str, Field]:
         fields = {}
 
         tree = list(cls.__mro__)
