@@ -125,5 +125,5 @@ jobs:
       shell: bash
     - name: Pip test cli
       run: |
-        echo "hello world!" | sourcehold compression --compress --in - --out - | sourcehold compression --decompress --in - --out -
+        echo "hello world!" | python -m sourcehold compression --compress --input - --output - | python -m sourcehold compression --decompress --input - --output -
       shell: bash
