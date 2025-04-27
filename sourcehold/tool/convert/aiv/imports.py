@@ -1,7 +1,7 @@
 import json
 import struct
 from turtle import position
-from typing import Dict
+from typing import Dict, Union
 import numpy as np
 from sourcehold.aivs.AIV import AIV
 from sourcehold.tool.convert.aiv.info import AIV_HEIGHT, AIV_WIDTH, CONSTRUCTIONS_STRUCT_FORMAT, INDEX_CONSTRUCTIONS, INDEX_MISC, INDEX_PAUSE, INDEX_PAUSES, INDEX_STEP_COUNT, INDEX_STEPS, MAPPER_BUILDING_SIZES, MAPPERS_SH1_VK, PAUSES_STRUCT_FORMAT_50, STEPS_STRUCT_FORMAT, UNITS_STRUCT_FORMAT, convertMapperEnumToAIVEnum, get_constructions_matrix, get_steps_matrix, get_units_matrix, x_range, y_range
@@ -31,7 +31,7 @@ def convert_offsets(offsets, invert_y=False):
   for loc in offsets:
     yield convert_offset(loc, invert_y=invert_y)
 
-def from_json(path: str | None = None, data: Dict | None = None, f=None, invert_y = True, report = False):
+def from_json(path: Union[str, None] = None, data: Union[Dict, None] = None, f=None, invert_y = True, report = False):
   if not path and not data and not f:
     raise Exception()
   
