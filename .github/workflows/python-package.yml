@@ -11,6 +11,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -70,6 +72,11 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
 
+    - name: Build wheel dependencies
+      shell: bash
+      run: |
+        python -m pip wheel . -w dist
+
     - name: Archive packages
       uses: actions/upload-artifact@v4
       with:
@@ -77,6 +84,11 @@ jobs:
         path: |
           dist/*
 
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: dist/*
 
   test_package:
     needs: build
