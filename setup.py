@@ -25,5 +25,6 @@ setup(
     test_suite="tests",
     entry_points={
         'console_scripts': ['sourcehold=sourcehold:entry_point']
-    }
+    },
+    include_package_data=True
 )

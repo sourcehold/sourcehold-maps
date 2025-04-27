@@ -2,7 +2,7 @@ from sourcehold.structure_tools import _resolve_cls_as_type, create_structure_fr
 
 
 import struct
-from typing import Callable, Generic, Iterable, cast
+from typing import Callable, Generic, Iterable, Union, cast
 
 from sourcehold.structure_tools.BreakFunctions import BreakFunctions
 from sourcehold.structure_tools.Buffer import Buffer
@@ -14,7 +14,7 @@ T = TypeVar("T")
 
 class Field(Generic[T]):
 
-    def __init__(self, name, typ, array_size: int | Callable | str=0, break_array=BreakFunctions.break_at_eof):
+    def __init__(self, name, typ, array_size: Union[int, Callable, str]=0, break_array=BreakFunctions.break_at_eof):
         object.__init__(self)
         self.name = name
         self.type = typ if type(typ) != type else _resolve_cls_as_type(typ)
