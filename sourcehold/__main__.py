@@ -10,6 +10,7 @@ from sourcehold.compression import COMPRESSION
 
 from sourcehold.tool.argparsers.common import main_parser
 from sourcehold.tool.argparsers.services import services_parser, convert_parser
+from sourcehold.tool.modify.map import modify_map
 
 file_input_output = argparse.ArgumentParser(add_help=False)
 file_input_output.add_argument("--in", help="files or folders to (un)pack", nargs='+', required=True)
@@ -77,7 +78,10 @@ args = main_parser.parse_args()
 from .tool.convert.aiv import convert_aiv
 
 def main():
-  convert_aiv(args)
+  if convert_aiv(args):
+      return
+  if modify_map(args):
+      return
 
   if args.service == "aiv":
     if args.method == "file":
