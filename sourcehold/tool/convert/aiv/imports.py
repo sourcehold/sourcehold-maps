@@ -70,7 +70,7 @@ def from_json(path: str | None = None, data: Dict | None = None, f=None, invert_
         raise Exception(f"unsupported mapper size: {mapperName}")
       size = MAPPER_BUILDING_SIZES[mapperName]
       if len(frame['tilePositionOfsets']) > 1:
-        raise Exception(f'too many locations for a building: {frame['tilePositionOfsets']}')
+        raise Exception(f'too many locations for a building: {frame["tilePositionOfsets"]}')
       location = frame['tilePositionOfsets'][0]
       x, y = convert_offset(location, invert_y=invert_y)
       constructions[x:(x+size),y:(y+size)] = aivID
