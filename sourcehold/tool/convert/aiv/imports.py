@@ -6,6 +6,9 @@ import numpy as np
 from sourcehold.aivs.AIV import AIV
 from sourcehold.tool.convert.aiv.info import AIV_HEIGHT, AIV_WIDTH, CONSTRUCTIONS_STRUCT_FORMAT, INDEX_CONSTRUCTIONS, INDEX_MISC, INDEX_PAUSE, INDEX_PAUSES, INDEX_STEP_COUNT, INDEX_STEPS, MAPPER_BUILDING_SIZES, MAPPERS_SH1_VK, PAUSES_STRUCT_FORMAT_50, STEPS_STRUCT_FORMAT, UNITS_STRUCT_FORMAT, convertMapperEnumToAIVEnum, get_constructions_matrix, get_steps_matrix, get_units_matrix, x_range, y_range
 
+from importlib import resources as impresources
+from sourcehold import resources
+
 mapping_xyinversed_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
 mapping_xy_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
 
@@ -86,7 +89,7 @@ def from_json(path: str | None = None, data: Dict | None = None, f=None, invert_
     pauses += [0] * (50 - len(pauses))
   
   select_all = np.ones((100,100), 'bool')
-  aiv = AIV().from_file("resources/aiv/empty.aiv")
+  aiv = AIV().from_file(str(impresources.files(resources) / "aiv" / "empty.aiv"))
   aiv.directory[INDEX_CONSTRUCTIONS].set_data(struct.pack(CONSTRUCTIONS_STRUCT_FORMAT, *constructions[select_all]))
   aiv.directory[INDEX_STEPS].set_data(struct.pack(STEPS_STRUCT_FORMAT, *steps[select_all]))
   aiv.directory[INDEX_STEP_COUNT].set_data(struct.pack("<i", len(frames) + 1))
