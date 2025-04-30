@@ -1,6 +1,5 @@
 import json
 import struct
-from turtle import position
 from typing import Dict, Union
 import numpy as np
 from sourcehold.aivs.AIV import AIV
