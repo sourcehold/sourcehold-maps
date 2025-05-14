@@ -1,3 +1,4 @@
+import argparse
 from .common import main_parser, file_input_file_output
 
 services_parser = main_parser.add_subparsers(title="service", dest="service", required=True)
@@ -11,6 +12,24 @@ convert_aiv_parser.add_argument('--from-format', required=False, default='')
 convert_aiv_parser.add_argument('--to-format', required=False, default='')
 
 memory_parser = services_parser.add_parser('memory')
+memory_parser.add_argument('--game', choices=['SHC1.41-latin', "SHCE1.41-latin"], default="SHC1.41-latin")
+memory_subparsers = memory_parser.add_subparsers(dest='type', required=True, title='type')
+
+memory_map_parser = memory_subparsers.add_parser('map')
+memory_map_subparsers = memory_map_parser.add_subparsers(dest='action', required=True)
+
+memory_common = argparse.ArgumentParser(add_help=False)
+memory_common.add_argument('what', choices=['terrain', 'height'])
+
+memory_map_get_parser = memory_map_subparsers.add_parser('get', parents=[memory_common])
+memory_map_get_parser.add_argument('--output', default='')
+memory_map_get_parser.add_argument('--output-format', default='', choices=['png'])
+
+memory_map_set_parser = memory_map_subparsers.add_parser('set', parents=[memory_common])
+memory_map_set_parser.add_argument('--input', default='-')
+memory_map_set_parser.add_argument('--input-format', default='', choices=['png'])
+
+
 
 modify_parser = services_parser.add_parser('modify')
 modify_subparser = modify_parser.add_subparsers(dest='type', required=True, title='type')
