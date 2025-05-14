@@ -18,9 +18,9 @@ jobs:
       matrix:
         # os: [ubuntu-latest, windows-latest, macOS-latest]
         os: [windows-latest]
-        platform: [x86, x64]
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
-        python-platform: [x86, x64]
+        platform: [x86]
+        python-version: ['3.8']
+        python-platform: [x86]
         # exclude:
         #   - platform: x86
         #     python-platform: x64
@@ -100,7 +100,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh --repo sourcehold/sourcehold-maps release upload latest dist/sourcehold*.whl
+        gh --repo sourcehold/sourcehold-maps release upload latest dist/sourcehold*.whl --clobber
     - name: Ensure release exists
       if: github.ref_type == 'tag'
       shell: bash
