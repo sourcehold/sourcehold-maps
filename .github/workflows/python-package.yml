@@ -84,6 +84,23 @@ jobs:
         path: |
           dist/sourcehold*
 
+    - name: Ensure special latest release exists
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # Set continue on error to true
+        set +e
+        if [[ "$(gh --repo sourcehold/sourcehold-maps release view latest 2>&1)" == "release not found" ]]; then
+          set -e
+          gh --repo sourcehold/sourcehold-maps release create latest --latest
+        fi
+    - name: Upload pyinstaller to special latest release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh --repo sourcehold/sourcehold-maps release upload latest dist/sourcehold*.whl
     - name: Ensure release exists
       if: github.ref_type == 'tag'
       shell: bash
@@ -92,7 +109,7 @@ jobs:
       run: |
         # Set continue on error to true
         set +e
-        if [[ "$(gh --repo sourcehold/sourcehold-maps release view $RELEASE_TAG 2>&1)" == "release not found" ]]; then
+        if [[ "$(gh --repo sourcehold/sourcehold-maps release view ${{ github.ref_name }} 2>&1)" == "release not found" ]]; then
           set -e
           gh --repo sourcehold/sourcehold-maps release create ${{ github.ref_name }} --latest
         fi
