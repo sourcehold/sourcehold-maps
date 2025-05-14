@@ -1,12 +1,11 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python package
+name: Python PR
 
 on:
   workflow_dispatch: {}
-  push:
-    branches: [ master ]
+  pull_request: {}
 
 jobs:
   build:
@@ -20,19 +19,6 @@ jobs:
         platform: [x86]
         python-version: ['3.8']
         python-platform: [x86]
-        # exclude:
-        #   - platform: x86
-        #     python-platform: x64
-        #   - os: ubuntu-latest
-        #     python-platform: x86
-        #   - os: ubuntu-latest
-        #     platform: x86
-        #   - os: macOS-latest
-        #     python-platform: x86
-        #   - os: macOS-latest
-        #     platform: x86
-        #   - platform: x64
-        #     python-platform: x86
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -76,6 +62,12 @@ jobs:
       run: |
         python -m pip wheel . -w dist
 
+    - name: Run pyinstaller
+      shell: bash
+      run: |
+        python -m pip install pyinstaller
+        pyinstaller --console --onefile ./sourcehold/__main__.py --name sourcehold
+        
     - name: Archive packages
       uses: actions/upload-artifact@v4
       with:
@@ -83,42 +75,6 @@ jobs:
         path: |
           dist/sourcehold*
 
-    - name: Ensure special latest release exists
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        # Set continue on error to true
-        set +e
-        if [[ "$(gh --repo sourcehold/sourcehold-maps release view latest 2>&1)" == "release not found" ]]; then
-          set -e
-          gh --repo sourcehold/sourcehold-maps release create latest --latest
-        fi
-    - name: Upload wheel to special latest release
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh --repo sourcehold/sourcehold-maps release upload latest dist/sourcehold*.whl --clobber
-    - name: Ensure release exists
-      if: github.ref_type == 'tag'
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        # Set continue on error to true
-        set +e
-        if [[ "$(gh --repo sourcehold/sourcehold-maps release view ${{ github.ref_name }} 2>&1)" == "release not found" ]]; then
-          set -e
-          gh --repo sourcehold/sourcehold-maps release create ${{ github.ref_name }} --latest
-        fi
-    - name: Upload wheel to release
-      if: github.ref_type == 'tag'
-      shell: bash
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh --repo sourcehold/sourcehold-maps release upload ${{ github.ref_name }} dist/sourcehold*.whl
 
   test_package:
     needs: build

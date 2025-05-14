@@ -5,8 +5,7 @@ name: Python dependencies
 
 on:
   workflow_dispatch: {}
-  push: {}
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:

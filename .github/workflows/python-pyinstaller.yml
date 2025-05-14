@@ -5,8 +5,7 @@ name: Python pyinstaller
 
 on:
   workflow_dispatch: {}
-  push: {}
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:
@@ -40,10 +39,10 @@ jobs:
           python -m pip install --upgrade wheel setuptools Cython
           pip install flake8 pytest
           pip install -r requirements.txt
-          python -m pip install pyinstaller
       - name: Run pyinstaller
         shell: bash
         run: |
+          python -m pip install pyinstaller
           pyinstaller --console --onefile ./sourcehold/__main__.py --name sourcehold
       - name: Ensure special latest release exists
         shell: bash
