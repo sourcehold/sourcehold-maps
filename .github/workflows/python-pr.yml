@@ -67,7 +67,7 @@ jobs:
       run: |
         python -m pip install pyinstaller
         pyinstaller --console --onefile ./sourcehold/__main__.py --name sourcehold
-        
+
     - name: Archive packages
       uses: actions/upload-artifact@v4
       with:
@@ -83,9 +83,9 @@ jobs:
       matrix:
         # os: [ubuntu-latest, windows-latest, macOS-latest]
         os: [windows-latest]
-        platform: [x86, x64]
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
-        python-platform: [x86, x64]
+        platform: [x86]
+        python-version: ['3.8']
+        python-platform: [x86]
     steps:
     - name: Download package
       uses: actions/download-artifact@v4.1.7
