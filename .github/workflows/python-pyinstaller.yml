@@ -10,14 +10,14 @@ on:
     branches: [ master ]
 
 jobs:
-  build_deps:
+  build_pyinstaller:
     permissions:
       contents: write
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         # os: [ubuntu-latest, windows-latest, macOS-latest]
-        os: [windows-latest, ubuntu-latest, macOS-latest]
+        os: [windows-latest]
         platform: [x86]
         python-version: ['3.13']
         python-platform: [x86]
