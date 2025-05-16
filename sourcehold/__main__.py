@@ -10,6 +10,7 @@ from sourcehold.compression import COMPRESSION
 
 from sourcehold.tool.argparsers.common import main_parser
 from sourcehold.tool.argparsers.services import services_parser, convert_parser
+from sourcehold.tool.memory.map import memory_map
 from sourcehold.tool.modify.map import modify_map
 
 file_input_output = argparse.ArgumentParser(add_help=False)
@@ -81,6 +82,8 @@ def main():
   if convert_aiv(args):
       return
   if modify_map(args):
+      return
+  if memory_map(args):
       return
 
   if args.service == "aiv":
