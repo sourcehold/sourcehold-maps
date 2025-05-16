@@ -1,20 +1,49 @@
 logic1 = {
-  'swamp': 1 << 1, # TODO
-  'pitch': '#314235',
-  'stone': '#c3bdb4',
-  'gravel': '#978f80',
-  'rocks': '#675335',
-  'iron': '#9e4f00',
-  'ford': '#567c71',
-  'river': '#427068',
-  'ocean': '#1e4a44',
-  'oasis': '#47540b',
-  'thick_scrub': '#6a692b',
-  'light_scrub': '#937e44',
-  'earth_and_stones': '#7c7059',
-  'earth': '#ae9467',
-  'dunes': '#b79453',
-  'beach': '#deb977',
+  'none': 0,
+  'ocean': 0x1,
+  'plain1': 0x4, # 0x8000
+  'plain2': 0x8, # 0x8000
+  'swamp': 0x20000000,
+  'moat_dug': 0x4000,
+  'moat': 0x40000000,
+  'pitch': 0x80000000,
+  # max_height_related = 0x8000, #TODO: not right
+  'stone': 0x20000,
+  'gravel': 0x40000, # TODO: what is this even?
+  'rocks': 0x80,
+  'iron': 0x80000,
+  'ford': 0x200000,
+  'river': 0x100000,
+  'oasis': 0x8000, # special
+  'thick_scrub': 0x8000, # special
+  'light_scrub': 0x8000, # special
+  'earth_and_stones': 0, # '#7c7059',
+  'earth': 0, #'#ae9467',
+  'dunes': 0x8000 # special '#b79453',
+  'beach': 0x8000 # special '#deb977',
+}
+
+logic2 = {
+  'none': 0,
+  'thick_scrub': 0x80,
+  'stones_or_driven_sand': 0x40, # don't know
+  'beach': 0x20,
+  'grass': 0x10,
+  'plateau_high': 0x8,
+  'plateau_low': 0x4,
+  'moat_undug': 0x3,
+  'scrub': 0x1,
+  ''
+    # NONE=0,
+    # SCRUB=1,
+    # DIRT=2,
+    # MOAT_UNDUG=3,
+    # PLATEAU_MEDIUM=4,
+    # PLATEAU_HIGH=8,
+    # GRASS=16,
+    # BEACH=32,
+    # STONES_OR_DRIVEN_SAND?=64,
+    # THICK_SCRUB=128
 }
 
     # NONE=0,
