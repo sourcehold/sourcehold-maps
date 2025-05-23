@@ -6,7 +6,7 @@ from sourcehold.tool.memory.map.common import get_process_handle, validate_input
 from sourcehold.world import create_selection_matrix
 import cv2 as cv # type: ignore
 from .logics import logic1, logic1_vk, logic2, logic2_vk
-from .colors import DEFAULT_PALETTE, monsterfish1_bgr, bgr_monsterfish1
+from .colors import DEFAULT_PALETTE, Palette
 import sys
 
 def get_image_data(img_path):
@@ -44,7 +44,7 @@ def set_terrain(args):
      return None  
   
   if args.palette:
-    palette = colors.Palette(args.palette)
+    palette = Palette(args.palette)
   else:
     palette = DEFAULT_PALETTE
 
@@ -84,7 +84,7 @@ def get_terrain(args):
      return None  
   
   if args.palette:
-    palette = colors.Palette(args.palette)
+    palette = Palette(args.palette)
   else:
     palette = DEFAULT_PALETTE
 
