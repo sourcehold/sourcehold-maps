@@ -76,7 +76,7 @@ memory_parser.add_argument("--standardized", help="standardize tilemap sections 
 
 args = main_parser.parse_args()
 
-from .tool.convert.aiv import convert_aiv
+from sourcehold.tool.convert.aiv import convert_aiv
 
 def main():
   if convert_aiv(args):
