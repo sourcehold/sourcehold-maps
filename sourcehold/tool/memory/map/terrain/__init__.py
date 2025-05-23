@@ -55,7 +55,11 @@ def set_terrain(args):
   process = get_process_handle(args.game)
 
   logic1matrix = numpy.zeros((400, 400), dtype='uint32')
-  # logic1matrix[selection] = get_raw_logic1(process)
+  borderlogic1matrix = numpy.zeros((400, 400), dtype='uint32')
+  borderlogic1matrix[selection] = get_raw_logic1(process) # We load it here to get the map borders only...
+  logic1matrix[borderlogic1matrix & logic1['border'] != 0] |= logic1['border']
+  logic1matrix[borderlogic1matrix & logic1['border_edge'] != 0] |= logic1['border_edge']
+  logic1matrix[borderlogic1matrix == 0] = 0 
 
   logic2matrix = numpy.zeros((400, 400), dtype='uint8')
   # logic2matrix[selection] = get_raw_logic2(process)
