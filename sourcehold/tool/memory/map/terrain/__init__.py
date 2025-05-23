@@ -6,11 +6,11 @@ from sourcehold.tool.memory.map.common import get_process_handle, validate_input
 from sourcehold.world import create_selection_matrix
 import cv2 as cv # type: ignore
 from .logics import logic1, logic1_vk, logic2, logic2_vk
-from .colors import monsterfish1_bgr, bgr_monsterfish1
+from .colors import DEFAULT_PALETTE, monsterfish1_bgr, bgr_monsterfish1
+import sys
 
 def get_image_data(img_path):
   img = cv.imread(img_path)
-  #img = 255 - cv.cvtColor(img, cv.COLOR_BGR2GRAY)
   return img
 
 selection = create_selection_matrix(size=MAP_SIZE)
@@ -42,6 +42,11 @@ def set_terrain(args):
   
   if args.action != "set":
      return None  
+  
+  if args.palette:
+    palette = colors.Palette(args.palette)
+  else:
+    palette = DEFAULT_PALETTE
 
   img_path = args.input
   validate_input_path(img_path)
@@ -49,12 +54,20 @@ def set_terrain(args):
 
   process = get_process_handle(args.game)
 
-  matrix = numpy.zeros((400, 400), dtype='uint32')
-  matrix[selection] = get_raw_logic1(process)
+  logic1matrix = numpy.zeros((400, 400), dtype='uint32')
+  # logic1matrix[selection] = get_raw_logic1(process)
 
-  # matrix[img > 255//128] |= 0x20000 # boulder flag?
+  logic2matrix = numpy.zeros((400, 400), dtype='uint8')
+  # logic2matrix[selection] = get_raw_logic2(process)
 
-  set_raw_logic1(process, matrix[selection].flat)
+  for color, name in palette.bgr_palette.items():
+    where = (img == color).all(2)
+    logic1matrix[where] |= logic1[name]
+    if name in logic2:
+      logic2matrix[where] = logic2[name]
+
+  set_raw_logic1(process, logic1matrix[selection].flat)
+  set_raw_logic2(process, logic2matrix[selection].flat)
 
   return True
 
@@ -66,8 +79,11 @@ def get_terrain(args):
   if args.action != "get":
      return None  
   
-  img_path = args.output
-  
+  if args.palette:
+    palette = colors.Palette(args.palette)
+  else:
+    palette = DEFAULT_PALETTE
+
   process = get_process_handle(args.game)
 
   logic1matrix = numpy.zeros((400, 400), dtype='uint32')
@@ -76,31 +92,42 @@ def get_terrain(args):
   logic2matrix = numpy.zeros((400, 400), dtype='uint8')
   logic2matrix[selection] = get_raw_logic2(process)
 
-  colorlogic1 = numpy.zeros((400,400,3), dtype='uint8')
-  colorlogic2 = numpy.zeros((400,400,3), dtype='uint8')
+  img = numpy.zeros((400,400,3), dtype='uint8')
 
+  if args.debug:
+    print("logic1")
   for flag, name in logic1_vk.items():
     color = (0, 0, 0)
-    if name in monsterfish1_bgr:
-      color = monsterfish1_bgr[name]
+    if name in palette.palette_bgr:
+      color = palette.palette_bgr[name]
     else:
-      print(f"skipping color for: {name}")
-    colorlogic1[logic1matrix & flag != 0] = color
-    print(f"set '{name}' {colorlogic1[logic1matrix & flag != 0].sum()} times to color: {bgr_monsterfish1[color]}")
-  
+      if args.debug:
+        print(f"skipping color for: {name}")
+    img[logic1matrix & flag != 0] = color
+    if args.debug:
+      print(f"set '{name}' {img[logic1matrix & flag != 0].sum()} times to color: {palette.bgr_palette[color]}")
+
+  if args.debug:
+    print("logic2")
   for flag, name in logic2_vk.items():
     if name == 'none':
       continue
     color = (0, 0, 0)
-    where = logic1matrix == logic1['default_earth_or_texture']
-    if name in monsterfish1_bgr:
-      color = monsterfish1_bgr[name]
+    where = (logic1matrix & logic1['default_earth_or_texture']) != 0
+    if name in palette.palette_bgr:
+      color = palette.palette_bgr[name]
     else:
-      print(f"skipping color for: {name}")
-    colorlogic1[where & (logic2matrix == flag)] = color
-    print(f"set '{name}' {colorlogic1[logic2matrix == flag].sum()} times to color: {bgr_monsterfish1[color]}")
+      if args.debug:
+        print(f"skipping color for: {name}")
+    img[where & (logic2matrix == flag)] = color
+    if args.debug:
+      print(f"set '{name}' {img[where & (logic2matrix == flag)].sum()} times to color: {palette.bgr_palette[color]}")
 
-  cv.imshow('result', colorlogic1)
-  cv.waitKey(0)
+  if not args.output:
+    if args.debug:
+      print(args.output_format)
+    sys.stdout.buffer.write(cv.imencode(f".{args.output_format}", img)[1].tobytes())
+  else:
+    cv.imwrite(args.output, img=img)
 
   return True

@@ -22,9 +22,12 @@ logic1 = {
   
   'oasis_grass': 0x8000, # special
   'thick_scrub': 0x8000, # special
-  'light_scrub': 0x8000, # special
+  'scrub': 0x8000, # special
   'driven_sand': 0x8000, # special '#b79453',
   'beach': 0x8000, # special '#deb977',
+  'plateau_high': 0x8000,
+  'plateau_medium': 0x8000,
+  'earth_and_stones': 0x8000,
   # 'unknown_wall_related': 0x10000,
   'boulders': 0x20000,
   'pebbles': 0x40000, # TODO: what is this even?

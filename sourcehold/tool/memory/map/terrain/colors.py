@@ -1,3 +1,24 @@
+import pathlib
+import json
+
+class Palette(object):
+  
+  def __init__(self, path: None = None, palette = None):
+    if not path and not palette:
+      raise Exception()
+    self.palette_hex = {}
+    if path:
+      data = pathlib.Path(path).read_text()
+      self.palette_hex = json.loads(data)
+    elif palette:
+      self.palette_hex = palette
+    else:
+      raise Exception()
+    self.palette_bgr = {key: hex_to_bgr(value) for key, value in self.palette_hex.items()}
+    self.bgr_palette = {hex_to_bgr(value): key for key, value in self.palette_hex.items()}
+  
+
+
 monsterfish1_hex = {
   'none': '#000000',
   'default_earth_or_texture': '#ae9467',
@@ -44,3 +65,6 @@ monsterfish1_rgb = {key: hex_to_rgb(v) for key, v in monsterfish1_hex.items()}
 monsterfish1_bgr = {key: hex_to_bgr(v) for key, v in monsterfish1_hex.items()}
 rgb_monsterfish1 = {v: key for key, v in monsterfish1_rgb.items()}
 bgr_monsterfish1 = {v: key for key, v in monsterfish1_bgr.items()}
+
+MONSTERFISH1 = Palette(palette=monsterfish1_hex)
+DEFAULT_PALETTE = MONSTERFISH1

@@ -20,10 +20,11 @@ memory_map_subparsers = memory_map_parser.add_subparsers(dest='action', required
 
 memory_common = argparse.ArgumentParser(add_help=False)
 memory_common.add_argument('what', choices=['terrain', 'height'])
+memory_common.add_argument('--palette', default='', required=False)
 
 memory_map_get_parser = memory_map_subparsers.add_parser('get', parents=[memory_common])
 memory_map_get_parser.add_argument('--output', default='')
-memory_map_get_parser.add_argument('--output-format', default='', choices=['png'])
+memory_map_get_parser.add_argument('--output-format', default='png', choices=['png'])
 
 memory_map_set_parser = memory_map_subparsers.add_parser('set', parents=[memory_common])
 memory_map_set_parser.add_argument('--input', default='-')
