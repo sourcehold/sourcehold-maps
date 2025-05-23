@@ -9,7 +9,7 @@ def get_process_handle(version):
   raise NotImplementedError(f"process not implemented: {version}")
 
 
-def validate_path(img_path):
+def validate_input_path(img_path):
   if not img_path:
     raise Exception(f"no input file specified")
   if img_path == "-":

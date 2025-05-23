@@ -4,7 +4,7 @@
 # python -m pip install Pillow
 import pathlib
 import struct
-from sourcehold.tool.memory.map.common import get_process_handle, validate_path
+from sourcehold.tool.memory.map.common import get_process_handle, validate_input_path
 from sourcehold.world import create_selection_matrix
 import cv2 as cv # type: ignore
 
@@ -56,7 +56,7 @@ def set_height(args):
      return None
   
   img_path = args.input
-  validate_path(img_path)
+  validate_input_path(img_path)
 
   img = get_image_data_grayscale(img_path)
 

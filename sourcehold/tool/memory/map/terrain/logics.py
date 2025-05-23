@@ -1,39 +1,59 @@
 logic1 = {
   'none': 0,
+  'default_earth_or_texture': 0x8000, #'#ae9467',
+
   'ocean': 0x1,
-  'plain1': 0x4, # 0x8000
-  'plain2': 0x8, # 0x8000
-  'swamp': 0x20000000,
-  'moat_dug': 0x4000,
-  'moat': 0x40000000,
-  'pitch': 0x80000000,
-  # max_height_related = 0x8000, #TODO: not right
-  'stone': 0x20000,
-  'gravel': 0x40000, # TODO: what is this even?
+  # 'stockpile': 0x2,
+  'plain1_and_farm': 0x4, # 0x8000
+  'plain2_and_pitch': 0x8, # 0x8000
+  
+  'border': 0x10,
+  'border_edge': 0x20,
+  
   'rocks': 0x80,
-  'iron': 0x80000,
-  'ford': 0x200000,
-  'river': 0x100000,
-  'oasis': 0x8000, # special
+  
+  # 'wall_gatehouse_tower': 0x100,
+  # 'crenel': 0x200,
+  # 'building': 0x400,
+  # 'stairs': 0x800,
+  # 'tree': 0x1000,
+  # 'tree_variation': 0x2000,
+  'moat_dug': 0x4000,
+  
+  'oasis_grass': 0x8000, # special
   'thick_scrub': 0x8000, # special
   'light_scrub': 0x8000, # special
-  'earth_and_stones': 0, # '#7c7059',
-  'earth': 0, #'#ae9467',
-  'dunes': 0x8000 # special '#b79453',
-  'beach': 0x8000 # special '#deb977',
+  'driven_sand': 0x8000, # special '#b79453',
+  'beach': 0x8000, # special '#deb977',
+  # 'unknown_wall_related': 0x10000,
+  'boulders': 0x20000,
+  'pebbles': 0x40000, # TODO: what is this even?
+  'iron': 0x80000,
+  'river': 0x100000,
+  'ford': 0x200000,
+  'crenel_variation': 0x400000,
+  'marsh': 0x20000000,
+  'moat': 0x40000000,
+  'oil': 0x80000000,
+  # max_height_related = 0x8000, #TODO: not right
+  
 }
+
+logic1_vk = {v: k for k, v in logic1.items()}
+
+logic1_vk[0x8000] = 'default_earth_or_texture'
 
 logic2 = {
   'none': 0,
   'thick_scrub': 0x80,
-  'stones_or_driven_sand': 0x40, # don't know
+  'driven_sand': 0x40, # don't know
   'beach': 0x20,
-  'grass': 0x10,
+  'oasis_grass': 0x10,
   'plateau_high': 0x8,
-  'plateau_low': 0x4,
+  'plateau_medium': 0x4,
   'moat_undug': 0x3,
+  'earth_and_stones': 0x2,
   'scrub': 0x1,
-  ''
     # NONE=0,
     # SCRUB=1,
     # DIRT=2,
@@ -45,6 +65,8 @@ logic2 = {
     # STONES_OR_DRIVEN_SAND?=64,
     # THICK_SCRUB=128
 }
+
+logic2_vk = {v: k for k, v in logic2.items()}
 
     # NONE=0,
     # SEA=1,
@@ -88,3 +110,4 @@ logic2 = {
     # BEACH=32,
     # STONES_OR_DRIVEN_SAND?=64,
     # THICK_SCRUB=128
+

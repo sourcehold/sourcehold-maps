@@ -3,7 +3,7 @@ import pathlib, sys
 from sourcehold.tool.convert.aiv.exports import to_json
 from sourcehold.tool.convert.aiv.imports import from_json
 from sourcehold.tool.memory.map.height import set_height
-from sourcehold.tool.memory.map.terrain import set_terrain
+from sourcehold.tool.memory.map.terrain import get_terrain, set_terrain
 
 
 def memory_map(args):
@@ -18,6 +18,9 @@ def memory_map(args):
     return True
   
   if set_terrain(args):
+    return True
+  
+  if get_terrain(args):
     return True
 
   return True
