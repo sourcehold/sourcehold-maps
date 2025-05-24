@@ -10,6 +10,7 @@ from sourcehold.compression import COMPRESSION
 
 from sourcehold.tool.argparsers.common import main_parser
 from sourcehold.tool.argparsers.services import services_parser, convert_parser
+from sourcehold.tool.memory.map import memory_map
 from sourcehold.tool.modify.map import modify_map
 
 file_input_output = argparse.ArgumentParser(add_help=False)
@@ -75,12 +76,14 @@ memory_parser.add_argument("--standardized", help="standardize tilemap sections 
 
 args = main_parser.parse_args()
 
-from .tool.convert.aiv import convert_aiv
+from sourcehold.tool.convert.aiv import convert_aiv
 
 def main():
   if convert_aiv(args):
       return
   if modify_map(args):
+      return
+  if memory_map(args):
       return
 
   if args.service == "aiv":

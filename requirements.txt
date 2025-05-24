@@ -3,3 +3,4 @@ pymem
 dclimplode
 numpy
 build
+opencv-python
