@@ -8,29 +8,31 @@ from sourcehold.tool.convert.aiv.info import AIV_HEIGHT, AIV_WIDTH, CONSTRUCTION
 from importlib import resources as impresources
 from sourcehold import resources
 
-mapping_xyinversed_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
-mapping_xy_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
+# mapping_xyinversed_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
+# mapping_xy_offset = np.zeros(shape=(AIV_WIDTH, AIV_HEIGHT), dtype='uint32')
 
-offset = -1
-for x in x_range():
-  for y in y_range(invert_y=False):
-    offset += 1
-    mapping_xy_offset[x, y] = offset
+# offset = -1
+# for x in x_range(invert_x=False):
+#   for y in y_range(invert_y=False):
+#     offset += 1
+#     mapping_xy_offset[x, y] = offset
 
-offset = -1
-for x in x_range():
-  for y in y_range(invert_y=True):
-    offset += 1
-    mapping_xyinversed_offset[x, y] = offset
+# offset = -1
+# for x in x_range(invert_x=False):
+#   for y in y_range(invert_y=True):
+#     offset += 1
+#     mapping_xyinversed_offset[x, y] = offset
 
-def convert_offset(offset, invert_y=False):
-  return (offset // AIV_WIDTH, offset % AIV_HEIGHT if not invert_y else (AIV_HEIGHT - 1) - (offset % AIV_HEIGHT))
+def convert_offset(offset, invert_y=False, invert_x=False):
+  y = offset % AIV_HEIGHT if not invert_y else (AIV_HEIGHT - 1) - (offset % AIV_HEIGHT)
+  x = offset // AIV_WIDTH if not invert_x else ((AIV_WIDTH - 1) - (offset // AIV_WIDTH))
+  return (x, y)
 
-def convert_offsets(offsets, invert_y=False):
+def convert_offsets(offsets, invert_y=False, invert_x=False):
   for loc in offsets:
-    yield convert_offset(loc, invert_y=invert_y)
+    yield convert_offset(loc, invert_y=invert_y, invert_x=invert_x)
 
-def from_json(path: Union[str, None] = None, data: Union[Dict, None] = None, f=None, invert_y = True, report = False):
+def from_json(path: Union[str, None] = None, data: Union[Dict, None] = None, f=None, invert_y = False, invert_x = True, report = False):
   if not path and not data and not f:
     raise Exception()
   
@@ -62,7 +64,7 @@ def from_json(path: Union[str, None] = None, data: Union[Dict, None] = None, f=N
       # Special type
       aivID = convertMapperEnumToAIVEnum(v = mapperID)
       locations = frame['tilePositionOfsets']
-      for x, y in convert_offsets(locations, invert_y=invert_y):
+      for x, y in convert_offsets(locations, invert_y=invert_y, invert_x=invert_x):
         constructions[x, y] = aivID
         steps[x, y] = step
     else:
@@ -74,7 +76,7 @@ def from_json(path: Union[str, None] = None, data: Union[Dict, None] = None, f=N
       if len(frame['tilePositionOfsets']) > 1:
         raise Exception(f'too many locations for a building: {frame["tilePositionOfsets"]}')
       location = frame['tilePositionOfsets'][0]
-      x, y = convert_offset(location, invert_y=invert_y)
+      x, y = convert_offset(location, invert_y=invert_y, invert_x=invert_x)
       constructions[x:(x+size),y:(y+size)] = aivID
       steps[x:(x+size),y:(y+size)] = step
   for miscItem in data['miscItems']:

@@ -19,9 +19,17 @@ import numpy as np
 import json
 
 
+def translate_offset(offset, invert_x, invert_y):
+  x = offset % AIV_WIDTH
+  y = offset // AIV_HEIGHT
+  if invert_x:
+    x = (AIV_WIDTH - 1) - x
+  if invert_y:
+    y = (AIV_HEIGHT - 1) - y
+  return (y * AIV_HEIGHT) + x
 
 
-def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, skip_keep=False, report=False):
+def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=False, invert_x=True, skip_keep=False, report=False):
   if not aiv and not path and not f:
     raise Exception()
   if aiv == None:
@@ -63,16 +71,16 @@ def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, 
   frames = [None] * step_count # + 1 is already stored in the aiv format
   miscItems = []
 
+  output["pauseDelayAmount"] = pauseDelayAmount
   output["frames"] = frames
   output["miscItems"] = miscItems
-  output["pauseDelayAmount"] = pauseDelayAmount
 
   processed = {}
 
   buildings = 0
   offset = -1
-  for i in x_range():
-    for j in y_range(invert_y=invert_y):
+  for i in y_range(invert_y=False):
+    for j in x_range(invert_x=False):
       offset += 1
       
       if offset in processed:
@@ -110,7 +118,8 @@ def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, 
       if frames[step] is None:
         buildings += 1
         shouldPause = step in pauses
-        frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [offset], 'shouldPause': shouldPause}
+        offset_t = translate_offset(offset, invert_x, invert_y)
+        frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [offset_t], 'shouldPause': shouldPause}
 
   if report:
     print(f"INFO: buildings: {buildings}")
@@ -118,8 +127,8 @@ def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, 
   nonbuildings = 0
 
   offset = -1
-  for i in x_range():
-    for j in y_range(invert_y=invert_y):
+  for i in y_range(invert_y=False):
+    for j in x_range(invert_x=False):
       offset += 1
       if offset not in processed:
         # do all the special stuff
@@ -129,7 +138,8 @@ def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, 
         shouldPause = step in pauses
         if frames[step] is None:
           frames[step] = {'itemType': buildingType, 'tilePositionOfsets': [], 'shouldPause': shouldPause}
-        frames[step]['tilePositionOfsets'].append(offset)
+        offset_t = translate_offset(offset, invert_x, invert_y)
+        frames[step]['tilePositionOfsets'].append(offset_t)
         nonbuildings += 1
   
   if report:
@@ -137,12 +147,15 @@ def to_json(aiv=None, path: str='', f=None, include_extra=False, invert_y=True, 
 
   misc = 0
   for unitType in range(24):
+    number = 0
     for entry in range(10):
       location = units[unitType, entry].item()
       if location == 0:
         continue
+      offset_t = translate_offset(location, invert_x, invert_y)
       misc += 1
-      miscItems.append({'itemType': unitType, 'positionOfset': location, 'number': entry})
+      miscItems.append({ 'positionOfset': offset_t, 'itemType': unitType,'number': number})
+      number += 1
 
   if report:
     print(f"INFO: units | flags | brazier | misc: {misc}")

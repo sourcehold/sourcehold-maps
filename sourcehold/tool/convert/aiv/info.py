@@ -824,7 +824,9 @@ def get_units_matrix(data = None):
 
 PAUSE_DELAY_AMOUNT_STRUCT_FORMAT = "<1i"
 
-def x_range():
+def x_range(invert_x=False):
+  if invert_x:
+    return range(AIV_WIDTH-1, -1, -1)
   return range(AIV_WIDTH)
 
 def y_range(invert_y=False):
